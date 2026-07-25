@@ -71,7 +71,11 @@ import { ideezaPreset } from "@ideeza/tokens/tailwind-preset";
 
 export default {
   presets: [ideezaPreset],
-  content: ["./src/**/*.{ts,tsx}"],
+  content: [
+    "./src/**/*.{ts,tsx}",
+    // Required so Tailwind generates the classes used inside @ideeza/ui:
+    "./node_modules/@ideeza/ui/dist/**/*.{js,cjs}",
+  ],
 };
 ```
 
