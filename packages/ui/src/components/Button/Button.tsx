@@ -17,7 +17,7 @@ import { cn } from "../../lib/cn";
  */
 export const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap select-none",
+    "inline-flex items-center justify-center gap-[8px] whitespace-nowrap select-none",
     "font-sans font-semibold transition-colors duration-fast ease-standard",
     "outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg-page",
     "disabled:pointer-events-none disabled:bg-bg-subtle disabled:text-text-disabled",
@@ -46,11 +46,11 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        sm: "h-8 rounded-md px-3 text-xs",
-        md: "h-10 rounded-lg px-4 text-sm",
-        lg: "h-11 rounded-lg px-5 text-sm",
-        xl: "h-12 rounded-lg px-6 text-md",
-        "2xl": "h-14 rounded-xl px-8 text-lg",
+        sm: "h-[32px] rounded-[6px] px-[12px] text-[12px]",
+        md: "h-[40px] rounded-[8px] px-[16px] text-[14px]",
+        lg: "h-[44px] rounded-[8px] px-[20px] text-[14px]",
+        xl: "h-[48px] rounded-[8px] px-[24px] text-[16px]",
+        "2xl": "h-[56px] rounded-[12px] px-[32px] text-[16px]",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },
@@ -58,11 +58,11 @@ export const buttonVariants = cva(
 );
 
 const spinnerSize: Record<string, string> = {
-  sm: "size-3.5",
-  md: "size-4",
-  lg: "size-4",
-  xl: "size-5",
-  "2xl": "size-5",
+  sm: "size-[14px]",
+  md: "size-[16px]",
+  lg: "size-[16px]",
+  xl: "size-[20px]",
+  "2xl": "size-[20px]",
 };
 
 function Spinner({ className }: { className?: string }) {

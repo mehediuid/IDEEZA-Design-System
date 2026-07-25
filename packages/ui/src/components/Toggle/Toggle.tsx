@@ -24,8 +24,8 @@ const trackVariants = cva(
   {
     variants: {
       size: {
-        sm: "h-5 w-9",
-        md: "h-6 w-11",
+        sm: "h-[20px] w-[36px]",
+        md: "h-[24px] w-[44px]",
       },
     },
     defaultVariants: { size: "md" },
@@ -35,13 +35,13 @@ const trackVariants = cva(
 const thumbVariants = cva(
   [
     "pointer-events-none block rounded-full bg-white shadow-1",
-    "transition-transform duration-fast ease-standard translate-x-0.5",
+    "transition-transform duration-fast ease-standard translate-x-[2px]",
   ],
   {
     variants: {
       size: {
-        sm: "size-4 data-[state=checked]:translate-x-[18px]",
-        md: "size-5 data-[state=checked]:translate-x-[22px]",
+        sm: "size-[16px] data-[state=checked]:translate-x-[18px]",
+        md: "size-[20px] data-[state=checked]:translate-x-[22px]",
       },
     },
     defaultVariants: { size: "md" },

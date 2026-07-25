@@ -20,9 +20,9 @@ export const badgeVariants = cva(
       variant: { subtle: "", solid: "", outline: "border bg-transparent" },
       color: { brand: "", neutral: "", blue: "", success: "", warning: "", error: "" },
       size: {
-        sm: "h-5 gap-1 px-2 text-2xs [&_svg]:size-3",
-        md: "h-6 gap-1 px-2 text-xs [&_svg]:size-3.5",
-        lg: "h-7 gap-1.5 px-3 text-sm [&_svg]:size-4",
+        sm: "h-[20px] gap-[4px] px-[6px] text-[10px] [&_svg]:size-[12px]",
+        md: "h-[24px] gap-[4px] px-[8px] text-[12px] [&_svg]:size-[14px]",
+        lg: "h-[28px] gap-[6px] px-[10px] text-[13px] [&_svg]:size-[16px]",
       },
     },
     compoundVariants: [
@@ -74,7 +74,7 @@ export interface BadgeProps
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ({ className, variant, color, size, dot, leftIcon, rightIcon, onDismiss, children, ...props }, ref) => (
     <span ref={ref} className={cn(badgeVariants({ variant, color, size }), className)} {...props}>
-      {dot && <span className={cn("size-1.5 rounded-full", dotColor[color ?? "brand"])} aria-hidden="true" />}
+      {dot && <span className={cn("size-[6px] rounded-full", dotColor[color ?? "brand"])} aria-hidden="true" />}
       {leftIcon}
       {children}
       {rightIcon}
@@ -83,7 +83,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
           type="button"
           onClick={onDismiss}
           aria-label="Remove"
-          className="-mr-0.5 inline-flex items-center justify-center rounded-full outline-none hover:opacity-70 focus-visible:ring-2 focus-visible:ring-border-focus"
+          className="-mr-[2px] inline-flex items-center justify-center rounded-full outline-none hover:opacity-70 focus-visible:ring-2 focus-visible:ring-border-focus"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" />
