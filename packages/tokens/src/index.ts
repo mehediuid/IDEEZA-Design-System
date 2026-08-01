@@ -16,7 +16,7 @@ export * from "./foundations.js";
 
 // Convenient grouped export
 import { primitives } from "./primitives.js";
-import { semanticColors, componentColors, glassColors } from "./semantic.js";
+import { semanticColors, componentColors, glassColors, focusColors } from "./semantic.js";
 import {
   spacing,
   radius,
@@ -39,6 +39,7 @@ export const tokens = {
   semanticColors,
   componentColors,
   glassColors,
+  focusColors,
   spacing,
   radius,
   fontSize,

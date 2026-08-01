@@ -269,17 +269,17 @@
 
   /* Text */
   --color-text-primary: var(--color-gray-900);
-  --color-text-secondary: var(--color-gray-600);
-  --color-text-tertiary: var(--color-gray-400);
+  --color-text-secondary: var(--color-gray-700);
+  --color-text-tertiary: var(--color-gray-600);
   --color-text-disabled: var(--color-gray-300);
   --color-text-inverse: var(--color-white);
   --color-text-on-brand: var(--color-white);
   --color-text-brand: var(--color-violet-600);
-  --color-text-blue: var(--color-blue-600);
-  --color-text-link: var(--color-blue-600);
-  --color-text-success: var(--color-green-700);
-  --color-text-warning: var(--color-yellow-700);
-  --color-text-error: var(--color-red-600);
+  --color-text-blue: var(--color-blue-700);
+  --color-text-link: var(--color-blue-700);
+  --color-text-success: var(--color-green-800);
+  --color-text-warning: var(--color-yellow-800);
+  --color-text-error: var(--color-red-700);
   --color-text-ai: var(--color-violet-600);
 
   /* Borders */
@@ -294,14 +294,21 @@
   --color-border-success: var(--color-green-500);
   --color-border-warning: var(--color-yellow-500);
 
+  /* Focus halo (soft ring, offset 0) */
+  --color-focus-halo: rgba(124, 45, 185, 0.45);
+  --color-focus-halo-on-fill: rgba(124, 45, 185, 0.55);
+  --color-focus-halo-danger: rgba(220, 38, 38, 0.50);
+  --color-focus-halo-inverse: rgba(255, 255, 255, 0.60);
+  --color-focus-halo-ai: rgba(124, 45, 185, 0.55);
+
   /* Icons */
   --color-icon-default: var(--color-gray-600);
-  --color-icon-secondary: var(--color-gray-400);
+  --color-icon-secondary: var(--color-gray-300);
   --color-icon-disabled: var(--color-gray-300);
   --color-icon-on-brand: var(--color-white);
   --color-icon-brand: var(--color-violet-600);
   --color-icon-blue: var(--color-blue-500);
-  --color-icon-success: var(--color-green-600);
+  --color-icon-success: var(--color-green-700);
   --color-icon-warning: var(--color-yellow-600);
   --color-icon-error: var(--color-red-500);
   --color-icon-ai: var(--color-violet-500);
@@ -316,7 +323,7 @@
   --color-button-secondary-text: var(--color-text-primary);
   --color-button-ghost-text: var(--color-text-primary);
   --color-button-ghost-bg-hover: var(--color-bg-subtle);
-  --color-button-danger-bg: var(--color-bg-error);
+  --color-button-danger-bg: var(--color-red-600);
   --color-button-danger-text: var(--color-text-on-brand);
   --color-button-disabled-bg: var(--color-bg-subtle);
   --color-button-disabled-text: var(--color-text-disabled);
@@ -372,8 +379,8 @@
   --color-bg-inverse: var(--color-gray-50);
   --color-bg-overlay: var(--color-gray-950);
   --color-bg-brand: var(--color-violet-500);
-  --color-bg-brand-hover: var(--color-violet-400);
-  --color-bg-brand-pressed: var(--color-violet-300);
+  --color-bg-brand-hover: var(--color-violet-600);
+  --color-bg-brand-pressed: var(--color-violet-700);
   --color-bg-brand-subtle: var(--color-violet-950);
   --color-bg-blue: var(--color-blue-400);
   --color-bg-blue-subtle: var(--color-blue-950);
@@ -391,7 +398,7 @@
   /* Text */
   --color-text-primary: var(--color-gray-50);
   --color-text-secondary: var(--color-gray-300);
-  --color-text-tertiary: var(--color-gray-500);
+  --color-text-tertiary: var(--color-gray-400);
   --color-text-disabled: var(--color-gray-600);
   --color-text-inverse: var(--color-gray-900);
   --color-text-brand: var(--color-violet-300);
@@ -414,9 +421,16 @@
   --color-border-success: var(--color-green-400);
   --color-border-warning: var(--color-yellow-400);
 
+  /* Focus halo (soft ring, offset 0) */
+  --color-focus-halo: rgba(171, 96, 247, 0.55);
+  --color-focus-halo-on-fill: rgba(145, 38, 217, 0.55);
+  --color-focus-halo-danger: rgba(248, 113, 113, 0.50);
+  --color-focus-halo-inverse: rgba(255, 255, 255, 0.60);
+  --color-focus-halo-ai: rgba(171, 96, 247, 0.55);
+
   /* Icons */
   --color-icon-default: var(--color-gray-400);
-  --color-icon-secondary: var(--color-gray-500);
+  --color-icon-secondary: var(--color-gray-300);
   --color-icon-disabled: var(--color-gray-600);
   --color-icon-brand: var(--color-violet-300);
   --color-icon-blue: var(--color-blue-400);
@@ -459,19 +473,25 @@
     --color-bg-surface-raised: var(--color-gray-800);
     --color-bg-subtle: var(--color-gray-800);
     --color-bg-brand: var(--color-violet-500);
-    --color-bg-brand-hover: var(--color-violet-400);
-    --color-bg-brand-pressed: var(--color-violet-300);
+    --color-bg-brand-hover: var(--color-violet-600);
+    --color-bg-brand-pressed: var(--color-violet-700);
     --color-bg-brand-subtle: var(--color-violet-950);
 
     --color-text-primary: var(--color-gray-50);
     --color-text-secondary: var(--color-gray-300);
-    --color-text-tertiary: var(--color-gray-500);
+    --color-text-tertiary: var(--color-gray-400);
     --color-text-disabled: var(--color-gray-600);
 
     --color-border-default: var(--color-gray-800);
     --color-border-strong: var(--color-gray-600);
     --color-border-subtle: var(--color-gray-700);
     --color-border-focus: var(--color-violet-400);
+
+    --color-focus-halo: rgba(171, 96, 247, 0.55);
+    --color-focus-halo-on-fill: rgba(145, 38, 217, 0.55);
+    --color-focus-halo-danger: rgba(248, 113, 113, 0.50);
+    --color-focus-halo-inverse: rgba(255, 255, 255, 0.60);
+    --color-focus-halo-ai: rgba(171, 96, 247, 0.55);
 
     --elevation-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
     --elevation-2: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);

@@ -40,14 +40,14 @@ export const semanticColors = {
 
   // ── Text ───────────────────────────────────────────────────────
   "text.primary": { light: "#0c121d", dark: "#f8fafc" },
-  "text.secondary": { light: "#475569", dark: "#cbd5e1" },
-  "text.tertiary": { light: "#94a3b8", dark: "#64748b" },
+  "text.secondary": { light: "#334155", dark: "#cbd5e1" },
+  "text.tertiary": { light: "#475569", dark: "#94a3b8" },
   "text.disabled": { light: "#cbd5e1", dark: "#475569" },
   "text.inverse": { light: "#ffffff", dark: "#0c121d" },
   "text.on-brand": { light: "#ffffff", dark: "#ffffff" },
   "text.brand": { light: "#7c2db9", dark: "#bb96fc" },
   "text.blue": { light: "#2563eb", dark: "#93c5fd" },
-  "text.link": { light: "#2563eb", dark: "#60a5fa" },
+  "text.link": { light: "#1d4ed8", dark: "#60a5fa" },
   "text.success": { light: "#15803d", dark: "#4ade80" },
   "text.warning": { light: "#a16207", dark: "#facc15" },
   "text.error": { light: "#dc2626", dark: "#f87171" },
@@ -67,7 +67,7 @@ export const semanticColors = {
 
   // ── Icons ──────────────────────────────────────────────────────
   "icon.default": { light: "#475569", dark: "#94a3b8" },
-  "icon.secondary": { light: "#94a3b8", dark: "#64748b" },
+  "icon.secondary": { light: "#64748b", dark: "#cbd5e1" },
   "icon.disabled": { light: "#cbd5e1", dark: "#475569" },
   "icon.on-brand": { light: "#ffffff", dark: "#ffffff" },
   "icon.brand": { light: "#7c2db9", dark: "#bb96fc" },
@@ -90,7 +90,7 @@ export const componentColors = {
   "button.secondary-text": { light: "#0c121d", dark: "#0c121d" },
   "button.ghost-text": { light: "#0c121d", dark: "#0c121d" },
   "button.ghost-bg-hover": { light: "#f1f5f9", dark: "#f1f5f9" },
-  "button.danger-bg": { light: "#ef4444", dark: "#ef4444" },
+  "button.danger-bg": { light: "#dc2626", dark: "#dc2626" },
   "button.danger-text": { light: "#ffffff", dark: "#ffffff" },
   "button.disabled-bg": { light: "#f1f5f9", dark: "#f1f5f9" },
   "button.disabled-text": { light: "#cbd5e1", dark: "#cbd5e1" },
@@ -100,7 +100,7 @@ export const componentColors = {
   "input.bg-disabled": { light: "#f1f5f9", dark: "#f1f5f9" },
   "input.border": { light: "#e2e8f0", dark: "#e2e8f0" },
   "input.border-hover": { light: "#cbd5e1", dark: "#cbd5e1" },
-  "input.border-focus": { light: "#7c2db9", dark: "#7c2db9" },
+  "input.border-focus": { light: "#7c2db9", dark: "#ab60f7" },
   "input.border-error": { light: "#ef4444", dark: "#ef4444" },
   "input.border-disabled": { light: "#f1f5f9", dark: "#f1f5f9" },
   "input.text": { light: "#0c121d", dark: "#0c121d" },
@@ -158,6 +158,25 @@ export const glassColors = {
   "glass.shadow": { light: "rgba(0,0,0,0.08)", dark: "rgba(0,0,0,0.30)" },
 } as const satisfies Record<string, ColorToken>;
 
+/**
+ * Focus halo — a 3px ring at offset 0, flush against the component edge.
+ * Alpha is the semantic value, so these are rgba like the glass tokens.
+ *
+ * In CSS: `focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]`.
+ * In Figma the same treatment is built as a 3px OUTSIDE stroke or a
+ * "Focus ring" child node — Figma does not render 0-blur drop shadows
+ * reliably. See IDEEZA-Handoff.md.
+ */
+export const focusColors = {
+  "focus.halo": { light: "rgba(124,45,185,0.45)", dark: "rgba(171,96,247,0.55)" },
+  "focus.halo-on-fill": { light: "rgba(124,45,185,0.55)", dark: "rgba(145,38,217,0.55)" },
+  "focus.halo-danger": { light: "rgba(220,38,38,0.50)", dark: "rgba(248,113,113,0.50)" },
+  "focus.halo-inverse": { light: "rgba(255,255,255,0.60)", dark: "rgba(255,255,255,0.60)" },
+  /** Exists in Figma for the AI hierarchy but currently identical to -on-fill and unused. */
+  "focus.halo-ai": { light: "rgba(124,45,185,0.55)", dark: "rgba(171,96,247,0.55)" },
+} as const satisfies Record<string, ColorToken>;
+
 export type SemanticColorToken = keyof typeof semanticColors;
 export type ComponentColorToken = keyof typeof componentColors;
 export type GlassColorToken = keyof typeof glassColors;
+export type FocusColorToken = keyof typeof focusColors;
