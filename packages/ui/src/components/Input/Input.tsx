@@ -43,13 +43,16 @@ const addonRadiusRight: Record<InputSize, string> = {
   44: "rounded-r-[10.5px]",
   48: "rounded-r-[14.5px]",
 };
-/** Horizontal padding the field would have had; the addon absorbs it. */
+/**
+ * The addon replaces the field's edge padding, so it carries the full Figma
+ * value minus the border it sits behind — matching the field's own inset.
+ */
 const addonPad: Record<InputSize, string> = {
-  32: "px-[10px]",
-  36: "px-[10px]",
-  40: "px-[12px]",
-  44: "px-[12px]",
-  48: "px-[14px]",
+  32: "px-[8.5px]",
+  36: "px-[8.5px]",
+  40: "px-[10.5px]",
+  44: "px-[10.5px]",
+  48: "px-[12.5px]",
 };
 
 export interface InputProps

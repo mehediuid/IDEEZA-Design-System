@@ -1,7 +1,7 @@
 {
   "name": "@ideeza/ui",
   "version": "0.1.0",
-  "description": "IDEEZA Design System — React components built on @ideeza/tokens",
+  "description": "IDEEZA Design System \u2014 React components built on @ideeza/tokens",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -14,7 +14,9 @@
     }
   },
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -30,7 +32,8 @@
     "@radix-ui/react-switch": "^1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.5.3"
+    "tailwind-merge": "^2.5.3",
+    "@ideeza/icons": "workspace:*"
   },
   "devDependencies": {
     "@ideeza/tokens": "workspace:*",
@@ -41,5 +44,7 @@
     "tsup": "^8.3.0",
     "typescript": "^5.6.2"
   },
-  "publishConfig": { "access": "public" }
+  "publishConfig": {
+    "access": "public"
+  }
 }

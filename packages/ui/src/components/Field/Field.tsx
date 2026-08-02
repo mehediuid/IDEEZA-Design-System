@@ -31,13 +31,21 @@ export const fieldRowGap: Record<FieldSize, string> = {
   48: "gap-[6px]",
 };
 
-/** Control geometry — height, radius, padding, inner gap. Matches Figma exactly. */
+/**
+ * Control geometry — height, radius, padding, inner gap.
+ *
+ * Figma measures padding from the frame edge and its INSIDE stroke sits inside
+ * that padding, so a field with padding 12 puts its text 12px from the outer
+ * edge. CSS border-box adds the border on top of the padding, so the padding
+ * here is the Figma value minus the 1.5px border: 10→8.5, 12→10.5, 14→12.5.
+ * The rendered offset is then identical to the design file.
+ */
 export const controlClass: Record<FieldSize, string> = {
-  32: "h-[32px] rounded-[8px] px-[10px] gap-[8px]",
-  36: "h-[36px] rounded-[8px] px-[10px] gap-[8px]",
-  40: "h-[40px] rounded-[12px] px-[12px] gap-[8px]",
-  44: "h-[44px] rounded-[12px] px-[12px] gap-[8px]",
-  48: "h-[48px] rounded-[16px] px-[14px] gap-[8px]",
+  32: "h-[32px] rounded-[8px] px-[8.5px] gap-[8px]",
+  36: "h-[36px] rounded-[8px] px-[8.5px] gap-[8px]",
+  40: "h-[40px] rounded-[12px] px-[10.5px] gap-[8px]",
+  44: "h-[44px] rounded-[12px] px-[10.5px] gap-[8px]",
+  48: "h-[48px] rounded-[16px] px-[12.5px] gap-[8px]",
 };
 
 /** Value / placeholder type ramp. */

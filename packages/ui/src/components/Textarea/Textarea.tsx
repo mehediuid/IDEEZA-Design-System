@@ -16,11 +16,15 @@ import { FieldShell, controlChrome, type FieldSize } from "../Field/Field";
  */
 export type TextareaRows = "sm" | "md" | "lg";
 
-/** Figma padding is asymmetric — bottom is 8 at every size so the char counter sits close. */
+/**
+ * Figma padding is asymmetric — bottom is 8 at every size, leaving room for the
+ * resize handle. Values here are the Figma numbers minus the 1.5px border, so
+ * the rendered inset matches (see the note in Field).
+ */
 const rowsClass: Record<TextareaRows, string> = {
-  sm: "min-h-[80px] rounded-[8px] pt-[10px] pr-[12px] pb-[8px] pl-[12px]",
-  md: "min-h-[104px] rounded-[12px] pt-[12px] pr-[14px] pb-[8px] pl-[14px]",
-  lg: "min-h-[128px] rounded-[16px] pt-[14px] pr-[16px] pb-[8px] pl-[16px]",
+  sm: "min-h-[80px] rounded-[8px] pt-[8.5px] pr-[10.5px] pb-[6.5px] pl-[10.5px]",
+  md: "min-h-[104px] rounded-[12px] pt-[10.5px] pr-[12.5px] pb-[6.5px] pl-[12.5px]",
+  lg: "min-h-[128px] rounded-[16px] pt-[12.5px] pr-[14.5px] pb-[6.5px] pl-[14.5px]",
 };
 
 /** Value type ramp — LG steps up, matching Figma. */

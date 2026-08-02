@@ -33,6 +33,11 @@ import { cn } from "../../lib/cn";
 export const buttonVariants = cva(
   [
     "inline-flex items-center justify-center whitespace-nowrap select-none",
+    // Figma padding is measured from the frame edge and its INSIDE stroke sits
+    // inside it, so a bordered button puts its label at the same offset as an
+    // unbordered one. CSS border-box adds the border on top, so bordered
+    // hierarchies subtract it back out through --bd.
+    "[--bd:0px]",
     "font-sans font-semibold transition-[colors,box-shadow] duration-fast ease-standard",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     // Figma: every hierarchy collapses to the same Disabled treatment —
@@ -52,7 +57,7 @@ export const buttonVariants = cva(
         ],
         secondary: [
           "bg-button-secondary-bg text-button-secondary-text",
-          "border-solid border-[1.5px] border-button-secondary-border",
+          "border-solid border-[1.5px] border-button-secondary-border [--bd:1.5px]",
           "hover:bg-button-secondary-bg-hover hover:border-button-secondary-border-hover",
           "active:bg-button-secondary-bg-pressed active:border-button-secondary-border-hover",
           "focus-visible:border-border-focus",
@@ -76,7 +81,7 @@ export const buttonVariants = cva(
         outline: [
           // Border stays brand in every state — only the fill changes.
           "bg-transparent text-text-brand",
-          "border-solid border-[1.5px] border-border-brand",
+          "border-solid border-[1.5px] border-border-brand [--bd:1.5px]",
           "hover:bg-button-outline-bg-hover active:bg-button-outline-bg-pressed",
         ],
         inverse: [
@@ -92,11 +97,11 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        sm: "h-[32px] rounded-[8px] px-[12px] gap-[6px] text-[12px] leading-[16px] [&_svg]:size-[14px]",
-        md: "h-[36px] rounded-[8px] px-[14px] gap-[6px] text-[14px] leading-[20px] [&_svg]:size-[16px]",
-        lg: "h-[40px] rounded-[12px] px-[16px] gap-[6px] text-[14px] leading-[20px] [&_svg]:size-[16px]",
-        xl: "h-[44px] rounded-[12px] px-[20px] gap-[8px] text-[16px] leading-[24px] [&_svg]:size-[20px]",
-        "2xl": "h-[48px] rounded-[16px] px-[24px] gap-[8px] text-[16px] leading-[24px] [&_svg]:size-[20px]",
+        sm: "h-[32px] rounded-[8px] px-[calc(12px-var(--bd))] gap-[6px] text-[12px] leading-[16px] [&_svg]:size-[14px]",
+        md: "h-[36px] rounded-[8px] px-[calc(14px-var(--bd))] gap-[6px] text-[14px] leading-[20px] [&_svg]:size-[16px]",
+        lg: "h-[40px] rounded-[12px] px-[calc(16px-var(--bd))] gap-[6px] text-[14px] leading-[20px] [&_svg]:size-[16px]",
+        xl: "h-[44px] rounded-[12px] px-[calc(20px-var(--bd))] gap-[8px] text-[16px] leading-[24px] [&_svg]:size-[20px]",
+        "2xl": "h-[48px] rounded-[16px] px-[calc(24px-var(--bd))] gap-[8px] text-[16px] leading-[24px] [&_svg]:size-[20px]",
       },
     },
     defaultVariants: { variant: "primary", size: "lg" },
