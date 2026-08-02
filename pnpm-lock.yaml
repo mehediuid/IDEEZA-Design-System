@@ -76,6 +76,21 @@ importers:
         specifier: ^5.4.8
         version: 5.4.21(@types/node@20.19.39)
 
+  packages/icons:
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.1
+        version: 18.3.28
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      tsup:
+        specifier: ^8.3.0
+        version: 8.5.1(jiti@1.21.7)(postcss@8.5.14)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.6.2
+        version: 5.9.3
+
   packages/tokens:
     devDependencies:
       tailwindcss:
@@ -90,6 +105,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@ideeza/icons':
+        specifier: workspace:*
+        version: link:../icons
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.2.4(@types/react@18.3.28)(react@18.3.1)
