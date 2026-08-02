@@ -3,23 +3,11 @@ import { cn } from "../../lib/cn";
 import {
   FieldShell,
   controlChrome,
+  controlClass,
   iconClass,
   valueClass,
   type FieldSize,
 } from "../Field/Field";
-
-/**
- * A06 uses a flat 12px horizontal padding at every size, unlike Text Input
- * which ramps 10/10/12/12/14. Mirrored exactly rather than unified — see the
- * note in IDEEZA-Handoff.md about cross-control padding.
- */
-const selectControlClass: Record<FieldSize, string> = {
-  32: "h-[32px] rounded-[8px] px-[12px] gap-[8px]",
-  36: "h-[36px] rounded-[8px] px-[12px] gap-[8px]",
-  40: "h-[40px] rounded-[12px] px-[12px] gap-[8px]",
-  44: "h-[44px] rounded-[12px] px-[12px] gap-[8px]",
-  48: "h-[48px] rounded-[16px] px-[12px] gap-[8px]",
-};
 
 /**
  * Select — mirrors Figma `A06 Select` (Atoms — Input), 35 variants.
@@ -28,10 +16,10 @@ const selectControlClass: Record<FieldSize, string> = {
  * pickers and form submission behave correctly. Figma's `Open` state is the
  * browser's own popup; the trigger keeps the focus treatment.
  *
- * Geometry matches A06: 32 · r8 · px12 | 40 · r12 · px12 | 48 · r16 · px12.
- * Value type follows the Text Input ramp — 32/36/40 → 14/20, 44/48 → 16/24.
- * A06 previously used 16/24 from 40 up, so a Select and an Input of the same
- * height showed different text sizes; the Figma component was corrected.
+ * Shares the field ramp with every other control — height, radius, padding,
+ * gap, value type and icon size all come from Field. A06 used to have its own
+ * flat 12px padding and a different type step; Figma was corrected so that a
+ * Select and an Input of the same height are identical apart from the chevron.
  */
 export type SelectSize = FieldSize;
 
@@ -95,7 +83,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           data-disabled={Boolean(disabled)}
           className={cn(
             controlChrome,
-            selectControlClass[size],
+            controlClass[size],
             iconClass[size],
             "relative [&_svg]:shrink-0 [&_svg]:text-icon-default"
           )}
