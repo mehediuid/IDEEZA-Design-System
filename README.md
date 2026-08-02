@@ -47,7 +47,7 @@ Generated from the IDEEZA Figma file (`V3uizmZLHo5Xhy65Dp3F0O`):
 - **Organisms** — App, Marketing
 - **Screens** — Auth, Core, Settings, Marketing, Email Templates
 
-This repo currently ships the tokens package and `Button` as a starter. Add components incrementally — see [Adding a component](#adding-a-component).
+This repo ships the tokens package, `@ideeza/ui` (Button, IconButton, Badge, Toggle) and a local Storybook playground. Add more components incrementally — see [Adding a component](#adding-a-component).
 
 ---
 
@@ -71,7 +71,11 @@ import { ideezaPreset } from "@ideeza/tokens/tailwind-preset";
 
 export default {
   presets: [ideezaPreset],
-  content: ["./src/**/*.{ts,tsx}"],
+  content: [
+    "./src/**/*.{ts,tsx}",
+    // Required so Tailwind generates the classes used inside @ideeza/ui:
+    "./node_modules/@ideeza/ui/dist/**/*.{js,cjs}",
+  ],
 };
 ```
 
@@ -186,9 +190,10 @@ The release workflow auto-publishes on merge to `main` when a changeset is prese
 ## Roadmap
 
 - [x] Tokens package (full)
-- [x] UI package scaffold + `Button`
-- [ ] `Input`, `Toggle`, `IconButton` (Atoms — Action / Input)
-- [ ] `Badge`, `Tag`, `Avatar`, `Tooltip` (Atoms — Display)
+- [x] UI package — `Button`, `IconButton`, `Badge`, `Toggle`
+- [x] Storybook app (`pnpm storybook`)
+- [ ] `Input`, `Select`, `Checkbox` (Atoms — Input)
+- [ ] `Tag`, `Avatar`, `Tooltip` (Atoms — Display)
 - [ ] `Dialog`, `Sheet`, `Popover`, `Toast` (Molecules — Overlay / Feedback)
 - [ ] Icons package (Lucide wrapper)
 - [ ] Charts package (Recharts wrapper using tokens)

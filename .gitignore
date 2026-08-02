@@ -33,3 +33,7 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+preview/
+package-lock.json
+*.command
+ideeza-color-changes.pdf

@@ -1,0 +1,127 @@
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "../../lib/cn";
+
+/**
+ * Button — mirrors Figma `A01 Button` (Atoms — Action).
+ *
+ * Figma variant map:
+ * - Hierarchy → `variant`  (Primary / Secondary / Ghost / Danger)
+ * - Size      → `size`     (SM / MD / LG / XL / 2XL)
+ * - State     → interaction pseudo-classes + `disabled` + `loading`
+ * - Has icon leading/trailing → `leftIcon` / `rightIcon`
+ *
+ * Focus matches the Figma `State=Focus` variants: a soft halo —
+ * 3px spread at offset 0, sitting flush against the button edge.
+ * No detached ring, no offset, so dense toolbars stay tight.
+ * Halo color is per-variant (`focus-halo`, `-on-fill`, `-danger`).
+ */
+export const buttonVariants = cva(
+  [
+    "inline-flex items-center justify-center gap-[8px] whitespace-nowrap select-none",
+    "font-sans font-semibold transition-[colors,box-shadow] duration-fast ease-standard",
+    "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+    "disabled:pointer-events-none disabled:bg-bg-subtle disabled:text-text-disabled",
+  ],
+  {
+    variants: {
+      variant: {
+        primary: [
+          "bg-button-primary-bg text-button-primary-text",
+          "hover:bg-button-primary-bg-hover active:bg-button-primary-bg-pressed",
+          "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo-on-fill)]",
+        ],
+        secondary: [
+          "bg-button-secondary-bg text-button-secondary-text",
+          "border border-button-secondary-border",
+          "hover:bg-bg-subtle active:bg-bg-surface-raised",
+          "disabled:border-transparent",
+        ],
+        ghost: [
+          "bg-transparent text-text-primary",
+          "hover:bg-button-ghost-bg-hover active:bg-bg-surface-raised",
+          "disabled:bg-transparent",
+        ],
+        danger: [
+          "bg-button-danger-bg text-text-on-brand",
+          "hover:bg-[var(--color-red-600)] active:bg-[var(--color-red-700)]",
+          "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo-danger)]",
+        ],
+      },
+      size: {
+        sm: "h-[32px] rounded-[6px] px-[12px] text-[12px]",
+        md: "h-[40px] rounded-[8px] px-[16px] text-[14px]",
+        lg: "h-[44px] rounded-[8px] px-[20px] text-[14px]",
+        xl: "h-[48px] rounded-[8px] px-[24px] text-[16px]",
+        "2xl": "h-[56px] rounded-[12px] px-[32px] text-[16px]",
+      },
+    },
+    defaultVariants: { variant: "primary", size: "md" },
+  }
+);
+
+const spinnerSize: Record<string, string> = {
+  sm: "size-[14px]",
+  md: "size-[16px]",
+  lg: "size-[16px]",
+  xl: "size-[20px]",
+  "2xl": "size-[20px]",
+};
+
+function Spinner({ className }: { className?: string }) {
+  return (
+    <svg
+      className={cn("animate-spin", className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.25" strokeWidth="4" />
+      <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  /** Render as the child element (e.g. a link) via Radix Slot. */
+  asChild?: boolean;
+  /** Shows a spinner and disables interaction. Mirrors Figma `State=Loading`. */
+  loading?: boolean;
+  /** Icon before the label. Mirrors `Has icon leading`. */
+  leftIcon?: React.ReactNode;
+  /** Icon after the label. Mirrors `Has icon trailing`. */
+  rightIcon?: React.ReactNode;
+}
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    { className, variant, size, asChild = false, loading = false, disabled, leftIcon, rightIcon, children, ...props },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
+    const sz = size ?? "md";
+    return (
+      <Comp
+        ref={ref}
+        className={cn(buttonVariants({ variant, size }), className)}
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {loading ? <Spinner className={spinnerSize[sz]} /> : leftIcon}
+            {children}
+            {!loading && rightIcon}
+          </>
+        )}
+      </Comp>
+    );
+  }
+);
+Button.displayName = "Button";
