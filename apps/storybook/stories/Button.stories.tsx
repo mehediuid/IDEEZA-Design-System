@@ -3,18 +3,45 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "@ideeza/ui";
 
 const Star = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-[16px]" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
     <path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L12 17.8l-5.8 3 1.1-6.4L2.6 9.8l6.5-.9L12 3z" strokeLinejoin="round" />
   </svg>
 );
+const Sparkle = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <path d="M12 3v6M12 15v6M3 12h6M15 12h6" strokeLinecap="round" />
+  </svg>
+);
+
+const VARIANTS = ["primary", "secondary", "ghost", "danger", "tonal", "outline", "inverse", "ai"] as const;
+const SIZES = ["sm", "md", "lg", "xl", "2xl"] as const;
+
+/** Figma geometry, for the size table. */
+const SIZE_SPEC: Record<(typeof SIZES)[number], string> = {
+  sm: "SM · 32px · r8",
+  md: "MD · 36px · r8",
+  lg: "LG · 40px · r12",
+  xl: "XL · 44px · r12",
+  "2xl": "2XL · 48px · r16",
+};
 
 const meta = {
   title: "Atoms/A01 Button",
   component: Button,
-  args: { children: "Button", variant: "primary", size: "md" },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Mirrors Figma `A01 Button` — 8 hierarchies × 5 sizes. Geometry, colours, depth and focus are taken from the Figma variants, not approximated.",
+      },
+    },
+  },
+  args: { children: "Button", variant: "primary", size: "lg" },
   argTypes: {
-    variant: { control: "select", options: ["primary", "secondary", "ghost", "danger"] },
-    size: { control: "select", options: ["sm", "md", "lg", "xl", "2xl"] },
+    variant: { control: "select", options: VARIANTS },
+    size: { control: "select", options: SIZES },
+    loading: { control: "boolean" },
+    disabled: { control: "boolean" },
   },
 } satisfies Meta<typeof Button>;
 export default meta;
@@ -22,19 +49,76 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const AllVariants: Story = {
+/** Every hierarchy in every state. Inverse sits on a dark surface, as in Figma. */
+export const AllHierarchies: Story = {
   render: () => (
-    <div className="flex flex-col gap-[16px]">
-      {(["primary", "secondary", "ghost", "danger"] as const).map((v) => (
-        <div key={v} className="flex items-center gap-[12px]">
-          <Button variant={v} size="sm">Button</Button>
-          <Button variant={v} size="md">Button</Button>
-          <Button variant={v} size="lg">Button</Button>
-          <Button variant={v} size="md" leftIcon={<Star />}>With icon</Button>
-          <Button variant={v} size="md" loading>Loading</Button>
-          <Button variant={v} size="md" disabled>Disabled</Button>
+    <div className="flex flex-col gap-[20px]">
+      {VARIANTS.map((v) => (
+        <div
+          key={v}
+          className={
+            "flex flex-col gap-[8px] rounded-[12px] p-[16px] " +
+            (v === "inverse" ? "bg-bg-inverse" : "bg-bg-surface")
+          }
+        >
+          <span
+            className={
+              "text-[11px] font-semibold uppercase tracking-wide " +
+              (v === "inverse" ? "text-text-inverse" : "text-text-tertiary")
+            }
+          >
+            {v}
+          </span>
+          <div className="flex flex-wrap items-center gap-[12px]">
+            <Button variant={v}>Default</Button>
+            <Button variant={v} leftIcon={<Star />}>With icon</Button>
+            <Button variant={v} rightIcon={<Sparkle />}>Trailing</Button>
+            <Button variant={v} loading>Loading</Button>
+            <Button variant={v} disabled>Disabled</Button>
+          </div>
         </div>
       ))}
+    </div>
+  ),
+};
+
+/** Size scale — matches Figma SM 32 / MD 36 / LG 40 / XL 44 / 2XL 48. */
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex flex-col gap-[16px]">
+      {SIZES.map((s) => (
+        <div key={s} className="flex items-center gap-[12px]">
+          <span className="w-[120px] text-[11px] font-semibold text-text-tertiary">{SIZE_SPEC[s]}</span>
+          <Button size={s} variant="primary">Button</Button>
+          <Button size={s} variant="secondary">Button</Button>
+          <Button size={s} variant="tonal">Button</Button>
+          <Button size={s} variant="outline">Button</Button>
+          <Button size={s} variant="primary" leftIcon={<Star />}>Icon</Button>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+/**
+ * Focus halo — 3px spread at offset 0, flush against the edge.
+ * Tab through these; the halo colour changes per hierarchy.
+ */
+export const FocusHalo: Story = {
+  render: () => (
+    <div className="flex flex-col gap-[16px]">
+      <p className="max-w-[520px] text-[12px] text-text-secondary">
+        Press <kbd>Tab</kbd> to move focus. Primary, Danger and AI use a stronger on-fill halo;
+        Inverse uses the white one. Nothing shifts — the halo is a shadow, not a layout ring.
+      </p>
+      <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] bg-bg-surface p-[16px]">
+        {VARIANTS.filter((v) => v !== "inverse").map((v) => (
+          <Button key={v} variant={v}>{v}</Button>
+        ))}
+      </div>
+      <div className="flex items-center gap-[12px] rounded-[12px] bg-bg-inverse p-[16px]">
+        <Button variant="inverse">inverse</Button>
+      </div>
     </div>
   ),
 };

@@ -12,10 +12,10 @@ const Gear = () => (
 const meta = {
   title: "Atoms/A02 Icon Button",
   component: IconButton,
-  args: { "aria-label": "Settings", variant: "ghost", size: "md", children: <Gear /> },
+  args: { "aria-label": "Settings", variant: "ghost", size: 40, children: <Gear /> },
   argTypes: {
     variant: { control: "select", options: ["primary", "secondary", "ghost", "danger"] },
-    size: { control: "select", options: ["sm", "md", "lg", "xl"] },
+    size: { control: "select", options: [32, 36, 40, 44, 48] },
   },
 } satisfies Meta<typeof IconButton>;
 export default meta;
@@ -30,8 +30,8 @@ export const AllVariants: Story = {
       <IconButton variant="secondary" aria-label="Settings"><Gear /></IconButton>
       <IconButton variant="ghost" aria-label="Settings"><Gear /></IconButton>
       <IconButton variant="danger" aria-label="Settings"><Gear /></IconButton>
-      <IconButton variant="ghost" size="sm" aria-label="Settings"><Gear /></IconButton>
-      <IconButton variant="ghost" size="lg" aria-label="Settings"><Gear /></IconButton>
+      <IconButton variant="ghost" size={32} aria-label="Settings"><Gear /></IconButton>
+      <IconButton variant="ghost" size={44} aria-label="Settings"><Gear /></IconButton>
       <IconButton variant="ghost" aria-label="Settings" disabled><Gear /></IconButton>
     </div>
   ),

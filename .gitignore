@@ -37,3 +37,4 @@ preview/
 package-lock.json
 *.command
 ideeza-color-changes.pdf
+.deps-platform

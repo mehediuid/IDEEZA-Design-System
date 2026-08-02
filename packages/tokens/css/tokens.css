@@ -301,6 +301,34 @@
   --color-focus-halo-inverse: rgba(255, 255, 255, 0.60);
   --color-focus-halo-ai: rgba(124, 45, 185, 0.55);
 
+  /* Button / focus additions — synced from Figma A01 */
+  --color-button-tonal-bg: #f8f5ff;
+  --color-button-tonal-bg-hover: #ede5ff;
+  --color-button-tonal-bg-pressed: #d9cafe;
+  --color-button-tonal-text: #6a1fa4;
+  --color-button-inverse-bg: #ffffff;
+  --color-button-inverse-bg-hover: #f1f5f9;
+  --color-button-inverse-bg-pressed: #e2e8f0;
+  --color-button-inverse-text: #0c121d;
+  --color-button-danger-bg-hover: #b91c1c;
+  --color-button-danger-bg-pressed: #991b1b;
+  --color-button-secondary-bg-hover: #f1f5f9;
+  --color-button-secondary-bg-pressed: #e2e8f0;
+  --color-button-secondary-border-hover: #94a3b8;
+  --color-button-outline-bg-hover: #ede5ff;
+  --color-button-outline-bg-pressed: #d9cafe;
+  --color-border-focus-on-fill: #3e0e68;
+  --color-border-focus-danger: #7f1d1d;
+  --color-border-focus-inverse: #d9cafe;
+  --color-text-brand-hover: #6a1fa4;
+  --color-text-error-hover: #991b1b;
+  --shadow-depth-accent: inset 0 1px 0 0 rgba(255,255,255,0.28), inset 0 -2px 3px 0 rgba(40,8,80,0.18);
+
+  /* Brand/AI gradient — Figma paint styles, ~121deg (violet → blue) */
+  --gradient-ai: linear-gradient(121deg, var(--color-violet-600) 0%, var(--color-blue-600) 100%);
+  --gradient-ai-hover: linear-gradient(121deg, var(--color-violet-700) 0%, var(--color-blue-700) 100%);
+  --gradient-ai-pressed: linear-gradient(121deg, var(--color-violet-800) 0%, var(--color-blue-800) 100%);
+
   /* Icons */
   --color-icon-default: var(--color-gray-600);
   --color-icon-secondary: var(--color-gray-300);
@@ -428,6 +456,29 @@
   --color-focus-halo-inverse: rgba(255, 255, 255, 0.60);
   --color-focus-halo-ai: rgba(171, 96, 247, 0.55);
 
+  /* Button / focus additions — synced from Figma A01 */
+  --color-button-tonal-bg: #280850;
+  --color-button-tonal-bg-hover: #3e0e68;
+  --color-button-tonal-bg-pressed: #55168a;
+  --color-button-tonal-text: #d9cafe;
+  --color-button-inverse-bg: #ffffff;
+  --color-button-inverse-bg-hover: #f1f5f9;
+  --color-button-inverse-bg-pressed: #e2e8f0;
+  --color-button-inverse-text: #0c121d;
+  --color-button-danger-bg-hover: #b91c1c;
+  --color-button-danger-bg-pressed: #991b1b;
+  --color-button-secondary-bg-hover: #1e293b;
+  --color-button-secondary-bg-pressed: #334155;
+  --color-button-secondary-border-hover: #64748b;
+  --color-button-outline-bg-hover: #3e0e68;
+  --color-button-outline-bg-pressed: #55168a;
+  --color-border-focus-on-fill: #d9cafe;
+  --color-border-focus-danger: #fecaca;
+  --color-border-focus-inverse: #d9cafe;
+  --color-text-brand-hover: #bb96fc;
+  --color-text-error-hover: #fecaca;
+  --shadow-depth-accent: inset 0 1px 0 0 rgba(255,255,255,0.28), inset 0 -2px 3px 0 rgba(40,8,80,0.18);
+
   /* Icons */
   --color-icon-default: var(--color-gray-400);
   --color-icon-secondary: var(--color-gray-300);
@@ -492,6 +543,29 @@
     --color-focus-halo-danger: rgba(248, 113, 113, 0.50);
     --color-focus-halo-inverse: rgba(255, 255, 255, 0.60);
     --color-focus-halo-ai: rgba(171, 96, 247, 0.55);
+
+    /* Button / focus additions — synced from Figma A01 */
+    --color-button-tonal-bg: #280850;
+    --color-button-tonal-bg-hover: #3e0e68;
+    --color-button-tonal-bg-pressed: #55168a;
+    --color-button-tonal-text: #d9cafe;
+    --color-button-inverse-bg: #ffffff;
+    --color-button-inverse-bg-hover: #f1f5f9;
+    --color-button-inverse-bg-pressed: #e2e8f0;
+    --color-button-inverse-text: #0c121d;
+    --color-button-danger-bg-hover: #b91c1c;
+    --color-button-danger-bg-pressed: #991b1b;
+    --color-button-secondary-bg-hover: #1e293b;
+    --color-button-secondary-bg-pressed: #334155;
+    --color-button-secondary-border-hover: #64748b;
+    --color-button-outline-bg-hover: #3e0e68;
+    --color-button-outline-bg-pressed: #55168a;
+    --color-border-focus-on-fill: #d9cafe;
+    --color-border-focus-danger: #fecaca;
+    --color-border-focus-inverse: #d9cafe;
+    --color-text-brand-hover: #bb96fc;
+    --color-text-error-hover: #fecaca;
+    --shadow-depth-accent: inset 0 1px 0 0 rgba(255,255,255,0.28), inset 0 -2px 3px 0 rgba(40,8,80,0.18);
 
     --elevation-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
     --elevation-2: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
