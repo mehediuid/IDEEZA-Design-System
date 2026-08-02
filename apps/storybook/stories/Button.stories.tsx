@@ -18,11 +18,11 @@ const SIZES = ["sm", "md", "lg", "xl", "2xl"] as const;
 
 /** Figma geometry, for the size table. */
 const SIZE_SPEC: Record<(typeof SIZES)[number], string> = {
-  sm: "SM · 32px · r8",
-  md: "MD · 36px · r8",
-  lg: "LG · 40px · r12",
-  xl: "XL · 44px · r12",
-  "2xl": "2XL · 48px · r16",
+  sm: "SM · 32 · r8 · px12 · 12/16",
+  md: "MD · 36 · r8 · px14 · 14/20",
+  lg: "LG · 40 · r12 · px16 · 14/20",
+  xl: "XL · 44 · r12 · px20 · 16/24",
+  "2xl": "2XL · 48 · r16 · px24 · 16/24",
 };
 
 const meta = {
@@ -88,7 +88,7 @@ export const Sizes: Story = {
     <div className="flex flex-col gap-[16px]">
       {SIZES.map((s) => (
         <div key={s} className="flex items-center gap-[12px]">
-          <span className="w-[120px] text-[11px] font-semibold text-text-tertiary">{SIZE_SPEC[s]}</span>
+          <span className="w-[190px] text-[11px] font-semibold text-text-tertiary">{SIZE_SPEC[s]}</span>
           <Button size={s} variant="primary">Button</Button>
           <Button size={s} variant="secondary">Button</Button>
           <Button size={s} variant="tonal">Button</Button>

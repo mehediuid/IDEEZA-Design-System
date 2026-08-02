@@ -15,10 +15,13 @@ import { cn } from "../../lib/cn";
  *
  * Geometry is taken from the Figma variants, not guessed:
  *   SM  32px · radius/lg  8 · px 12 · gap 6 · 12/16 semibold
- *   MD  36px · radius/lg  8 · px 12 · gap 6 · 12/16 semibold
+ *   MD  36px · radius/lg  8 · px 14 · gap 6 · 14/20 semibold
  *   LG  40px · radius/xl 12 · px 16 · gap 6 · 14/20 semibold
- *   XL  44px · radius/xl 12 · px 20 · gap 8 · 14/20 semibold
- *   2XL 48px · radius/2xl 16 · px 20 · gap 8 · 16/20 semibold
+ *   XL  44px · radius/xl 12 · px 20 · gap 8 · 16/24 semibold
+ *   2XL 48px · radius/2xl 16 · px 24 · gap 8 · 16/24 semibold
+ *
+ * MD, XL and 2XL were corrected on 2026-08-02: MD was an exact copy of SM
+ * apart from height, XL shared SM/LG's type, and 2XL shared XL's padding.
  *
  * Focus is the soft halo — 3px spread at offset 0, flush against the edge,
  * per-variant colour (`focus-halo`, `-on-fill`, `-danger`, `-inverse`).
@@ -90,10 +93,10 @@ export const buttonVariants = cva(
       },
       size: {
         sm: "h-[32px] rounded-[8px] px-[12px] gap-[6px] text-[12px] leading-[16px] [&_svg]:size-[14px]",
-        md: "h-[36px] rounded-[8px] px-[12px] gap-[6px] text-[12px] leading-[16px] [&_svg]:size-[16px]",
+        md: "h-[36px] rounded-[8px] px-[14px] gap-[6px] text-[14px] leading-[20px] [&_svg]:size-[16px]",
         lg: "h-[40px] rounded-[12px] px-[16px] gap-[6px] text-[14px] leading-[20px] [&_svg]:size-[16px]",
-        xl: "h-[44px] rounded-[12px] px-[20px] gap-[8px] text-[14px] leading-[20px] [&_svg]:size-[20px]",
-        "2xl": "h-[48px] rounded-[16px] px-[20px] gap-[8px] text-[16px] leading-[20px] [&_svg]:size-[20px]",
+        xl: "h-[44px] rounded-[12px] px-[20px] gap-[8px] text-[16px] leading-[24px] [&_svg]:size-[20px]",
+        "2xl": "h-[48px] rounded-[16px] px-[24px] gap-[8px] text-[16px] leading-[24px] [&_svg]:size-[20px]",
       },
     },
     defaultVariants: { variant: "primary", size: "lg" },
