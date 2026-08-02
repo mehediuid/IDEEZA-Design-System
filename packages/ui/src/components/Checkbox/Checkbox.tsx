@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { Check, Minus } from "../../lib/icons";
 
 /**
  * Checkbox — mirrors Figma `A08 Selection Control` (Type=Checkbox) and its
@@ -7,7 +8,7 @@ import { cn } from "../../lib/cn";
  *
  * Extracted from Figma, not approximated:
  *   box      sm 20×20 radius 6 · md 24×24 radius 8 · 2px border
- *   check    sm 10×8 · md 12×10
+ *   check    sm 10×8 · md 12×10 — a 16px / 20px icon/tick-02 instance
  *   row gap  16px between control and text (not 8)
  *   label    sm 14/20 regular · md 16/24 regular · color input/label
  *   support  sm 11/16 regular · md 12/16 regular · color input/helper
@@ -26,14 +27,13 @@ const boxClass: Record<CheckboxSize, string> = {
   sm: "size-[20px] rounded-[6px]",
   md: "size-[24px] rounded-[8px]",
 };
-/** Figma check vector bounds. */
-const checkSize: Record<CheckboxSize, { w: number; h: number }> = {
-  sm: { w: 10, h: 8 },
-  md: { w: 12, h: 10 },
-};
-const dashSize: Record<CheckboxSize, { w: number; h: number }> = {
-  sm: { w: 10, h: 2 },
-  md: { w: 12, h: 2 },
+/**
+ * Glyph box. Figma puts a 16px _Check icon inside the 20px box and a 20px one
+ * inside the 24px box, which is what produces the 10×8 / 12×10 tick bounds.
+ */
+const glyphSize: Record<CheckboxSize, string> = {
+  sm: "size-[16px]",
+  md: "size-[20px]",
 };
 const labelClass: Record<CheckboxSize, string> = {
   sm: "text-[14px] leading-[20px]",
@@ -67,9 +67,6 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       if (inner.current) inner.current.indeterminate = Boolean(indeterminate);
     }, [indeterminate]);
 
-    const chk = checkSize[size];
-    const dash = dashSize[size];
-
     return (
       <div className={cn("flex items-start gap-[16px]", containerClassName)}>
         <span className="relative inline-flex shrink-0">
@@ -92,29 +89,21 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             )}
             {...props}
           />
-          {/* Check — viewBox matches the Figma vector bounds so the glyph is the right size. */}
-          <svg
-            viewBox="0 0 10 8"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
-            style={{ width: chk.w, height: chk.h }}
+          {/* Library glyphs — icon/tick-02 and icon/remove-01, exported verbatim. */}
+          <Check
             className={cn(
               "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
               "opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-0",
-              "peer-disabled:text-text-disabled"
+              "peer-disabled:text-text-disabled",
+              glyphSize[size]
             )}
-          >
-            <path d="M1 4.2 3.6 6.8 9 1.2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span
-            aria-hidden="true"
-            style={{ width: dash.w, height: dash.h }}
+          />
+          <Minus
             className={cn(
-              "pointer-events-none absolute inset-0 m-auto rounded-full bg-icon-on-brand",
+              "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
               "opacity-0 peer-indeterminate:opacity-100",
-              "peer-disabled:bg-text-disabled"
+              "peer-disabled:text-text-disabled",
+              glyphSize[size]
             )}
           />
         </span>

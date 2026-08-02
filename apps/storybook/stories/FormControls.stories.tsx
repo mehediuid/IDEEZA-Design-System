@@ -22,7 +22,7 @@ export const TextareaRows: Story = {
     <div className="flex flex-col gap-[20px] max-w-[420px]">
       <Textarea rows="sm" label="Rows = sm" placeholder="Placeholder text" helperText="Helper text" />
       <Textarea rows="md" label="Rows = md" placeholder="Placeholder text" helperText="Helper text" />
-      <Textarea rows="lg" label="Rows = lg" placeholder="Placeholder text" showCount maxLength={200} />
+      <Textarea rows="lg" label="Rows = lg" placeholder="Placeholder text" helperText="Helper text" showCount maxLength={200} />
       <Textarea rows="md" label="Error" defaultValue="Too short" error="Please write at least 20 characters" />
       <Textarea rows="md" label="Disabled" placeholder="Placeholder text" helperText="Helper text" disabled />
     </div>

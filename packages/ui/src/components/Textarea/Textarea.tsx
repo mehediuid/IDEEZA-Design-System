@@ -10,7 +10,9 @@ import { FieldShell, controlChrome, type FieldSize } from "../Field/Field";
  *   MD · 104px · radius/xl 12 · pad 12/14/8/14 · value 14/20 · label 12/16
  *   LG · 128px · radius/2xl 16 · pad 14/16/8/16 · value 16/24 · label 14/20
  *
- * Padding is asymmetric — bottom stays 8 at every size.
+ * Padding is asymmetric — bottom stays 8 at every size, leaving room for the
+ * resize handle. Helper text and the character counter share one footer row —
+ * helper left, count right — exactly as in the Figma `Footer` frame.
  */
 export type TextareaRows = "sm" | "md" | "lg";
 
@@ -86,6 +88,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         disabled={disabled}
         htmlFor={areaId}
         className={containerClassName}
+        footerRight={showCount && maxLength ? `${count}/${maxLength}` : undefined}
       >
         <div
           data-invalid={invalid}
@@ -103,7 +106,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             aria-invalid={invalid || undefined}
             aria-describedby={helperText || error ? `${areaId}-description` : undefined}
             className={cn(
-              "min-h-full w-full resize-none bg-transparent font-sans",
+              // Figma draws a resize handle bottom-right, so the field is vertically resizable.
+              "min-h-full w-full resize-y bg-transparent font-sans",
               rowsValueClass[rows],
               "text-input-text outline-none placeholder:text-input-placeholder",
               "disabled:cursor-not-allowed disabled:text-text-disabled disabled:placeholder:text-text-disabled",
@@ -113,16 +117,6 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
         </div>
 
-        {showCount && maxLength ? (
-          <span
-            className={cn(
-              "self-end font-sans text-[12px] leading-[16px] tabular-nums",
-              disabled ? "text-text-disabled" : "text-input-helper"
-            )}
-          >
-            {count}/{maxLength}
-          </span>
-        ) : null}
       </FieldShell>
     );
   }

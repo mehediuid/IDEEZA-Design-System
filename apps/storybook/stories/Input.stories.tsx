@@ -77,3 +77,30 @@ export const IconsAndAddons: Story = {
     </div>
   ),
 };
+
+/** Select addons — Figma `Prefix Select`, `Suffix Select` and `Both Select`. */
+export const SelectAddons: Story = {
+  render: () => {
+    const protocols = (
+      <>
+        <option>https://</option>
+        <option>http://</option>
+      </>
+    );
+    const units = (
+      <>
+        <option>USD</option>
+        <option>EUR</option>
+        <option>BDT</option>
+      </>
+    );
+    return (
+      <div className="flex flex-col gap-[16px] max-w-[400px]">
+        <Input label="Prefix Select" prefixSelect={protocols} placeholder="ideeza.com" />
+        <Input label="Suffix Select" suffixSelect={units} placeholder="0.00" />
+        <Input label="Both Select" prefixSelect={protocols} suffixSelect={units} placeholder="0.00" />
+        <Input label="Disabled" prefixSelect={protocols} placeholder="ideeza.com" disabled />
+      </div>
+    );
+  },
+};

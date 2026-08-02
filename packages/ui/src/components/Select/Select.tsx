@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { ChevronDown } from "../../lib/icons";
 import {
   FieldShell,
   controlChrome,
@@ -22,12 +23,6 @@ import {
  * Select and an Input of the same height are identical apart from the chevron.
  */
 export type SelectSize = FieldSize;
-
-const Chevron = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 export interface SelectProps
   extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "size"> {
@@ -115,7 +110,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             ) : null}
             {children}
           </select>
-          <Chevron />
+          <ChevronDown />
         </div>
       </FieldShell>
     );

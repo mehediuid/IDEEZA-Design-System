@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { ChevronDown } from "../../lib/icons";
 import {
   FieldShell,
   controlChrome,
@@ -14,7 +15,8 @@ import {
  *
  * Figma variant map:
  * - Size  → `size` — 32 / 36 / 40 / 44 / 48 (named by pixel height, as in Figma)
- * - Type  → `leftIcon` / `rightIcon` / `prefix` / `suffix`
+ * - Type  → `leftIcon` / `rightIcon` / `prefix` / `suffix` /
+ *            `prefixSelect` / `suffixSelect` (both together = `Both Select`)
  * - State → pseudo-classes + `error` + `disabled`
  *
  * Geometry per size (height · radius · padding-x):
@@ -66,6 +68,18 @@ export interface InputProps
   prefix?: React.ReactNode;
   /** Text addon flush to the right edge, e.g. `.com` or `USD`. */
   suffix?: React.ReactNode;
+  /**
+   * `<option>` elements for a select addon on the left.
+   * Mirrors Figma `Type=Prefix Select`; combine with `suffixSelect` for
+   * `Type=Both Select`.
+   */
+  prefixSelect?: React.ReactNode;
+  /** Props forwarded to the left addon's `<select>`. */
+  prefixSelectProps?: React.SelectHTMLAttributes<HTMLSelectElement>;
+  /** `<option>` elements for a select addon on the right. `Type=Suffix Select`. */
+  suffixSelect?: React.ReactNode;
+  /** Props forwarded to the right addon's `<select>`. */
+  suffixSelectProps?: React.SelectHTMLAttributes<HTMLSelectElement>;
   /** Class for the field shell rather than the `<input>` itself. */
   containerClassName?: string;
 }
@@ -82,6 +96,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       rightIcon,
       prefix,
       suffix,
+      prefixSelect,
+      prefixSelectProps,
+      suffixSelect,
+      suffixSelectProps,
       className,
       containerClassName,
       disabled,
@@ -94,17 +112,40 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? autoId;
     const invalid = Boolean(error);
 
+    const addonShell = (side: "l" | "r", extra?: string) =>
+      cn(
+        "flex shrink-0 self-stretch items-center bg-bg-subtle text-input-placeholder",
+        "font-sans",
+        valueClass[size],
+        addonPad[size],
+        side === "l" ? addonRadius[size] : addonRadiusRight[size],
+        extra
+      );
+
     const addon = (node: React.ReactNode, side: "l" | "r") => (
-      <span
-        className={cn(
-          "flex shrink-0 self-stretch items-center bg-bg-subtle text-input-placeholder",
-          "font-sans",
-          valueClass[size],
-          addonPad[size],
-          side === "l" ? addonRadius[size] : addonRadiusRight[size]
-        )}
-      >
-        {node}
+      <span className={addonShell(side)}>{node}</span>
+    );
+
+    /** Figma `Prefix Select` / `Suffix Select` — a select plus a chevron, inside the addon. */
+    const selectAddon = (
+      options: React.ReactNode,
+      side: "l" | "r",
+      selectProps?: React.SelectHTMLAttributes<HTMLSelectElement>
+    ) => (
+      <span className={addonShell(side, "gap-[4px] text-input-text")}>
+        <select
+          disabled={disabled}
+          {...selectProps}
+          className={cn(
+            "cursor-pointer appearance-none bg-transparent font-sans outline-none",
+            "text-input-text disabled:cursor-not-allowed disabled:text-text-disabled",
+            valueClass[size],
+            selectProps?.className
+          )}
+        >
+          {options}
+        </select>
+        <ChevronDown className="shrink-0 text-icon-default" />
       </span>
     );
 
@@ -127,11 +168,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             controlClass[size],
             iconClass[size],
             // The addon supplies the edge padding, so drop it from the shell.
-            prefix && "pl-[1.5px]",
-            suffix && "pr-[1.5px]",
+            (prefix || prefixSelect) && "pl-[1.5px]",
+            (suffix || suffixSelect) && "pr-[1.5px]",
             "[&_svg]:shrink-0 [&_svg]:text-icon-default"
           )}
         >
+          {prefixSelect ? selectAddon(prefixSelect, "l", prefixSelectProps) : null}
           {prefix ? addon(prefix, "l") : null}
           {leftIcon}
           <input
@@ -151,6 +193,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {rightIcon}
           {suffix ? addon(suffix, "r") : null}
+          {suffixSelect ? selectAddon(suffixSelect, "r", suffixSelectProps) : null}
         </div>
       </FieldShell>
     );

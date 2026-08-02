@@ -93,6 +93,12 @@ export interface FieldShellProps {
   className?: string;
   /** id of the control, so the label and helper wire up correctly. */
   htmlFor?: string;
+  /**
+   * Rendered at the right of the message row, opposite the helper text.
+   * Figma's Textarea puts its character counter here — helper left, count
+   * right, on one line.
+   */
+  footerRight?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -105,6 +111,7 @@ export function FieldShell({
   disabled,
   className,
   htmlFor,
+  footerRight,
   children,
 }: FieldShellProps) {
   const message = error ?? helperText;
@@ -130,20 +137,32 @@ export function FieldShell({
 
       {children}
 
-      {message && (
-        <p
-          id={htmlFor ? `${htmlFor}-description` : undefined}
-          className={cn(
-            "font-sans text-[12px] leading-[16px]",
-            disabled
-              ? "text-text-disabled"
-              : error
-                ? "font-semibold text-input-error-text"
-                : "text-input-helper"
+      {(message || footerRight) && (
+        <div className="flex items-start justify-between gap-[8px]">
+          <p
+            id={htmlFor ? `${htmlFor}-description` : undefined}
+            className={cn(
+              "font-sans text-[12px] leading-[16px]",
+              disabled
+                ? "text-text-disabled"
+                : error
+                  ? "font-semibold text-input-error-text"
+                  : "text-input-helper"
+            )}
+          >
+            {message}
+          </p>
+          {footerRight && (
+            <span
+              className={cn(
+                "shrink-0 font-sans text-[12px] leading-[16px] tabular-nums",
+                disabled ? "text-text-disabled" : "text-input-helper"
+              )}
+            >
+              {footerRight}
+            </span>
           )}
-        >
-          {message}
-        </p>
+        </div>
       )}
     </div>
   );
