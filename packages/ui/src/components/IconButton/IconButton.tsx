@@ -38,7 +38,7 @@ export const iconButtonVariants = cva(
         ],
         secondary: [
           "bg-button-secondary-bg text-button-secondary-text",
-          "border-[1.5px] border-button-secondary-border",
+          "border-solid border-[1.5px] border-button-secondary-border",
           "hover:bg-button-secondary-bg-hover hover:border-button-secondary-border-hover",
           "active:bg-button-secondary-bg-pressed",
         ],

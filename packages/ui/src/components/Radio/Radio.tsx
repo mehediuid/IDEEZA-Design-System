@@ -52,7 +52,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             type="radio"
             disabled={disabled}
             className={cn(
-              "peer appearance-none rounded-full border-[2px] bg-input-bg border-input-border",
+              "peer appearance-none rounded-full border-solid border-[2px] bg-input-bg border-input-border",
               "transition-[colors,box-shadow] duration-fast ease-standard outline-none",
               "hover:border-input-border-hover",
               "checked:border-bg-brand checked:hover:border-bg-brand-hover",

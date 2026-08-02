@@ -49,7 +49,7 @@ export const buttonVariants = cva(
         ],
         secondary: [
           "bg-button-secondary-bg text-button-secondary-text",
-          "border-[1.5px] border-button-secondary-border",
+          "border-solid border-[1.5px] border-button-secondary-border",
           "hover:bg-button-secondary-bg-hover hover:border-button-secondary-border-hover",
           "active:bg-button-secondary-bg-pressed active:border-button-secondary-border-hover",
           "focus-visible:border-border-focus",
@@ -73,7 +73,7 @@ export const buttonVariants = cva(
         outline: [
           // Border stays brand in every state — only the fill changes.
           "bg-transparent text-text-brand",
-          "border-[1.5px] border-border-brand",
+          "border-solid border-[1.5px] border-border-brand",
           "hover:bg-button-outline-bg-hover active:bg-button-outline-bg-pressed",
         ],
         inverse: [

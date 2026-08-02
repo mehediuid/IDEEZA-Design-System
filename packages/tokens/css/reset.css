@@ -59,7 +59,10 @@ select {
 
 button {
   background: transparent;
-  border: 0;
+  /* border-width, NOT the `border` shorthand — the shorthand resets
+     border-style to `none`, which silently kills every bordered button
+     (Secondary, Outline). The `*` rule above already sets `solid`. */
+  border-width: 0;
   padding: 0;
   cursor: pointer;
 }
@@ -73,9 +76,12 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Fallback focus for anything that does not define its own. Matches the
+   design-system halo: 3px, flush to the edge, no gap. Components that
+   handle focus themselves set `outline-none` and draw their own box-shadow. */
 :focus-visible {
-  outline: 2px solid var(--color-border-focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-focus-halo);
+  outline-offset: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -100,24 +100,55 @@ export const Sizes: Story = {
   ),
 };
 
+/** The halo each hierarchy uses, so the state can be shown without a keyboard. */
+const FORCED: Record<(typeof VARIANTS)[number], string> = {
+  primary: "shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
+  danger: "shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-danger)]",
+  ai: "shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
+  tonal: "shadow-[0_0_0_3px_var(--color-focus-halo-on-fill)]",
+  secondary: "shadow-[0_0_0_3px_var(--color-focus-halo)] !border-border-focus",
+  outline: "shadow-[0_0_0_3px_var(--color-focus-halo)]",
+  ghost: "shadow-[0_0_0_3px_var(--color-focus-halo)]",
+  inverse: "shadow-[0_0_0_3px_var(--color-focus-halo-inverse)]",
+};
+
 /**
  * Focus halo — 3px spread at offset 0, flush against the edge.
- * Tab through these; the halo colour changes per hierarchy.
+ *
+ * Clicking a button with the mouse deliberately does **not** show the halo:
+ * `:focus-visible` only matches keyboard focus, which is the accessible
+ * behaviour. Press Tab on the first row to see the real thing. The second row
+ * forces the same styles on so the state can be reviewed without a keyboard.
  */
 export const FocusHalo: Story = {
   render: () => (
-    <div className="flex flex-col gap-[16px]">
-      <p className="max-w-[520px] text-[12px] text-text-secondary">
-        Press <kbd>Tab</kbd> to move focus. Primary, Danger and AI use a stronger on-fill halo;
-        Inverse uses the white one. Nothing shifts — the halo is a shadow, not a layout ring.
-      </p>
-      <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] bg-bg-surface p-[16px]">
-        {VARIANTS.filter((v) => v !== "inverse").map((v) => (
-          <Button key={v} variant={v}>{v}</Button>
-        ))}
+    <div className="flex flex-col gap-[20px]">
+      <div className="flex flex-col gap-[8px]">
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-text-tertiary">
+          Real focus — press Tab (mouse click will not show it, by design)
+        </span>
+        <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] bg-bg-surface p-[16px]">
+          {VARIANTS.filter((v) => v !== "inverse").map((v) => (
+            <Button key={v} variant={v}>{v}</Button>
+          ))}
+        </div>
+        <div className="flex items-center gap-[12px] rounded-[12px] bg-bg-inverse p-[16px]">
+          <Button variant="inverse">inverse</Button>
+        </div>
       </div>
-      <div className="flex items-center gap-[12px] rounded-[12px] bg-bg-inverse p-[16px]">
-        <Button variant="inverse">inverse</Button>
+
+      <div className="flex flex-col gap-[8px]">
+        <span className="text-[11px] font-semibold uppercase tracking-wide text-text-brand">
+          Forced focus — same styles, always on
+        </span>
+        <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] bg-bg-surface p-[16px]">
+          {VARIANTS.filter((v) => v !== "inverse").map((v) => (
+            <Button key={v} variant={v} className={FORCED[v]}>{v}</Button>
+          ))}
+        </div>
+        <div className="flex items-center gap-[12px] rounded-[12px] bg-bg-inverse p-[16px]">
+          <Button variant="inverse" className={FORCED.inverse}>inverse</Button>
+        </div>
       </div>
     </div>
   ),

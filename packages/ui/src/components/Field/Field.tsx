@@ -64,7 +64,7 @@ export const iconClass: Record<FieldSize, string> = {
  */
 export const controlChrome = [
   "flex w-full items-center bg-input-bg text-input-text",
-  "border-[1.5px] border-input-border",
+  "border-solid border-[1.5px] border-input-border",
   "transition-[colors,box-shadow] duration-fast ease-standard",
   "hover:border-input-border-hover",
   "outline-none",
