@@ -2,17 +2,19 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 
 /**
- * Radio — mirrors Figma `A08 Selection Control` with `Type=Radio`
- * and its `_Radio base` (Atoms — Input).
+ * Radio — mirrors Figma `A08 Selection Control` (Type=Radio) and its
+ * `_Radio base` (Atoms — Input).
  *
- * Figma spec — unlike the checkbox, a selected radio keeps the white fill
- * and shows a brand ring plus a brand dot:
- *   sm 20×20 · md 24×24 · always fully round · 2px border
- *   Off       fill input/bg · border input/border
- *   Hover     border input/border-hover
- *   On        fill input/bg · border bg/brand · brand dot
- *   Focused   3px focus/halo ring, flush
- *   Disabled  border input/border-disabled
+ * Extracted from Figma, not approximated:
+ *   circle   sm 20×20 · md 24×24 · always round · 2px border
+ *   dot      sm 8×8 · md 10×10
+ *   row gap  16px between control and text
+ *   label    sm 14/20 regular · md 16/24 regular · color input/label
+ *   support  sm 11/16 regular · md 12/16 regular · color input/helper
+ *   text gap 4px
+ *
+ * Unlike the checkbox, a selected radio keeps the white fill and shows a
+ * brand ring with a brand dot — it never fills solid.
  */
 export type RadioSize = "sm" | "md";
 
@@ -27,6 +29,10 @@ const dotClass: Record<RadioSize, string> = {
 const labelClass: Record<RadioSize, string> = {
   sm: "text-[14px] leading-[20px]",
   md: "text-[16px] leading-[24px]",
+};
+const supportClass: Record<RadioSize, string> = {
+  sm: "text-[11px] leading-[16px]",
+  md: "text-[12px] leading-[16px]",
 };
 
 export interface RadioProps
@@ -44,7 +50,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     const radioId = id ?? autoId;
 
     return (
-      <div className={cn("flex items-start gap-[8px]", containerClassName)}>
+      <div className={cn("flex items-start gap-[16px]", containerClassName)}>
         <span className="relative inline-flex shrink-0">
           <input
             ref={ref}
@@ -75,14 +81,14 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
         </span>
 
         {(label || description) && (
-          <span className="flex flex-col gap-[2px]">
+          <span className="flex flex-col gap-[4px]">
             {label && (
               <label
                 htmlFor={radioId}
                 className={cn(
                   "cursor-pointer font-sans",
                   labelClass[size],
-                  disabled ? "cursor-not-allowed text-text-disabled" : "text-text-primary"
+                  disabled ? "cursor-not-allowed text-text-disabled" : "text-input-label"
                 )}
               >
                 {label}
@@ -91,8 +97,9 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             {description && (
               <span
                 className={cn(
-                  "font-sans text-[12px] leading-[16px]",
-                  disabled ? "text-text-disabled" : "text-text-tertiary"
+                  "font-sans",
+                  supportClass[size],
+                  disabled ? "text-text-disabled" : "text-input-helper"
                 )}
               >
                 {description}

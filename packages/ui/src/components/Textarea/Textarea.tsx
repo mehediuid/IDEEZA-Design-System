@@ -6,18 +6,26 @@ import { FieldShell, controlChrome, type FieldSize } from "../Field/Field";
  * Textarea — mirrors Figma `Textarea` (A05, Atoms — Input), 18 variants.
  *
  * Figma uses a `Rows` property rather than a pixel size:
- *   SM · 80px min · radius/lg  8 · padding 12
- *   MD · 104px    · radius/xl 12 · padding 14
- *   LG · 128px    · radius/2xl 16 · padding 16
+ *   SM · 80px  · radius/lg  8  · pad 10/12/8/12 · value 14/20 · label 11/16
+ *   MD · 104px · radius/xl 12 · pad 12/14/8/14 · value 14/20 · label 12/16
+ *   LG · 128px · radius/2xl 16 · pad 14/16/8/16 · value 16/24 · label 14/20
  *
- * Label and helper follow the 40px Text Input ramp, which is what Figma uses.
+ * Padding is asymmetric — bottom stays 8 at every size.
  */
 export type TextareaRows = "sm" | "md" | "lg";
 
+/** Figma padding is asymmetric — bottom is 8 at every size so the char counter sits close. */
 const rowsClass: Record<TextareaRows, string> = {
-  sm: "min-h-[80px] rounded-[8px] p-[12px]",
-  md: "min-h-[104px] rounded-[12px] p-[14px]",
-  lg: "min-h-[128px] rounded-[16px] p-[16px]",
+  sm: "min-h-[80px] rounded-[8px] pt-[10px] pr-[12px] pb-[8px] pl-[12px]",
+  md: "min-h-[104px] rounded-[12px] pt-[12px] pr-[14px] pb-[8px] pl-[14px]",
+  lg: "min-h-[128px] rounded-[16px] pt-[14px] pr-[16px] pb-[8px] pl-[16px]",
+};
+
+/** Value type ramp — LG steps up, matching Figma. */
+const rowsValueClass: Record<TextareaRows, string> = {
+  sm: "text-[14px] leading-[20px]",
+  md: "text-[14px] leading-[20px]",
+  lg: "text-[16px] leading-[24px]",
 };
 
 const rowsToFieldSize: Record<TextareaRows, FieldSize> = { sm: 36, md: 40, lg: 48 };
@@ -95,7 +103,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             aria-invalid={invalid || undefined}
             aria-describedby={helperText || error ? `${areaId}-description` : undefined}
             className={cn(
-              "min-h-full w-full resize-none bg-transparent font-sans text-[14px] leading-[20px]",
+              "min-h-full w-full resize-none bg-transparent font-sans",
+              rowsValueClass[rows],
               "text-input-text outline-none placeholder:text-input-placeholder",
               "disabled:cursor-not-allowed disabled:text-text-disabled disabled:placeholder:text-text-disabled",
               className

@@ -2,19 +2,23 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 
 /**
- * Checkbox — mirrors Figma `A08 Selection Control` with `Type=Checkbox`
- * and its `_Checkbox base` (Atoms — Input).
+ * Checkbox — mirrors Figma `A08 Selection Control` (Type=Checkbox) and its
+ * `_Checkbox base` (Atoms — Input).
  *
- * Figma spec:
- *   sm 20×20 · radius 6 · 2px border    md 24×24 · radius 8 · 2px border
- *   Unchecked  fill input/bg      · border input/border
- *   Hover      border input/border-hover
- *   Checked    fill bg/brand      · no border
- *   Focused    3px focus/halo ring, flush
+ * Extracted from Figma, not approximated:
+ *   box      sm 20×20 radius 6 · md 24×24 radius 8 · 2px border
+ *   check    sm 10×8 · md 12×10
+ *   row gap  16px between control and text (not 8)
+ *   label    sm 14/20 regular · md 16/24 regular · color input/label
+ *   support  sm 11/16 regular · md 12/16 regular · color input/helper
+ *   text gap 4px between label and supporting text
+ *
+ * Colours:
+ *   Unchecked  fill input/bg · border input/border · hover input/border-hover
+ *   Checked    fill bg/brand · no border · hover bg/brand-hover
+ *   Focused    3px focus/halo, flush
  *   Disabled   unchecked → border input/border-disabled
  *              checked   → fill input/bg-disabled
- *
- * Supports `indeterminate`, matching the Figma `Selection=Indeterminate` variant.
  */
 export type CheckboxSize = "sm" | "md";
 
@@ -22,13 +26,22 @@ const boxClass: Record<CheckboxSize, string> = {
   sm: "size-[20px] rounded-[6px]",
   md: "size-[24px] rounded-[8px]",
 };
+/** Figma check vector bounds. */
+const checkSize: Record<CheckboxSize, { w: number; h: number }> = {
+  sm: { w: 10, h: 8 },
+  md: { w: 12, h: 10 },
+};
+const dashSize: Record<CheckboxSize, { w: number; h: number }> = {
+  sm: { w: 10, h: 2 },
+  md: { w: 12, h: 2 },
+};
 const labelClass: Record<CheckboxSize, string> = {
   sm: "text-[14px] leading-[20px]",
   md: "text-[16px] leading-[24px]",
 };
-const glyph: Record<CheckboxSize, string> = {
-  sm: "size-[14px]",
-  md: "size-[16px]",
+const supportClass: Record<CheckboxSize, string> = {
+  sm: "text-[11px] leading-[16px]",
+  md: "text-[12px] leading-[16px]",
 };
 
 export interface CheckboxProps
@@ -54,8 +67,11 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       if (inner.current) inner.current.indeterminate = Boolean(indeterminate);
     }, [indeterminate]);
 
+    const chk = checkSize[size];
+    const dash = dashSize[size];
+
     return (
-      <div className={cn("flex items-start gap-[8px]", containerClassName)}>
+      <div className={cn("flex items-start gap-[16px]", containerClassName)}>
         <span className="relative inline-flex shrink-0">
           <input
             ref={inner}
@@ -76,47 +92,42 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             )}
             {...props}
           />
-          {/* Glyphs sit above the box and only show for the matching state. */}
+          {/* Check — viewBox matches the Figma vector bounds so the glyph is the right size. */}
           <svg
-            viewBox="0 0 24 24"
+            viewBox="0 0 10 8"
             fill="none"
             stroke="currentColor"
-            strokeWidth="3"
+            strokeWidth="2"
             aria-hidden="true"
+            style={{ width: chk.w, height: chk.h }}
             className={cn(
               "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
               "opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-0",
-              "peer-disabled:text-text-disabled",
-              glyph[size]
+              "peer-disabled:text-text-disabled"
             )}
           >
-            <path d="m5 13 4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1 4.2 3.6 6.8 9 1.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
+          <span
             aria-hidden="true"
+            style={{ width: dash.w, height: dash.h }}
             className={cn(
-              "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
-              "opacity-0 peer-indeterminate:opacity-100 peer-disabled:text-text-disabled",
-              glyph[size]
+              "pointer-events-none absolute inset-0 m-auto rounded-full bg-icon-on-brand",
+              "opacity-0 peer-indeterminate:opacity-100",
+              "peer-disabled:bg-text-disabled"
             )}
-          >
-            <path d="M6 12h12" strokeLinecap="round" />
-          </svg>
+          />
         </span>
 
         {(label || description) && (
-          <span className="flex flex-col gap-[2px]">
+          <span className="flex flex-col gap-[4px]">
             {label && (
               <label
                 htmlFor={boxId}
                 className={cn(
                   "cursor-pointer font-sans",
                   labelClass[size],
-                  disabled ? "cursor-not-allowed text-text-disabled" : "text-text-primary"
+                  disabled ? "cursor-not-allowed text-text-disabled" : "text-input-label"
                 )}
               >
                 {label}
@@ -125,8 +136,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             {description && (
               <span
                 className={cn(
-                  "font-sans text-[12px] leading-[16px]",
-                  disabled ? "text-text-disabled" : "text-text-tertiary"
+                  "font-sans",
+                  supportClass[size],
+                  disabled ? "text-text-disabled" : "text-input-helper"
                 )}
               >
                 {description}
