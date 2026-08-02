@@ -362,11 +362,12 @@
   --color-input-border-hover: var(--color-border-strong);
   --color-input-border-focus: var(--color-border-focus);
   --color-input-border-error: var(--color-border-error);
+  --color-input-border-disabled: var(--color-border-subtle);
   --color-input-text: var(--color-text-primary);
   --color-input-placeholder: var(--color-text-tertiary);
   --color-input-label: var(--color-text-secondary);
   --color-input-helper: var(--color-text-tertiary);
-  --color-input-error-text: var(--color-text-error);
+  --color-input-error-text: var(--color-red-700);
 
   /* Glass */
   --color-glass-fill-xs: rgba(255, 255, 255, 0.30);

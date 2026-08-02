@@ -189,6 +189,20 @@ export const ideezaPreset = {
           ai: "var(--color-border-ai)",
         },
         // Component-scoped — handy for direct utility access
+        input: {
+          bg: "var(--color-input-bg)",
+          "bg-disabled": "var(--color-input-bg-disabled)",
+          border: "var(--color-input-border)",
+          "border-hover": "var(--color-input-border-hover)",
+          "border-focus": "var(--color-input-border-focus)",
+          "border-error": "var(--color-input-border-error)",
+          "border-disabled": "var(--color-input-border-disabled)",
+          text: "var(--color-input-text)",
+          placeholder: "var(--color-input-placeholder)",
+          label: "var(--color-input-label)",
+          helper: "var(--color-input-helper)",
+          "error-text": "var(--color-input-error-text)",
+        },
         button: {
           "primary-bg": "var(--color-button-primary-bg)",
           "primary-bg-hover": "var(--color-button-primary-bg-hover)",
