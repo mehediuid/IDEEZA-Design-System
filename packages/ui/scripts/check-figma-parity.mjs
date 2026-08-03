@@ -69,3 +69,14 @@ chk('textarea resizable',has(ta,'resize-y'),'matches the Figma resize handle');
 chk('input select addons',has(read('Input/Input.tsx'),'prefixSelect','suffixSelect','selectAddon'),'Prefix/Suffix/Both Select');
 
 console.log('\n' + (bad? `❌ ${bad} mismatch` : '✅ all form control values match the Figma extraction'));
+
+// ── Token discipline ────────────────────────────────────────────────
+// Type must go through the scale, never a raw px value. A hardcoded
+// text-[14px] silently drifts the moment the scale moves.
+import { readdirSync } from 'node:fs';
+const walk = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+  e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]);
+const srcFiles = walk(new URL('../src/', import.meta.url).pathname).filter((f) => f.endsWith('.tsx'));
+const offenders = srcFiles.filter((f) => /text-\[\d+px\]|leading-\[\d+px\]/.test(fs.readFileSync(f, 'utf8')));
+chk('no hardcoded type sizes', offenders.length === 0,
+  offenders.length ? offenders.map((f) => f.split('/src/')[1]).join(', ') : 'all through text-xs/sm/md/lg');

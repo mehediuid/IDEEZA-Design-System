@@ -67,6 +67,28 @@ export const fontSize = {
   "8xl": { desktop: 72, mobile: 52 },
 } as const;
 
+/**
+ * Line height, paired 1:1 with `fontSize`.
+ *
+ * The Figma file never tokenised these, but the pairing is consistent across
+ * every text node in it: 11/12→16, 14→20, 16→24, 20→28, 24→32, 32→40.
+ */
+export const lineHeight = {
+  "2xs": "14px",
+  "xs": "16px",
+  "sm": "16px",
+  "md": "20px",
+  "lg": "24px",
+  "xl": "28px",
+  "2xl": "28px",
+  "3xl": "32px",
+  "4xl": "36px",
+  "5xl": "40px",
+  "6xl": "56px",
+  "7xl": "68px",
+  "8xl": "80px",
+} as const;
+
 export const fontWeight = {
   regular:   400,
   medium:    500,

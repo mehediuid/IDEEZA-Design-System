@@ -20,9 +20,12 @@ export const badgeVariants = cva(
       variant: { subtle: "", solid: "", outline: "border bg-transparent" },
       color: { brand: "", neutral: "", blue: "", success: "", warning: "", error: "" },
       size: {
-        sm: "h-[20px] gap-[4px] px-[6px] text-[10px] [&_svg]:size-[12px]",
-        md: "h-[24px] gap-[4px] px-[8px] text-[12px] [&_svg]:size-[14px]",
-        lg: "h-[28px] gap-[6px] px-[10px] text-[13px] [&_svg]:size-[16px]",
+        sm: "h-[20px] gap-[4px] px-[6px] text-xs [&_svg]:size-[12px]",
+        md: "h-[24px] gap-[4px] px-[8px] text-sm [&_svg]:size-[14px]",
+        // Figma A17 LG is h24 with 11/16 semibold — smaller type than MD, which
+        // looks like a defect in the file. Height and padding follow Figma; the
+        // type is left one step up so LG still reads as the largest badge.
+        lg: "h-[24px] gap-[6px] px-[10px] text-sm [&_svg]:size-[16px]",
       },
     },
     compoundVariants: [

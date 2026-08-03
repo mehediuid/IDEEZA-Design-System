@@ -27,12 +27,12 @@ const dotClass: Record<RadioSize, string> = {
   md: "size-[10px]",
 };
 const labelClass: Record<RadioSize, string> = {
-  sm: "text-[14px] leading-[20px]",
-  md: "text-[16px] leading-[24px]",
+  sm: "text-md",
+  md: "text-lg",
 };
 const supportClass: Record<RadioSize, string> = {
-  sm: "text-[11px] leading-[16px]",
-  md: "text-[12px] leading-[16px]",
+  sm: "text-xs",
+  md: "text-sm",
 };
 
 export interface RadioProps

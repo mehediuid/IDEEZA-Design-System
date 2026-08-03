@@ -36,12 +36,12 @@ const glyphSize: Record<CheckboxSize, string> = {
   md: "size-[20px]",
 };
 const labelClass: Record<CheckboxSize, string> = {
-  sm: "text-[14px] leading-[20px]",
-  md: "text-[16px] leading-[24px]",
+  sm: "text-md",
+  md: "text-lg",
 };
 const supportClass: Record<CheckboxSize, string> = {
-  sm: "text-[11px] leading-[16px]",
-  md: "text-[12px] leading-[16px]",
+  sm: "text-xs",
+  md: "text-sm",
 };
 
 export interface CheckboxProps

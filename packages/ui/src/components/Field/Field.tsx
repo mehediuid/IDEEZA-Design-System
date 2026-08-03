@@ -16,11 +16,11 @@ import { cn } from "../../lib/cn";
 export type FieldSize = 32 | 36 | 40 | 44 | 48;
 
 export const fieldLabelClass: Record<FieldSize, string> = {
-  32: "text-[11px] leading-[16px]",
-  36: "text-[11px] leading-[16px]",
-  40: "text-[12px] leading-[16px]",
-  44: "text-[12px] leading-[16px]",
-  48: "text-[14px] leading-[20px]",
+  32: "text-xs",
+  36: "text-xs",
+  40: "text-sm",
+  44: "text-sm",
+  48: "text-md",
 };
 
 export const fieldRowGap: Record<FieldSize, string> = {
@@ -50,11 +50,11 @@ export const controlClass: Record<FieldSize, string> = {
 
 /** Value / placeholder type ramp. */
 export const valueClass: Record<FieldSize, string> = {
-  32: "text-[14px] leading-[20px]",
-  36: "text-[14px] leading-[20px]",
-  40: "text-[14px] leading-[20px]",
-  44: "text-[16px] leading-[24px]",
-  48: "text-[16px] leading-[24px]",
+  32: "text-md",
+  36: "text-md",
+  40: "text-md",
+  44: "text-lg",
+  48: "text-lg",
 };
 
 export const iconClass: Record<FieldSize, string> = {
@@ -150,7 +150,7 @@ export function FieldShell({
           <p
             id={htmlFor ? `${htmlFor}-description` : undefined}
             className={cn(
-              "font-sans text-[12px] leading-[16px]",
+              "font-sans text-sm",
               disabled
                 ? "text-text-disabled"
                 : error
@@ -163,7 +163,7 @@ export function FieldShell({
           {footerRight && (
             <span
               className={cn(
-                "shrink-0 font-sans text-[12px] leading-[16px] tabular-nums",
+                "shrink-0 font-sans text-sm tabular-nums",
                 disabled ? "text-text-disabled" : "text-input-helper"
               )}
             >
