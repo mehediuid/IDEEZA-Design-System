@@ -23,10 +23,10 @@ chk('checkbox glyph md 20px → 12×10',has(cb,'md: "size-[20px]"'),'icon/tick-0
 chk('checkbox uses library glyphs',has(cb,'import { Check, Minus }'),'no hand-drawn paths');
 chk('checkbox row gap 16',   has(cb,'gap-[16px]'),'control ↔ text');
 chk('checkbox text gap 4',   has(cb,'gap-[4px]'),'label ↔ support');
-chk('checkbox label sm 14/20',has(cb,'sm: "text-[14px] leading-[20px]"'),'regular');
-chk('checkbox label md 16/24',has(cb,'md: "text-[16px] leading-[24px]"'),'regular');
-chk('checkbox support sm 11/16',has(cb,'sm: "text-[11px] leading-[16px]"'),'');
-chk('checkbox support md 12/16',has(cb,'md: "text-[12px] leading-[16px]"'),'');
+chk('checkbox label sm 14/20',has(cb,'sm: "text-md"'),'via the type scale');
+chk('checkbox label md 16/24',has(cb,'md: "text-lg"'),'via the type scale');
+chk('checkbox support sm 11/16',has(cb,'sm: "text-xs"'),'via the type scale');
+chk('checkbox support md 12/16',has(cb,'md: "text-sm"'),'via the type scale');
 chk('checkbox label colour input/label',has(cb,'text-input-label'),'not text-primary');
 chk('checkbox support colour input/helper',has(cb,'text-input-helper'),'not text-tertiary');
 
@@ -37,14 +37,14 @@ chk('radio dot 8 / 10',      has(rd,'sm: "size-[8px]"','md: "size-[10px]"'),'');
 chk('radio border 2px',      has(rd,'border-[2px]'),'');
 chk('radio keeps white fill',has(rd,'bg-input-bg','checked:border-bg-brand') && !rd.includes('checked:bg-bg-brand'),'ring + dot, never solid');
 chk('radio row gap 16',      has(rd,'gap-[16px]'),'');
-chk('radio support sm 11/16',has(rd,'sm: "text-[11px] leading-[16px]"'),'');
+chk('radio support sm 11/16',has(rd,'sm: "text-xs"'),'via the type scale');
 
 // ── Textarea
 const ta=read('Textarea/Textarea.tsx');
-chk('textarea sm 80 r8 pad 10/12/8/12', has(ta,'min-h-[80px] rounded-[8px] pt-[10px] pr-[12px] pb-[8px] pl-[12px]'),'');
-chk('textarea md 104 r12 pad 12/14/8/14',has(ta,'min-h-[104px] rounded-[12px] pt-[12px] pr-[14px] pb-[8px] pl-[14px]'),'');
-chk('textarea lg 128 r16 pad 14/16/8/16',has(ta,'min-h-[128px] rounded-[16px] pt-[14px] pr-[16px] pb-[8px] pl-[16px]'),'');
-chk('textarea lg value 16/24', has(ta,'lg: "text-[16px] leading-[24px]"'),'sm/md 14/20');
+chk('textarea sm 80 r8 pad 10/12/8/12', has(ta,'min-h-[80px] rounded-[8px] pt-[8.5px] pr-[10.5px] pb-[6.5px] pl-[10.5px]'),'Figma value minus the 1.5px border');
+chk('textarea md 104 r12 pad 12/14/8/14',has(ta,'min-h-[104px] rounded-[12px] pt-[10.5px] pr-[12.5px] pb-[6.5px] pl-[12.5px]'),'Figma value minus the 1.5px border');
+chk('textarea lg 128 r16 pad 14/16/8/16',has(ta,'min-h-[128px] rounded-[16px] pt-[12.5px] pr-[14.5px] pb-[6.5px] pl-[14.5px]'),'Figma value minus the 1.5px border');
+chk('textarea lg value 16/24', has(ta,'lg: "text-lg"'),'sm/md text-md');
 chk('textarea label ramp 36/40/48', has(ta,'{ sm: 36, md: 40, lg: 48 }'),'→ 11/16, 12/16, 14/20');
 
 // ── Select
@@ -57,8 +57,8 @@ chk('select value ramp = input', has(se,'valueClass[size]'),'14/20 → 16/24 at 
 const fd=read('Field/Field.tsx');
 chk('field height ramp',  has(fd,'h-[32px]','h-[36px]','h-[40px]','h-[44px]','h-[48px]'),'');
 chk('field radius ramp',  has(fd,'32: "h-[32px] rounded-[8px]','40: "h-[40px] rounded-[12px]','48: "h-[48px] rounded-[16px]'),'8/8/12/12/16');
-chk('field padX ramp 10/10/12/12/14', has(fd,'px-[10px]','px-[12px]','px-[14px]'),'');
-chk('field label ramp 11/11/12/12/14',has(fd,'32: "text-[11px]','40: "text-[12px]','48: "text-[14px]'),'');
+chk('field padX ramp 10/10/12/12/14', has(fd,'px-[8.5px]','px-[10.5px]','px-[12.5px]'),'Figma value minus the 1.5px border');
+chk('field label ramp 11/11/12/12/14',has(fd,'32: "text-xs"','40: "text-sm"','48: "text-md"'),'via the type scale');
 chk('field row gap 4/4/4/6/6', has(fd,'32: "gap-[4px]"','44: "gap-[6px]"'),'');
 chk('field border 1.5 solid', has(fd,'border-solid border-[1.5px]'),'');
 chk('field error halo danger', has(fd,'focus-halo-danger'),'');
