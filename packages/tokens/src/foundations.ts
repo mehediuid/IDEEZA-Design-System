@@ -68,26 +68,96 @@ export const fontSize = {
 } as const;
 
 /**
- * Line height, paired 1:1 with `fontSize`.
+ * Line height — its own scale, deliberately not paired 1:1 with `fontSize`.
  *
- * The Figma file never tokenised these, but the pairing is consistent across
- * every text node in it: 11/12→16, 14→20, 16→24, 20→28, 24→32, 32→40.
+ * A single size takes different line heights at different densities: 12px is
+ * 16 as a label and 18 as prose; 18px is 26 as a heading and 28 as prose. A
+ * 1:1 pairing cannot express that, so the two scales are independent and
+ * `textStyle` below is what joins them.
+ *
+ * Mirrors the Figma `line/height/*` variables.
  */
 export const lineHeight = {
-  "2xs": "14px",
-  "xs": "16px",
-  "sm": "16px",
-  "md": "20px",
-  "lg": "24px",
-  "xl": "28px",
-  "2xl": "28px",
-  "3xl": "32px",
-  "4xl": "36px",
-  "5xl": "40px",
-  "6xl": "56px",
-  "7xl": "68px",
-  "8xl": "80px",
+  "2xs": { desktop: 14, mobile: 14 },
+  xs:    { desktop: 16, mobile: 16 },
+  sm:    { desktop: 18, mobile: 18 },
+  md:    { desktop: 20, mobile: 20 },
+  lg:    { desktop: 24, mobile: 24 },
+  xl:    { desktop: 26, mobile: 24 },
+  "2xl": { desktop: 28, mobile: 26 },
+  "3xl": { desktop: 30, mobile: 28 },
+  "4xl": { desktop: 32, mobile: 28 },
+  "5xl": { desktop: 36, mobile: 32 },
+  "6xl": { desktop: 40, mobile: 36 },
+  "7xl": { desktop: 56, mobile: 42 },
+  "8xl": { desktop: 68, mobile: 50 },
+  "9xl": { desktop: 80, mobile: 58 },
 } as const;
+
+/**
+ * Letter spacing, in px. Negative steps track with size — big type needs
+ * pulling in — so they shrink on mobile alongside the sizes they serve.
+ * Positive steps track with role, so they are mode-independent.
+ *
+ * Mirrors the Figma `letter/spacing/*` variables.
+ */
+export const letterSpacing = {
+  tighter: { desktop: -2.5, mobile: -1.8 },
+  tight:   { desktop: -2,   mobile: -1.5 },
+  snug:    { desktop: -1.5, mobile: -1.1 },
+  close:   { desktop: -0.75, mobile: -0.7 },
+  near:    { desktop: -0.5, mobile: -0.4 },
+  slight:  { desktop: -0.25, mobile: -0.2 },
+  normal:  { desktop: 0,    mobile: 0 },
+  wide:    { desktop: 0.1,  mobile: 0.1 },
+  wider:   { desktop: 0.15, mobile: 0.15 },
+  widest:  { desktop: 1.2,  mobile: 1.2 },
+  caps:    { desktop: 1.5,  mobile: 1.5 },
+} as const;
+
+/**
+ * The type ramp — one entry per Figma text style, same names lowercased.
+ *
+ * This is the layer components are meant to use. Picking a size and a line
+ * height separately is how they drifted apart in the first place; a style
+ * carries size, line height, tracking and weight as one indivisible choice.
+ *
+ * `Label/MD` in Figma is `text-label-md` here, and both resolve to the same
+ * four variables.
+ */
+export const textStyle = {
+  "display-xl":      { size: "8xl", line: "9xl", tracking: "tighter", weight: "bold" },
+  "display-lg":      { size: "7xl", line: "8xl", tracking: "tight",   weight: "semibold" },
+  "display-md":      { size: "6xl", line: "7xl", tracking: "snug",    weight: "semibold" },
+  "heading-h1":      { size: "5xl", line: "6xl", tracking: "close",   weight: "semibold" },
+  "heading-h2":      { size: "4xl", line: "5xl", tracking: "near",    weight: "semibold" },
+  "heading-h3":      { size: "3xl", line: "4xl", tracking: "slight",  weight: "semibold" },
+  "heading-h4":      { size: "2xl", line: "2xl", tracking: "normal",  weight: "semibold" },
+  "heading-h5":      { size: "xl",  line: "xl",  tracking: "normal",  weight: "semibold" },
+  "heading-h6":      { size: "lg",  line: "lg",  tracking: "normal",  weight: "semibold" },
+  "body-xs":         { size: "sm",  line: "sm",  tracking: "normal",  weight: "regular" },
+  "body-sm":         { size: "md",  line: "md",  tracking: "normal",  weight: "regular" },
+  "body-md":         { size: "lg",  line: "lg",  tracking: "normal",  weight: "regular" },
+  "body-lg":         { size: "xl",  line: "2xl", tracking: "normal",  weight: "regular" },
+  "body-xl":         { size: "2xl", line: "3xl", tracking: "normal",  weight: "regular" },
+  "body-xs-medium":  { size: "sm",  line: "sm",  tracking: "normal",  weight: "medium" },
+  "body-sm-medium":  { size: "md",  line: "md",  tracking: "normal",  weight: "medium" },
+  "body-md-medium":  { size: "lg",  line: "lg",  tracking: "normal",  weight: "medium" },
+  "body-lg-medium":  { size: "xl",  line: "2xl", tracking: "normal",  weight: "medium" },
+  "body-xl-medium":  { size: "2xl", line: "3xl", tracking: "normal",  weight: "medium" },
+  "label-xl":        { size: "lg",  line: "lg",  tracking: "wide",    weight: "semibold" },
+  "label-lg":        { size: "md",  line: "md",  tracking: "wide",    weight: "semibold" },
+  "label-md":        { size: "sm",  line: "xs",  tracking: "wide",    weight: "semibold" },
+  "label-sm":        { size: "xs",  line: "xs",  tracking: "wider",   weight: "semibold" },
+  "caption-md":      { size: "sm",  line: "xs",  tracking: "normal",  weight: "regular" },
+  "caption-sm":      { size: "xs",  line: "xs",  tracking: "normal",  weight: "regular" },
+  "overline-md":     { size: "xs",  line: "xs",  tracking: "widest",  weight: "semibold" },
+  "overline-sm":     { size: "2xs", line: "2xs", tracking: "caps",    weight: "semibold" },
+  "code-md":         { size: "md",  line: "md",  tracking: "normal",  weight: "regular" },
+  "code-sm":         { size: "sm",  line: "sm",  tracking: "normal",  weight: "regular" },
+} as const;
+
+export type TextStyleName = keyof typeof textStyle;
 
 export const fontWeight = {
   regular:   400,

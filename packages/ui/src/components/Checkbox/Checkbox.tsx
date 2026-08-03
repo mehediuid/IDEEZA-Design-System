@@ -10,8 +10,8 @@ import { Check, Minus } from "../../lib/icons";
  *   box      sm 20×20 radius 6 · md 24×24 radius 8 · 2px border
  *   check    sm 10×8 · md 12×10 — a 16px / 20px icon/tick-02 instance
  *   row gap  16px between control and text (not 8)
- *   label    sm 14/20 regular · md 16/24 regular · color input/label
- *   support  sm 11/16 regular · md 12/16 regular · color input/helper
+ *   label    sm Body/SM · md Body/MD · color input/label
+ *   support  sm Caption/SM · md Caption/MD · color input/helper
  *   text gap 4px between label and supporting text
  *
  * Colours:
@@ -36,12 +36,12 @@ const glyphSize: Record<CheckboxSize, string> = {
   md: "size-[20px]",
 };
 const labelClass: Record<CheckboxSize, string> = {
-  sm: "text-md",
-  md: "text-lg",
+  sm: "text-body-sm",
+  md: "text-body-md",
 };
 const supportClass: Record<CheckboxSize, string> = {
-  sm: "text-xs",
-  md: "text-sm",
+  sm: "text-caption-sm",
+  md: "text-caption-md",
 };
 
 export interface CheckboxProps

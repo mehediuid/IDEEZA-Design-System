@@ -14,11 +14,15 @@ import { cn } from "../../lib/cn";
  * - Has icon leading/trailing → `leftIcon` / `rightIcon`
  *
  * Geometry is taken from the Figma variants, not guessed:
- *   SM  32px · radius/lg  8 · px 12 · gap 6 · 12/16 semibold
- *   MD  36px · radius/lg  8 · px 14 · gap 6 · 14/20 semibold
- *   LG  40px · radius/xl 12 · px 16 · gap 6 · 14/20 semibold
- *   XL  44px · radius/xl 12 · px 20 · gap 8 · 16/24 semibold
- *   2XL 48px · radius/2xl 16 · px 24 · gap 8 · 16/24 semibold
+ *   SM  32px · radius/lg  8 · px 12 · gap 6 · Label/MD
+ *   MD  36px · radius/lg  8 · px 14 · gap 6 · Label/LG
+ *   LG  40px · radius/xl 12 · px 16 · gap 6 · Label/LG
+ *   XL  44px · radius/xl 12 · px 20 · gap 8 · Label/XL
+ *   2XL 48px · radius/2xl 16 · px 24 · gap 8 · Label/XL
+ *
+ * The type is a Figma text style, not a size — Label/XL carries 16/24,
+ * 0.1px tracking and semibold as one unit, so the four cannot drift apart.
+ * `font-semibold` is deliberately absent from the base: the style sets it.
  *
  * MD, XL and 2XL were corrected on 2026-08-02: MD was an exact copy of SM
  * apart from height, XL shared SM/LG's type, and 2XL shared XL's padding.
@@ -38,7 +42,7 @@ export const buttonVariants = cva(
     // unbordered one. CSS border-box adds the border on top, so bordered
     // hierarchies subtract it back out through --bd.
     "[--bd:0px]",
-    "font-sans font-semibold transition-[colors,box-shadow] duration-fast ease-standard",
+    "font-sans transition-[colors,box-shadow] duration-fast ease-standard",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     // Figma: every hierarchy collapses to the same Disabled treatment —
     // disabled-bg + disabled-text, no border, no depth. Ghost and Outline
@@ -97,11 +101,11 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        sm: "h-[32px] rounded-[8px] px-[calc(12px-var(--bd))] gap-[6px] text-sm [&_svg]:size-[14px]",
-        md: "h-[36px] rounded-[8px] px-[calc(14px-var(--bd))] gap-[6px] text-md [&_svg]:size-[16px]",
-        lg: "h-[40px] rounded-[12px] px-[calc(16px-var(--bd))] gap-[6px] text-md [&_svg]:size-[16px]",
-        xl: "h-[44px] rounded-[12px] px-[calc(20px-var(--bd))] gap-[8px] text-lg [&_svg]:size-[20px]",
-        "2xl": "h-[48px] rounded-[16px] px-[calc(24px-var(--bd))] gap-[8px] text-lg [&_svg]:size-[20px]",
+        sm: "h-[32px] rounded-[8px] px-[calc(12px-var(--bd))] gap-[6px] text-label-md [&_svg]:size-[14px]",
+        md: "h-[36px] rounded-[8px] px-[calc(14px-var(--bd))] gap-[6px] text-label-lg [&_svg]:size-[16px]",
+        lg: "h-[40px] rounded-[12px] px-[calc(16px-var(--bd))] gap-[6px] text-label-lg [&_svg]:size-[16px]",
+        xl: "h-[44px] rounded-[12px] px-[calc(20px-var(--bd))] gap-[8px] text-label-xl [&_svg]:size-[20px]",
+        "2xl": "h-[48px] rounded-[16px] px-[calc(24px-var(--bd))] gap-[8px] text-label-xl [&_svg]:size-[20px]",
       },
     },
     defaultVariants: { variant: "primary", size: "lg" },

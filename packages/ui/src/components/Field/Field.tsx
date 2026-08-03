@@ -7,20 +7,23 @@ import { cn } from "../../lib/cn";
  * Textarea and Select compose it so the three stay identical.
  *
  * Figma per-size type ramp (Text Input A04):
- *   32 · label 11/16 semibold · helper 12/16 · row gap 4
- *   36 · label 11/16 semibold · helper 12/16 · row gap 4
- *   40 · label 12/16 semibold · helper 12/16 · row gap 4
- *   44 · label 12/16 semibold · helper 12/16 · row gap 6
- *   48 · label 14/20 semibold · helper 12/16 · row gap 6
+ *   32 · label Label/SM · helper Caption/MD · row gap 4
+ *   36 · label Label/SM · helper Caption/MD · row gap 4
+ *   40 · label Label/MD · helper Caption/MD · row gap 4
+ *   44 · label Label/MD · helper Caption/MD · row gap 6
+ *   48 · label Label/LG · helper Caption/MD · row gap 6
+ *
+ * Everything is a Figma text style rather than a size, so weight and
+ * tracking travel with the size instead of being set alongside it.
  */
 export type FieldSize = 32 | 36 | 40 | 44 | 48;
 
 export const fieldLabelClass: Record<FieldSize, string> = {
-  32: "text-xs",
-  36: "text-xs",
-  40: "text-sm",
-  44: "text-sm",
-  48: "text-md",
+  32: "text-label-sm",
+  36: "text-label-sm",
+  40: "text-label-md",
+  44: "text-label-md",
+  48: "text-label-lg",
 };
 
 export const fieldRowGap: Record<FieldSize, string> = {
@@ -50,11 +53,11 @@ export const controlClass: Record<FieldSize, string> = {
 
 /** Value / placeholder type ramp. */
 export const valueClass: Record<FieldSize, string> = {
-  32: "text-md",
-  36: "text-md",
-  40: "text-md",
-  44: "text-lg",
-  48: "text-lg",
+  32: "text-body-sm",
+  36: "text-body-sm",
+  40: "text-body-sm",
+  44: "text-body-md",
+  48: "text-body-md",
 };
 
 export const iconClass: Record<FieldSize, string> = {
@@ -129,7 +132,7 @@ export function FieldShell({
         <label
           htmlFor={htmlFor}
           className={cn(
-            "font-sans font-semibold",
+            "font-sans",
             fieldLabelClass[size],
             disabled ? "text-text-disabled" : "text-input-label"
           )}
@@ -150,11 +153,14 @@ export function FieldShell({
           <p
             id={htmlFor ? `${htmlFor}-description` : undefined}
             className={cn(
-              "font-sans text-sm",
+              // Helper is Caption/MD; the error swaps to Label/MD, which is
+              // the same 12/16 in semibold with the label's tracking.
+              "font-sans",
+              error ? "text-label-md" : "text-caption-md",
               disabled
                 ? "text-text-disabled"
                 : error
-                  ? "font-semibold text-input-error-text"
+                  ? "text-input-error-text"
                   : "text-input-helper"
             )}
           >
@@ -163,7 +169,7 @@ export function FieldShell({
           {footerRight && (
             <span
               className={cn(
-                "shrink-0 font-sans text-sm tabular-nums",
+                "shrink-0 font-sans text-caption-md tabular-nums",
                 disabled ? "text-text-disabled" : "text-input-helper"
               )}
             >

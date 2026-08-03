@@ -14,18 +14,19 @@ import { cn } from "../../lib/cn";
  * - Dot → `dot`
  */
 export const badgeVariants = cva(
-  "inline-flex items-center font-sans font-medium whitespace-nowrap rounded-full",
+  // No `font-medium` — the Label styles carry semibold, matching Figma.
+  "inline-flex items-center font-sans whitespace-nowrap rounded-full",
   {
     variants: {
       variant: { subtle: "", solid: "", outline: "border bg-transparent" },
       color: { brand: "", neutral: "", blue: "", success: "", warning: "", error: "" },
       size: {
-        sm: "h-[20px] gap-[4px] px-[6px] text-xs [&_svg]:size-[12px]",
-        md: "h-[24px] gap-[4px] px-[8px] text-sm [&_svg]:size-[14px]",
+        sm: "h-[20px] gap-[4px] px-[6px] text-label-sm [&_svg]:size-[12px]",
+        md: "h-[24px] gap-[4px] px-[8px] text-label-md [&_svg]:size-[14px]",
         // Figma A17 LG is h24 with 11/16 semibold — smaller type than MD, which
         // looks like a defect in the file. Height and padding follow Figma; the
         // type is left one step up so LG still reads as the largest badge.
-        lg: "h-[24px] gap-[6px] px-[10px] text-sm [&_svg]:size-[16px]",
+        lg: "h-[24px] gap-[6px] px-[10px] text-label-md [&_svg]:size-[16px]",
       },
     },
     compoundVariants: [

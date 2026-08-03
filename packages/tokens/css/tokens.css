@@ -117,21 +117,40 @@
   --font-size-7xl: 60px;
   --font-size-8xl: 72px;
 
-  /* Line height — pairs 1:1 with the size scale above. Taken from the
-     Figma file, where 11/12→16, 14→20, 16→24, 20→28, 24→32, 32→40. */
+  /* Line height — its own scale, NOT paired 1:1 with size. One size can take
+     two line heights depending on density: 12px is 16 as a label and 18 as
+     prose, 18px is 26 as a heading and 28 as prose. Mirrors the Figma
+     `line/height/*` variables. Don't reach for these directly — use a text
+     style class (`text-label-md`, `text-body-sm`) which pairs them for you. */
   --line-height-2xs: 14px;
   --line-height-xs: 16px;
-  --line-height-sm: 16px;
+  --line-height-sm: 18px;
   --line-height-md: 20px;
   --line-height-lg: 24px;
-  --line-height-xl: 28px;
+  --line-height-xl: 26px;
   --line-height-2xl: 28px;
-  --line-height-3xl: 32px;
-  --line-height-4xl: 36px;
-  --line-height-5xl: 40px;
-  --line-height-6xl: 56px;
-  --line-height-7xl: 68px;
-  --line-height-8xl: 80px;
+  --line-height-3xl: 30px;
+  --line-height-4xl: 32px;
+  --line-height-5xl: 36px;
+  --line-height-6xl: 40px;
+  --line-height-7xl: 56px;
+  --line-height-8xl: 68px;
+  --line-height-9xl: 80px;
+
+  /* Letter spacing. Negative steps are a function of size — large type needs
+     pulling in — so they shrink on mobile with the sizes they serve. Positive
+     steps are a function of role, so they are the same in both modes. */
+  --letter-spacing-tighter: -2.5px;
+  --letter-spacing-tight: -2px;
+  --letter-spacing-snug: -1.5px;
+  --letter-spacing-close: -0.75px;
+  --letter-spacing-near: -0.5px;
+  --letter-spacing-slight: -0.25px;
+  --letter-spacing-normal: 0px;
+  --letter-spacing-wide: 0.1px;
+  --letter-spacing-wider: 0.15px;
+  --letter-spacing-widest: 1.2px;
+  --letter-spacing-caps: 1.5px;
 
   /* ── Spacing (Desktop) ──────────────────────────────────────── */
   --spacing-0: 0;
@@ -249,6 +268,27 @@
     --font-size-6xl: 36px;
     --font-size-7xl: 44px;
     --font-size-8xl: 52px;
+
+    /* Line height follows the sizes down. Steps up to /lg are unchanged
+       because the sizes they pair with are unchanged. /2xl is a compromise —
+       it serves both 18px prose (wants 24) and 20px headings (want 26). */
+    --line-height-xl: 24px;
+    --line-height-2xl: 26px;
+    --line-height-3xl: 28px;
+    --line-height-4xl: 28px;
+    --line-height-5xl: 32px;
+    --line-height-6xl: 36px;
+    --line-height-7xl: 42px;
+    --line-height-8xl: 50px;
+    --line-height-9xl: 58px;
+
+    /* Only the negative steps scale — see the note on the desktop block. */
+    --letter-spacing-tighter: -1.8px;
+    --letter-spacing-tight: -1.5px;
+    --letter-spacing-snug: -1.1px;
+    --letter-spacing-close: -0.7px;
+    --letter-spacing-near: -0.4px;
+    --letter-spacing-slight: -0.2px;
   }
 }
 

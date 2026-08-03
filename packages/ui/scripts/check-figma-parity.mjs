@@ -23,10 +23,10 @@ chk('checkbox glyph md 20px → 12×10',has(cb,'md: "size-[20px]"'),'icon/tick-0
 chk('checkbox uses library glyphs',has(cb,'import { Check, Minus }'),'no hand-drawn paths');
 chk('checkbox row gap 16',   has(cb,'gap-[16px]'),'control ↔ text');
 chk('checkbox text gap 4',   has(cb,'gap-[4px]'),'label ↔ support');
-chk('checkbox label sm 14/20',has(cb,'sm: "text-md"'),'via the type scale');
-chk('checkbox label md 16/24',has(cb,'md: "text-lg"'),'via the type scale');
-chk('checkbox support sm 11/16',has(cb,'sm: "text-xs"'),'via the type scale');
-chk('checkbox support md 12/16',has(cb,'md: "text-sm"'),'via the type scale');
+chk('checkbox label sm Body/SM',has(cb,'sm: "text-body-sm"'),'14/20 regular');
+chk('checkbox label md Body/MD',has(cb,'md: "text-body-md"'),'16/24 regular');
+chk('checkbox support sm Caption/SM',has(cb,'sm: "text-caption-sm"'),'11/16 regular');
+chk('checkbox support md Caption/MD',has(cb,'md: "text-caption-md"'),'12/16 regular');
 chk('checkbox label colour input/label',has(cb,'text-input-label'),'not text-primary');
 chk('checkbox support colour input/helper',has(cb,'text-input-helper'),'not text-tertiary');
 
@@ -37,14 +37,14 @@ chk('radio dot 8 / 10',      has(rd,'sm: "size-[8px]"','md: "size-[10px]"'),'');
 chk('radio border 2px',      has(rd,'border-[2px]'),'');
 chk('radio keeps white fill',has(rd,'bg-input-bg','checked:border-bg-brand') && !rd.includes('checked:bg-bg-brand'),'ring + dot, never solid');
 chk('radio row gap 16',      has(rd,'gap-[16px]'),'');
-chk('radio support sm 11/16',has(rd,'sm: "text-xs"'),'via the type scale');
+chk('radio support sm Caption/SM',has(rd,'sm: "text-caption-sm"'),'11/16 regular');
 
 // ── Textarea
 const ta=read('Textarea/Textarea.tsx');
 chk('textarea sm 80 r8 pad 10/12/8/12', has(ta,'min-h-[80px] rounded-[8px] pt-[8.5px] pr-[10.5px] pb-[6.5px] pl-[10.5px]'),'Figma value minus the 1.5px border');
 chk('textarea md 104 r12 pad 12/14/8/14',has(ta,'min-h-[104px] rounded-[12px] pt-[10.5px] pr-[12.5px] pb-[6.5px] pl-[12.5px]'),'Figma value minus the 1.5px border');
 chk('textarea lg 128 r16 pad 14/16/8/16',has(ta,'min-h-[128px] rounded-[16px] pt-[12.5px] pr-[14.5px] pb-[6.5px] pl-[14.5px]'),'Figma value minus the 1.5px border');
-chk('textarea lg value 16/24', has(ta,'lg: "text-lg"'),'sm/md text-md');
+chk('textarea lg value Body/MD', has(ta,'lg: "text-body-md"'),'sm/md Body/SM');
 chk('textarea label ramp 36/40/48', has(ta,'{ sm: 36, md: 40, lg: 48 }'),'→ 11/16, 12/16, 14/20');
 
 // ── Select
@@ -58,7 +58,7 @@ const fd=read('Field/Field.tsx');
 chk('field height ramp',  has(fd,'h-[32px]','h-[36px]','h-[40px]','h-[44px]','h-[48px]'),'');
 chk('field radius ramp',  has(fd,'32: "h-[32px] rounded-[8px]','40: "h-[40px] rounded-[12px]','48: "h-[48px] rounded-[16px]'),'8/8/12/12/16');
 chk('field padX ramp 10/10/12/12/14', has(fd,'px-[8.5px]','px-[10.5px]','px-[12.5px]'),'Figma value minus the 1.5px border');
-chk('field label ramp 11/11/12/12/14',has(fd,'32: "text-xs"','40: "text-sm"','48: "text-md"'),'via the type scale');
+chk('field label ramp Label SM/SM/MD/MD/LG',has(fd,'32: "text-label-sm"','40: "text-label-md"','48: "text-label-lg"'),'11/11/12/12/14 semibold');
 chk('field row gap 4/4/4/6/6', has(fd,'32: "gap-[4px]"','44: "gap-[6px]"'),'');
 chk('field border 1.5 solid', has(fd,'border-solid border-[1.5px]'),'');
 chk('field error halo danger', has(fd,'focus-halo-danger'),'');
@@ -68,15 +68,44 @@ chk('textarea footer row',has(ta,'footerRight='),'helper left, count right');
 chk('textarea resizable',has(ta,'resize-y'),'matches the Figma resize handle');
 chk('input select addons',has(read('Input/Input.tsx'),'prefixSelect','suffixSelect','selectAddon'),'Prefix/Suffix/Both Select');
 
-console.log('\n' + (bad? `❌ ${bad} mismatch` : '✅ all form control values match the Figma extraction'));
-
 // ── Token discipline ────────────────────────────────────────────────
-// Type must go through the scale, never a raw px value. A hardcoded
-// text-[14px] silently drifts the moment the scale moves.
+// Type goes through a named Figma text style, never a raw px value and never
+// a bare size. Picking a size and a line height separately is exactly how the
+// two drifted apart; a style is one indivisible choice.
 import { readdirSync } from 'node:fs';
 const walk = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
   e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]);
 const srcFiles = walk(new URL('../src/', import.meta.url).pathname).filter((f) => f.endsWith('.tsx'));
-const offenders = srcFiles.filter((f) => /text-\[\d+px\]|leading-\[\d+px\]/.test(fs.readFileSync(f, 'utf8')));
-chk('no hardcoded type sizes', offenders.length === 0,
-  offenders.length ? offenders.map((f) => f.split('/src/')[1]).join(', ') : 'all through text-xs/sm/md/lg');
+
+const raw = srcFiles.filter((f) => /text-\[\d+px\]|leading-\[\d+px\]|tracking-\[/.test(fs.readFileSync(f, 'utf8')));
+chk('no hardcoded type', raw.length === 0,
+  raw.length ? raw.map((f) => f.split('/src/')[1]).join(', ') : 'no text-[Npx], leading-[Npx] or tracking-[…]');
+
+const bare = srcFiles.filter((f) =>
+  /\btext-(2xs|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl)\b/.test(fs.readFileSync(f, 'utf8')));
+chk('no bare size classes', bare.length === 0,
+  bare.length ? bare.map((f) => f.split('/src/')[1]).join(', ') : 'every class is a named style');
+
+// The preset is the single place the four axes are joined. Confirm each style
+// this package uses resolves to the size, line height, tracking and weight
+// that Figma's style of the same name carries.
+const preset = fs.readFileSync(new URL('../../tokens/src/tailwind-preset.ts', import.meta.url).pathname, 'utf8');
+const FIGMA = {                       // name:            [size, line,  track,   weight]
+  'label-sm':   ['xs',  'xs',  'wider',  'semibold'],   // Label/SM    11/16/0.15
+  'label-md':   ['sm',  'xs',  'wide',   'semibold'],   // Label/MD    12/16/0.1
+  'label-lg':   ['md',  'md',  'wide',   'semibold'],   // Label/LG    14/20/0.1
+  'label-xl':   ['lg',  'lg',  'wide',   'semibold'],   // Label/XL    16/24/0.1
+  'body-sm':    ['md',  'md',  'normal', 'regular'],    // Body/SM     14/20/0
+  'body-md':    ['lg',  'lg',  'normal', 'regular'],    // Body/MD     16/24/0
+  'caption-sm': ['xs',  'xs',  'normal', 'regular'],    // Caption/SM  11/16/0
+  'caption-md': ['sm',  'xs',  'normal', 'regular'],    // Caption/MD  12/16/0
+  'overline-md':['xs',  'xs',  'widest', 'semibold'],   // Overline/MD 11/16/1.2
+};
+for (const [name, row] of Object.entries(FIGMA)) {
+  const m = preset.match(new RegExp(`"${name}":\\s*\\[([^\\]]*)\\]`));
+  const got = m ? m[1].split(',').map((x) => x.trim().replace(/"/g, '')) : null;
+  chk(`preset ${name}`, got && row.every((v, i) => got[i] === v),
+    got ? got.join(' · ') : 'not found in the preset');
+}
+
+console.log('\n' + (bad ? `❌ ${bad} mismatch` : '✅ everything matches the Figma extraction'));

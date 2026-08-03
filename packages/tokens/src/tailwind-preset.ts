@@ -13,6 +13,32 @@
  */
 import type { Config } from "tailwindcss";
 
+/**
+ * Expands the compact text-style table below into Tailwind `fontSize` tuples.
+ * Every value resolves to a CSS variable, so switching to the mobile mode is
+ * a media query in tokens.css and nothing here has to know about it.
+ */
+type StyleRow = [size: string, line: string, tracking: string, weight: string];
+type FontSizeEntry = [
+  fontSize: string,
+  config: { lineHeight: string; letterSpacing: string; fontWeight: string },
+];
+
+const ts = <K extends string>(rows: Record<K, StyleRow>): Record<K, FontSizeEntry> =>
+  Object.fromEntries(
+    (Object.entries(rows) as [K, StyleRow][]).map(([name, [size, line, tracking, weight]]) => [
+      name,
+      [
+        `var(--font-size-${size})`,
+        {
+          lineHeight: `var(--line-height-${line})`,
+          letterSpacing: `var(--letter-spacing-${tracking})`,
+          fontWeight: `var(--font-weight-${weight})`,
+        },
+      ] satisfies FontSizeEntry,
+    ])
+  ) as Record<K, FontSizeEntry>;
+
 export const ideezaPreset = {
   content: [],
   theme: {
@@ -22,23 +48,46 @@ export const ideezaPreset = {
         display: ["var(--font-family-display)"],
         mono: ["var(--font-family-mono)"],
       },
-      // Each step carries its line height, so `text-md` is 14/20 — no
-      // separate `leading-` class and no way to drift from the pair.
-      fontSize: {
-        "2xs": ["var(--font-size-2xs)", { lineHeight: "var(--line-height-2xs)" }],
-        "xs": ["var(--font-size-xs)", { lineHeight: "var(--line-height-xs)" }],
-        "sm": ["var(--font-size-sm)", { lineHeight: "var(--line-height-sm)" }],
-        "md": ["var(--font-size-md)", { lineHeight: "var(--line-height-md)" }],
-        "lg": ["var(--font-size-lg)", { lineHeight: "var(--line-height-lg)" }],
-        "xl": ["var(--font-size-xl)", { lineHeight: "var(--line-height-xl)" }],
-        "2xl": ["var(--font-size-2xl)", { lineHeight: "var(--line-height-2xl)" }],
-        "3xl": ["var(--font-size-3xl)", { lineHeight: "var(--line-height-3xl)" }],
-        "4xl": ["var(--font-size-4xl)", { lineHeight: "var(--line-height-4xl)" }],
-        "5xl": ["var(--font-size-5xl)", { lineHeight: "var(--line-height-5xl)" }],
-        "6xl": ["var(--font-size-6xl)", { lineHeight: "var(--line-height-6xl)" }],
-        "7xl": ["var(--font-size-7xl)", { lineHeight: "var(--line-height-7xl)" }],
-        "8xl": ["var(--font-size-8xl)", { lineHeight: "var(--line-height-8xl)" }],
-      },
+      /**
+       * One class per Figma text style — `Label/MD` is `text-label-md`.
+       *
+       * There is deliberately no bare `text-sm`/`text-md`. Choosing a size
+       * and then a line height separately is how the two drifted apart; a
+       * style is one indivisible choice covering size, line height, tracking
+       * and weight. If a design needs a combination that isn't here, the
+       * answer is a new style in Figma, not an arbitrary value in a class.
+       */
+      fontSize: ts({
+        "display-xl":     ["8xl", "9xl", "tighter", "bold"],
+        "display-lg":     ["7xl", "8xl", "tight", "semibold"],
+        "display-md":     ["6xl", "7xl", "snug", "semibold"],
+        "heading-h1":     ["5xl", "6xl", "close", "semibold"],
+        "heading-h2":     ["4xl", "5xl", "near", "semibold"],
+        "heading-h3":     ["3xl", "4xl", "slight", "semibold"],
+        "heading-h4":     ["2xl", "2xl", "normal", "semibold"],
+        "heading-h5":     ["xl", "xl", "normal", "semibold"],
+        "heading-h6":     ["lg", "lg", "normal", "semibold"],
+        "body-xs":        ["sm", "sm", "normal", "regular"],
+        "body-sm":        ["md", "md", "normal", "regular"],
+        "body-md":        ["lg", "lg", "normal", "regular"],
+        "body-lg":        ["xl", "2xl", "normal", "regular"],
+        "body-xl":        ["2xl", "3xl", "normal", "regular"],
+        "body-xs-medium": ["sm", "sm", "normal", "medium"],
+        "body-sm-medium": ["md", "md", "normal", "medium"],
+        "body-md-medium": ["lg", "lg", "normal", "medium"],
+        "body-lg-medium": ["xl", "2xl", "normal", "medium"],
+        "body-xl-medium": ["2xl", "3xl", "normal", "medium"],
+        "label-xl":       ["lg", "lg", "wide", "semibold"],
+        "label-lg":       ["md", "md", "wide", "semibold"],
+        "label-md":       ["sm", "xs", "wide", "semibold"],
+        "label-sm":       ["xs", "xs", "wider", "semibold"],
+        "caption-md":     ["sm", "xs", "normal", "regular"],
+        "caption-sm":     ["xs", "xs", "normal", "regular"],
+        "overline-md":    ["xs", "xs", "widest", "semibold"],
+        "overline-sm":    ["2xs", "2xs", "caps", "semibold"],
+        "code-md":        ["md", "md", "normal", "regular"],
+        "code-sm":        ["sm", "sm", "normal", "regular"],
+      }),
       fontWeight: {
         regular: "var(--font-weight-regular)",
         medium: "var(--font-weight-medium)",

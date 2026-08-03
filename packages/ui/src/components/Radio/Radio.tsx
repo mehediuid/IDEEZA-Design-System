@@ -9,8 +9,8 @@ import { cn } from "../../lib/cn";
  *   circle   sm 20×20 · md 24×24 · always round · 2px border
  *   dot      sm 8×8 · md 10×10
  *   row gap  16px between control and text
- *   label    sm 14/20 regular · md 16/24 regular · color input/label
- *   support  sm 11/16 regular · md 12/16 regular · color input/helper
+ *   label    sm Body/SM · md Body/MD · color input/label
+ *   support  sm Caption/SM · md Caption/MD · color input/helper
  *   text gap 4px
  *
  * Unlike the checkbox, a selected radio keeps the white fill and shows a
@@ -27,12 +27,12 @@ const dotClass: Record<RadioSize, string> = {
   md: "size-[10px]",
 };
 const labelClass: Record<RadioSize, string> = {
-  sm: "text-md",
-  md: "text-lg",
+  sm: "text-body-sm",
+  md: "text-body-md",
 };
 const supportClass: Record<RadioSize, string> = {
-  sm: "text-xs",
-  md: "text-sm",
+  sm: "text-caption-sm",
+  md: "text-caption-md",
 };
 
 export interface RadioProps

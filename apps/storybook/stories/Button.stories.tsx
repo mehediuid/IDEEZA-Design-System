@@ -18,11 +18,11 @@ const SIZES = ["sm", "md", "lg", "xl", "2xl"] as const;
 
 /** Figma geometry, for the size table. */
 const SIZE_SPEC: Record<(typeof SIZES)[number], string> = {
-  sm: "SM · 32 · r8 · px12 · 12/16",
-  md: "MD · 36 · r8 · px14 · 14/20",
-  lg: "LG · 40 · r12 · px16 · 14/20",
-  xl: "XL · 44 · r12 · px20 · 16/24",
-  "2xl": "2XL · 48 · r16 · px24 · 16/24",
+  sm: "SM · 32 · r8 · px12 · Label/MD",
+  md: "MD · 36 · r8 · px14 · Label/LG",
+  lg: "LG · 40 · r12 · px16 · Label/LG",
+  xl: "XL · 44 · r12 · px20 · Label/XL",
+  "2xl": "2XL · 48 · r16 · px24 · Label/XL",
 };
 
 const meta = {
@@ -63,7 +63,7 @@ export const AllHierarchies: Story = {
         >
           <span
             className={
-              "text-[11px] font-semibold uppercase tracking-wide " +
+              "text-overline-md uppercase " +
               (v === "inverse" ? "text-text-inverse" : "text-text-tertiary")
             }
           >
@@ -88,7 +88,7 @@ export const Sizes: Story = {
     <div className="flex flex-col gap-[16px]">
       {SIZES.map((s) => (
         <div key={s} className="flex items-center gap-[12px]">
-          <span className="w-[190px] text-[11px] font-semibold text-text-tertiary">{SIZE_SPEC[s]}</span>
+          <span className="w-[190px] text-label-sm text-text-tertiary">{SIZE_SPEC[s]}</span>
           <Button size={s} variant="primary">Button</Button>
           <Button size={s} variant="secondary">Button</Button>
           <Button size={s} variant="tonal">Button</Button>
@@ -124,7 +124,7 @@ export const FocusHalo: Story = {
   render: () => (
     <div className="flex flex-col gap-[20px]">
       <div className="flex flex-col gap-[8px]">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-text-tertiary">
+        <span className="text-overline-md uppercase text-text-tertiary">
           Real focus — press Tab (mouse click will not show it, by design)
         </span>
         <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] bg-bg-surface p-[16px]">
@@ -138,7 +138,7 @@ export const FocusHalo: Story = {
       </div>
 
       <div className="flex flex-col gap-[8px]">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-text-brand">
+        <span className="text-overline-md uppercase text-text-brand">
           Forced focus — same styles, always on
         </span>
         <div className="flex flex-wrap items-center gap-[12px] rounded-[12px] bg-bg-surface p-[16px]">

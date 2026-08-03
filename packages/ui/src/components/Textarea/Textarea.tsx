@@ -29,9 +29,9 @@ const rowsClass: Record<TextareaRows, string> = {
 
 /** Value type ramp — LG steps up, matching Figma. */
 const rowsValueClass: Record<TextareaRows, string> = {
-  sm: "text-md",
-  md: "text-md",
-  lg: "text-lg",
+  sm: "text-body-sm",
+  md: "text-body-sm",
+  lg: "text-body-md",
 };
 
 const rowsToFieldSize: Record<TextareaRows, FieldSize> = { sm: 36, md: 40, lg: 48 };
