@@ -239,6 +239,23 @@ export const ideezaPreset = {
           brand: "var(--color-border-brand)",
           ai: "var(--color-border-ai)",
         },
+        // Semantic — icon. Separate from `text` because Figma keeps them apart:
+        // icon/secondary is gray-500 while text/secondary is gray-700, and
+        // icon/brand goes violet-300 in Dark where text/brand goes violet-300
+        // too but icon/ai and text/ai diverge. Spinner and any glyph read here.
+        icon: {
+          DEFAULT: "var(--color-icon-default)",
+          secondary: "var(--color-icon-secondary)",
+          disabled: "var(--color-icon-disabled)",
+          "on-brand": "var(--color-icon-on-brand)",
+          brand: "var(--color-icon-brand)",
+          blue: "var(--color-icon-blue)",
+          info: "var(--color-icon-info)",
+          success: "var(--color-icon-success)",
+          warning: "var(--color-icon-warning)",
+          error: "var(--color-icon-error)",
+          ai: "var(--color-icon-ai)",
+        },
         // Component-scoped — handy for direct utility access
         input: {
           bg: "var(--color-input-bg)",

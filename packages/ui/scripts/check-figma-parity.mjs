@@ -108,4 +108,60 @@ for (const [name, row] of Object.entries(FIGMA)) {
     got ? got.join(' · ') : 'not found in the preset');
 }
 
+// ── Display atoms ───────────────────────────────────────────────────
+// Values read out of Atoms — Display with the plugin API, same as above.
+
+// A16 Avatar — 6 sizes, and initials step through named styles rather than
+// raw sizes. The contrast border is 1px up to XS and 2px from SM.
+const av = read('Avatar/Avatar.tsx');
+chk('avatar size ramp 20/24/32/40/48/64',
+  has(av, 'size-[20px]', 'size-[24px]', 'size-[32px]', 'size-[40px]', 'size-[48px]', 'size-[64px]'), '2XS→XL');
+chk('avatar initials type ramp',
+  has(av, '"2xs": "size-[20px] text-overline-sm"', 'xs: "size-[24px] text-label-sm"',
+       'sm: "size-[32px] text-label-lg"', 'md: "size-[40px] text-heading-h6"',
+       'lg: "size-[48px] text-heading-h5"', 'xl: "size-[64px] text-heading-h3"'),
+  'Overline/SM → Label/SM → Label/LG → H6 → H5 → H3');
+chk('avatar contrast border 1px → 2px', has(av, '"2xs": "ring-1 ring-inset ring-bg-surface"', 'sm: "ring-2 ring-inset ring-bg-surface"'), '1px at 20/24, 2px from 32');
+chk('avatar status dot ramp 6/7/9/11/13/16',
+  has(av, 'size-[6px]', 'size-[7px]', 'size-[9px]', 'size-[11px]', 'size-[13px]', 'size-[16px]'), '');
+chk('avatar initials fill', has(av, 'bg-bg-brand-subtle text-text-brand'), 'bg/brand-subtle + text/brand');
+chk('avatar icon fill', has(av, 'bg-bg-surface-raised'), 'bg/surface-raised');
+chk('avatar hover wash 8%', has(av, 'hover:after:opacity-[0.08]'), 'text/primary at 8%');
+chk('avatar disabled 50%', has(av, 'opacity-50'), '');
+
+// A18 Tag — border in every state; Badge is the coloured one, Tag is neutral.
+const tg = read('Tag/Tag.tsx');
+chk('tag sm 24 pad 8 gap 4 Caption/SM', has(tg, 'h-[24px] gap-[4px] px-[8px] text-caption-sm'), '');
+chk('tag md 28 pad 10 gap 6 Caption/MD', has(tg, 'h-[28px] gap-[6px] px-[10px] text-caption-md'), '');
+chk('tag lg 32 pad 12 gap 6 Label/SM', has(tg, 'h-[32px] gap-[6px] px-[12px] text-label-sm'), '');
+chk('tag default surface-raised + border', has(tg, 'bg-bg-surface-raised border-border text-text-primary'), '');
+chk('tag hover subtle + strong border', has(tg, 'hover:bg-bg-subtle hover:border-border-strong'), '');
+chk('tag selected brand', has(tg, 'bg-bg-brand-subtle border-border-brand text-text-brand'), '');
+chk('tag close icon 12 / 16', has(tg, '[&_svg]:size-[12px]', '[&_svg]:size-[16px]'), 'SM 12, MD/LG 16');
+
+// A20 Spinner — the Figma arc is 0.87→4.01 rad, exactly half the circle.
+const spn = read('Spinner/Spinner.tsx');
+chk('spinner size ramp 16/20/24/32', has(spn, 'size-[16px]', 'size-[20px]', 'size-[24px]', 'size-[32px]'), '');
+chk('spinner stroke ramp 2/2/2.5/3', has(spn, 'border-[2px]', 'border-[2.5px]', 'border-[3px]'), '');
+chk('spinner arc is half the circle', has(spn, 'border-r-transparent border-t-transparent'), '0.87→4.01 rad = 180°');
+chk('spinner ring track border/subtle', has(spn, 'border-border-subtle'), '');
+chk('spinner colours read icon/*', has(spn, 'text-icon-brand', 'text-icon-secondary', 'text-icon-on-brand', 'text-icon-error'), 'not text/*');
+chk('spinner dots = 12', has(spn, 'const DOTS = 12'), 'Figma bakes 12 nodes with a fade');
+
+// A21 Skeleton — geometry is the Figma default, overridable via className.
+const sk = read('Skeleton/Skeleton.tsx');
+chk('skeleton rectangle ramp', has(sk, 'w-[120px] h-[60px]', 'w-[200px] h-[100px]', 'w-[320px] h-[160px]'), 'SM/MD/LG');
+chk('skeleton line ramp', has(sk, 'w-[80px] h-[8px]', 'w-[160px] h-[12px]', 'w-[240px] h-[16px]'), '');
+chk('skeleton circle ramp 24/32/48', has(sk, 'size-[24px]', 'size-[32px]', 'size-[48px]'), '');
+chk('skeleton card image ramp', has(sk, 'w-[160px] h-[80px]', 'w-[240px] h-[140px]', 'w-[320px] h-[180px]'), '');
+chk('skeleton fill bg/subtle', has(sk, 'bg-bg-subtle'), '');
+
+// A24 Divider — 1px border/subtle, 16px gap, Body/SM label.
+const dv = read('Divider/Divider.tsx');
+chk('divider line border/subtle', has(dv, 'bg-border-subtle'), '1px');
+chk('divider content gap 16', has(dv, 'gap-[16px]'), '');
+chk('divider label Body/SM + text/secondary', has(dv, 'text-body-sm text-text-secondary'), '');
+chk('divider fill pad 10/16 on bg/subtle', has(dv, 'bg-bg-subtle px-[16px] py-[10px]'), '');
+chk('divider left align drops the leading line', has(dv, 'align !== "left" && <Line'), '');
+
 console.log('\n' + (bad ? `❌ ${bad} mismatch` : '✅ everything matches the Figma extraction'));

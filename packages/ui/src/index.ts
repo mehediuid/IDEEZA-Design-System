@@ -13,5 +13,10 @@ export * from "./components/Toggle/index.js";
 
 // Atoms — Display
 export * from "./components/Badge/index.js";
+export * from "./components/Avatar/index.js";
+export * from "./components/Tag/index.js";
+export * from "./components/Spinner/index.js";
+export * from "./components/Skeleton/index.js";
+export * from "./components/Divider/index.js";
 
 export { cn } from "./lib/cn.js";
