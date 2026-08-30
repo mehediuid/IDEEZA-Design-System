@@ -88,6 +88,26 @@
   --color-orange-600: #ea580c;
   --color-orange-700: #c2410c;
 
+  --color-pink-50: #fdf2f8;
+  --color-pink-100: #fce7f3;
+  --color-pink-200: #fbcfe8;
+  --color-pink-400: #f472b6;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+  --color-pink-700: #be185d;
+  --color-pink-800: #9d174d;
+  --color-pink-900: #831843;
+
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+
   --color-white: #ffffff;
   --color-black: #000000;
 
@@ -425,6 +445,90 @@
   --color-input-helper: var(--color-text-tertiary);
   --color-input-error-text: var(--color-text-error);
 
+  /* Charts — synced from Figma */
+  --chart-axis: var(--color-gray-400);
+  --chart-categorical-01: var(--color-violet-600);
+  --chart-categorical-02: var(--color-blue-600);
+  --chart-categorical-03: var(--color-green-700);
+  --chart-categorical-04: var(--color-orange-700);
+  --chart-categorical-05: var(--color-pink-600);
+  --chart-categorical-06: var(--color-teal-700);
+  --chart-categorical-07: var(--color-yellow-700);
+  --chart-categorical-08: var(--color-red-600);
+  --chart-delta-up-bg: var(--color-green-50);
+  --chart-delta-up-icon: var(--color-green-600);
+  --chart-delta-up-text: var(--color-green-700);
+  --chart-delta-down-bg: var(--color-red-50);
+  --chart-delta-down-icon: var(--color-red-600);
+  --chart-delta-down-text: var(--color-red-700);
+  --chart-delta-flat-bg: var(--color-gray-100);
+  --chart-delta-flat-icon: var(--color-gray-500);
+  --chart-delta-flat-text: var(--color-gray-500);
+  --chart-diverging-01: var(--color-red-700);
+  --chart-diverging-02: var(--color-red-500);
+  --chart-diverging-03: var(--color-red-200);
+  --chart-diverging-04: var(--color-gray-200);
+  --chart-diverging-05: var(--color-blue-200);
+  --chart-diverging-06: var(--color-blue-500);
+  --chart-diverging-07: var(--color-blue-700);
+  --chart-sequential-01: var(--color-violet-100);
+  --chart-sequential-02: var(--color-violet-200);
+  --chart-sequential-03: var(--color-violet-300);
+  --chart-sequential-04: var(--color-violet-400);
+  --chart-sequential-05: var(--color-violet-500);
+  --chart-sequential-06: var(--color-violet-600);
+  --chart-sequential-07: var(--color-violet-700);
+  --chart-grid: var(--color-gray-200);
+  --chart-muted: var(--color-gray-300);
+  --chart-negative: var(--color-red-600);
+  --chart-neutral: var(--color-gray-400);
+  --chart-positive: var(--color-green-600);
+
+  /* AI surfaces */
+  --color-ai-badge-bg: var(--color-violet-50);
+  --color-ai-badge-text: var(--color-violet-600);
+  --color-ai-prompt-bg: var(--color-white);
+  --color-ai-prompt-border: var(--color-violet-600);
+
+  /* Badge */
+  --color-badge-brand-bg: var(--color-violet-50);
+  --color-badge-brand-text: var(--color-violet-600);
+  --color-badge-blue-bg: var(--color-blue-50);
+  --color-badge-blue-text: var(--color-blue-700);
+  --color-badge-success-bg: var(--color-green-50);
+  --color-badge-success-text: var(--color-green-800);
+  --color-badge-warning-bg: var(--color-yellow-50);
+  --color-badge-warning-text: var(--color-yellow-800);
+  --color-badge-error-bg: var(--color-red-50);
+  --color-badge-error-text: var(--color-red-700);
+
+  /* Tag */
+  --color-tag-brand-bg: var(--color-violet-50);
+  --color-tag-brand-text: var(--color-violet-600);
+  --color-tag-neutral-bg: var(--color-gray-100);
+  --color-tag-neutral-text: var(--color-gray-700);
+
+  /* Toast */
+  --color-toast-success-bg: var(--color-green-50);
+  --color-toast-warning-bg: var(--color-yellow-50);
+  --color-toast-error-bg: var(--color-red-50);
+  --color-toast-info-bg: var(--color-blue-50);
+
+  /* Card */
+  --color-card-bg: var(--color-white);
+  --color-card-bg-hover: var(--color-gray-100);
+  --color-card-border: var(--color-gray-200);
+
+  /* Modal */
+  --color-modal-bg: var(--color-white);
+  --color-modal-border: var(--color-gray-200);
+  --color-modal-overlay: var(--color-gray-900);
+
+  /* Info role */
+  --color-border-info: var(--color-blue-500);
+  --color-icon-info: var(--color-blue-700);
+  --color-text-info: var(--color-blue-800);
+
   /* Glass */
   --color-glass-fill-xs: rgba(255, 255, 255, 0.30);
   --color-glass-fill-sm: rgba(255, 255, 255, 0.50);
@@ -561,6 +665,87 @@
   --color-glass-highlight: rgba(255, 255, 255, 0.20);
   --color-glass-shadow: rgba(0, 0, 0, 0.30);
 
+  /* Charts — synced from Figma */
+  --chart-axis: var(--color-gray-500);
+  --chart-categorical-01: var(--color-violet-400);
+  --chart-categorical-02: var(--color-blue-400);
+  --chart-categorical-03: var(--color-green-400);
+  --chart-categorical-04: var(--color-orange-400);
+  --chart-categorical-05: var(--color-pink-400);
+  --chart-categorical-06: var(--color-teal-400);
+  --chart-categorical-07: var(--color-yellow-400);
+  --chart-categorical-08: var(--color-red-400);
+  --chart-delta-up-bg: var(--color-green-900);
+  --chart-delta-up-icon: var(--color-green-400);
+  --chart-delta-up-text: var(--color-green-400);
+  --chart-delta-down-bg: var(--color-red-900);
+  --chart-delta-down-icon: var(--color-red-400);
+  --chart-delta-down-text: var(--color-red-400);
+  --chart-delta-flat-bg: var(--color-gray-900);
+  --chart-delta-flat-icon: var(--color-gray-400);
+  --chart-delta-flat-text: var(--color-gray-400);
+  --chart-diverging-01: var(--color-red-400);
+  --chart-diverging-03: var(--color-red-700);
+  --chart-diverging-04: var(--color-gray-700);
+  --chart-diverging-05: var(--color-blue-700);
+  --chart-diverging-07: var(--color-blue-400);
+  --chart-sequential-01: var(--color-violet-900);
+  --chart-sequential-02: var(--color-violet-800);
+  --chart-sequential-03: var(--color-violet-700);
+  --chart-sequential-04: var(--color-violet-600);
+  --chart-sequential-06: var(--color-violet-400);
+  --chart-sequential-07: var(--color-violet-300);
+  --chart-grid: var(--color-gray-800);
+  --chart-muted: var(--color-gray-700);
+  --chart-negative: var(--color-red-400);
+  --chart-neutral: var(--color-gray-500);
+  --chart-positive: var(--color-green-400);
+
+  /* AI surfaces */
+  --color-ai-badge-bg: var(--color-violet-950);
+  --color-ai-badge-text: var(--color-violet-200);
+  --color-ai-prompt-bg: var(--color-gray-900);
+  --color-ai-prompt-border: var(--color-violet-400);
+
+  /* Badge */
+  --color-badge-brand-bg: var(--color-violet-950);
+  --color-badge-brand-text: var(--color-violet-300);
+  --color-badge-blue-bg: var(--color-blue-950);
+  --color-badge-blue-text: var(--color-blue-300);
+  --color-badge-success-bg: var(--color-green-900);
+  --color-badge-success-text: var(--color-green-400);
+  --color-badge-warning-bg: var(--color-yellow-900);
+  --color-badge-warning-text: var(--color-yellow-400);
+  --color-badge-error-bg: var(--color-red-900);
+  --color-badge-error-text: var(--color-red-200);
+
+  /* Tag */
+  --color-tag-brand-bg: var(--color-violet-950);
+  --color-tag-brand-text: var(--color-violet-300);
+  --color-tag-neutral-bg: var(--color-gray-800);
+  --color-tag-neutral-text: var(--color-gray-300);
+
+  /* Toast */
+  --color-toast-success-bg: var(--color-green-900);
+  --color-toast-warning-bg: var(--color-yellow-900);
+  --color-toast-error-bg: var(--color-red-900);
+  --color-toast-info-bg: var(--color-blue-950);
+
+  /* Card */
+  --color-card-bg: var(--color-gray-900);
+  --color-card-bg-hover: var(--color-gray-800);
+  --color-card-border: var(--color-gray-800);
+
+  /* Modal */
+  --color-modal-bg: var(--color-gray-900);
+  --color-modal-border: var(--color-gray-800);
+  --color-modal-overlay: var(--color-gray-950);
+
+  /* Info role */
+  --color-border-info: var(--color-blue-400);
+  --color-icon-info: var(--color-blue-400);
+  --color-text-info: var(--color-blue-400);
+
   /* Elevation */
   --elevation-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
   --elevation-2: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
@@ -682,6 +867,87 @@
     --color-glass-border-strong: rgba(255, 255, 255, 0.25);
     --color-glass-highlight: rgba(255, 255, 255, 0.20);
     --color-glass-shadow: rgba(0, 0, 0, 0.30);
+
+    /* Charts — synced from Figma */
+    --chart-axis: var(--color-gray-500);
+    --chart-categorical-01: var(--color-violet-400);
+    --chart-categorical-02: var(--color-blue-400);
+    --chart-categorical-03: var(--color-green-400);
+    --chart-categorical-04: var(--color-orange-400);
+    --chart-categorical-05: var(--color-pink-400);
+    --chart-categorical-06: var(--color-teal-400);
+    --chart-categorical-07: var(--color-yellow-400);
+    --chart-categorical-08: var(--color-red-400);
+    --chart-delta-up-bg: var(--color-green-900);
+    --chart-delta-up-icon: var(--color-green-400);
+    --chart-delta-up-text: var(--color-green-400);
+    --chart-delta-down-bg: var(--color-red-900);
+    --chart-delta-down-icon: var(--color-red-400);
+    --chart-delta-down-text: var(--color-red-400);
+    --chart-delta-flat-bg: var(--color-gray-900);
+    --chart-delta-flat-icon: var(--color-gray-400);
+    --chart-delta-flat-text: var(--color-gray-400);
+    --chart-diverging-01: var(--color-red-400);
+    --chart-diverging-03: var(--color-red-700);
+    --chart-diverging-04: var(--color-gray-700);
+    --chart-diverging-05: var(--color-blue-700);
+    --chart-diverging-07: var(--color-blue-400);
+    --chart-sequential-01: var(--color-violet-900);
+    --chart-sequential-02: var(--color-violet-800);
+    --chart-sequential-03: var(--color-violet-700);
+    --chart-sequential-04: var(--color-violet-600);
+    --chart-sequential-06: var(--color-violet-400);
+    --chart-sequential-07: var(--color-violet-300);
+    --chart-grid: var(--color-gray-800);
+    --chart-muted: var(--color-gray-700);
+    --chart-negative: var(--color-red-400);
+    --chart-neutral: var(--color-gray-500);
+    --chart-positive: var(--color-green-400);
+
+    /* AI surfaces */
+    --color-ai-badge-bg: var(--color-violet-950);
+    --color-ai-badge-text: var(--color-violet-200);
+    --color-ai-prompt-bg: var(--color-gray-900);
+    --color-ai-prompt-border: var(--color-violet-400);
+
+    /* Badge */
+    --color-badge-brand-bg: var(--color-violet-950);
+    --color-badge-brand-text: var(--color-violet-300);
+    --color-badge-blue-bg: var(--color-blue-950);
+    --color-badge-blue-text: var(--color-blue-300);
+    --color-badge-success-bg: var(--color-green-900);
+    --color-badge-success-text: var(--color-green-400);
+    --color-badge-warning-bg: var(--color-yellow-900);
+    --color-badge-warning-text: var(--color-yellow-400);
+    --color-badge-error-bg: var(--color-red-900);
+    --color-badge-error-text: var(--color-red-200);
+
+    /* Tag */
+    --color-tag-brand-bg: var(--color-violet-950);
+    --color-tag-brand-text: var(--color-violet-300);
+    --color-tag-neutral-bg: var(--color-gray-800);
+    --color-tag-neutral-text: var(--color-gray-300);
+
+    /* Toast */
+    --color-toast-success-bg: var(--color-green-900);
+    --color-toast-warning-bg: var(--color-yellow-900);
+    --color-toast-error-bg: var(--color-red-900);
+    --color-toast-info-bg: var(--color-blue-950);
+
+    /* Card */
+    --color-card-bg: var(--color-gray-900);
+    --color-card-bg-hover: var(--color-gray-800);
+    --color-card-border: var(--color-gray-800);
+
+    /* Modal */
+    --color-modal-bg: var(--color-gray-900);
+    --color-modal-border: var(--color-gray-800);
+    --color-modal-overlay: var(--color-gray-950);
+
+    /* Info role */
+    --color-border-info: var(--color-blue-400);
+    --color-icon-info: var(--color-blue-400);
+    --color-text-info: var(--color-blue-400);
 
     /* Elevation */
     --elevation-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.5);
