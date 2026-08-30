@@ -30,6 +30,8 @@ jobs:
 
       - run: pnpm turbo run build --filter=./packages/*
 
+      - run: pnpm turbo run typecheck test
+
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
