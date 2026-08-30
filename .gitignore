@@ -35,6 +35,5 @@ Thumbs.db
 .env.*.local
 preview/
 package-lock.json
-*.command
 ideeza-color-changes.pdf
 .deps-platform
