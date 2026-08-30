@@ -16,8 +16,9 @@ ideeza-design-system/
 │   ├── tokens/        @ideeza/tokens  ─ design tokens (CSS vars + TS constants)
 │   ├── ui/            @ideeza/ui      ─ React components
 │   └── icons/         @ideeza/icons   ─ Lucide icon set (planned)
-└── apps/
-    └── storybook/     @ideeza/storybook ─ component playground
+├── apps/
+│   └── storybook/     @ideeza/storybook ─ component playground
+└── scripts/           double-click runners for macOS (see Local development)
 ```
 
 ### Token coverage
@@ -26,8 +27,8 @@ Generated from the IDEEZA Figma file (`V3uizmZLHo5Xhy65Dp3F0O`):
 
 | Collection      | Tokens | Modes              |
 | --------------- | -----: | ------------------ |
-| Primitives      |     68 | Value              |
-| Semantic colors |    120 | Light / Dark       |
+| Primitives      |     86 | Value              |
+| Semantic colors |    185 | Light / Dark       |
 | Spacing         |     20 | Desktop / Mobile   |
 | Radius          |      9 | Desktop / Mobile   |
 | Typography      |     21 | Desktop / Mobile   |
@@ -109,6 +110,21 @@ pnpm storybook    # open the component playground at localhost:6006
 pnpm typecheck
 pnpm test
 ```
+
+### Double-click runners (macOS)
+
+Two `.command` scripts in `scripts/` do the same things without a terminal — open Finder and double-click. Both `cd` to the repo root themselves, so they work from wherever they sit.
+
+| Script | Does |
+| --- | --- |
+| `scripts/RUN-KORO.command` | Checks Node 18+, finds or fetches pnpm, installs dependencies only when they're actually stale, builds in turbo dependency order, frees port 6006, then starts Storybook and opens the browser once the port really responds. |
+| `scripts/PUSH-KORO.command` | Shows uncommitted files, warns if any look like secrets (`.env`, `*.pem`, `*.key`, `id_rsa`, `.npmrc`, …), asks before committing, checks whether `origin/main` is ahead, then pushes. |
+
+`RUN-KORO` decides whether to reinstall by comparing a `.deps-platform` marker (gitignored) against the current platform and the hash of `pnpm-lock.yaml` — so it reinstalls after a lockfile change or when `node_modules` came from a different machine, and skips the wait otherwise.
+
+Both are macOS-only: they rely on `.command`, `open` and `lsof`. On Linux or Windows use the `pnpm` commands above.
+
+> `PUSH-KORO` warns about risky files but does not exclude them — answering `y` runs `git add -A` and commits everything shown. Check the list before confirming.
 
 ---
 
