@@ -18,5 +18,11 @@ export * from "./components/Tag/index.js";
 export * from "./components/Spinner/index.js";
 export * from "./components/Skeleton/index.js";
 export * from "./components/Divider/index.js";
+export * from "./components/Dot/index.js";
+export * from "./components/Kbd/index.js";
+export * from "./components/Code/index.js";
+export * from "./components/DeltaChip/index.js";
+export * from "./components/ProgressBar/index.js";
+export * from "./components/ProgressRing/index.js";
 
 export { cn } from "./lib/cn.js";

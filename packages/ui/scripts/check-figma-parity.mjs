@@ -111,6 +111,41 @@ for (const [name, row] of Object.entries(FIGMA)) {
     got ? got.join(' · ') : 'not found in the preset');
 }
 
+// ── A26 Dot · A25 KBD · A27 Code · A30 Delta Chip · A22/A23 Progress ─
+const dt = stripComments(read('Dot/Dot.tsx'));
+chk('dot ramp 6/8/10/12', has(dt,'xs: "size-[6px]"','sm: "size-[8px]"','md: "size-[10px]"','lg: "size-[12px]"'), '');
+chk('dot 2px surface ring', has(dt,'ring-2 ring-bg-surface'), 'Figma ring ellipse is 4px wider');
+chk('dot neutral is bg/inverse', has(dt,'neutral: "bg-bg-inverse"'), 'flips with the theme');
+
+const kb = stripComments(read('Kbd/Kbd.tsx'));
+chk('kbd 22/24/30 pad 6/8/10', has(kb,'h-[22px] px-[6px] py-[2px]','h-[24px] px-[8px] py-[3px]','h-[30px] px-[10px] py-[5px]'), '');
+chk('kbd raised: surface-raised + border', has(kb,'border border-border bg-bg-surface-raised text-text-secondary'), '');
+chk('kbd type Code/SM · Code/MD', has(kb,'text-code-sm','text-code-md'), '');
+
+const cd2 = stripComments(read('Code/Code.tsx'));
+chk('code 22/24/28 pad 6/8/10', has(cd2,'h-[22px] px-[6px] py-[2px]','h-[24px] px-[8px] py-[3px]','h-[28px] px-[10px] py-[4px]'), '');
+chk('code flat: bg/subtle, no border', has(cd2,'bg-bg-subtle text-text-primary') && !/border/.test(cd2), '');
+
+const dc = stripComments(read('DeltaChip/DeltaChip.tsx'));
+chk('delta sm 20 gap 3 icon 12', has(dc,'h-[20px] gap-[3px] px-[8px] py-[2px] text-label-sm','[&>svg]:size-[12px]'), '');
+chk('delta md 24 gap 4 icon 14', has(dc,'h-[24px] gap-[4px] px-[10px] py-[4px] text-label-md','[&>svg]:size-[14px]'), '');
+chk('delta reads the chart/delta ramp',
+  has(dc,'bg-chart-delta-up-bg text-chart-delta-up-text','bg-chart-delta-down-icon text-text-inverse',
+        'text-chart-delta-flat-text'), 'subtle/filled/text x up/down/flat');
+
+const pbar = stripComments(read('ProgressBar/ProgressBar.tsx'));
+chk('progress bar track 8 r4', has(pbar,'h-[8px] w-full overflow-hidden rounded-[4px] bg-bg-subtle'), '');
+chk('progress bar fill bg/brand r4', has(pbar,'rounded-[4px] bg-bg-brand'), '');
+chk('progress bar pill 22 r6 bordered', has(pbar,'h-[22px] items-center rounded-[6px] border border-border-subtle bg-bg-surface-raised'), '');
+chk('progress bar right label Caption/MD', has(pbar,'gap-[12px]','text-caption-md text-text-primary'), '');
+
+const pring = stripComments(read('ProgressRing/ProgressRing.tsx'));
+chk('ring sizes 40/56/80/120/160', has(pring,'box: 40','box: 56','box: 80','box: 120','box: 160'), '');
+chk('ring strokes 4/6/8/10/14', has(pring,'stroke: 4','stroke: 6','stroke: 8','stroke: 10','stroke: 14'), '');
+chk('ring value type ramp', has(pring,'text-overline-sm','text-label-lg','text-heading-h4','text-heading-h3','text-heading-h1'), '');
+chk('gauge is half the circle', has(pring,'circumference / 2'), 'Figma track spans 180°');
+chk('ring starts at 12 o\'clock, gauge at 9', has(pring,'variant === "gauge" ? 180 : -90'), '');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin
