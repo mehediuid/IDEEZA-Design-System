@@ -11,6 +11,9 @@ const R = new URL('../src/components/', import.meta.url).pathname;
 const read=f=>fs.readFileSync(R+f,'utf8');
 const has=(s,...p)=>p.every(x=>s.includes(x));
 let bad=0;
+// These checks assert on class strings; the notes in each file mention the very
+// things they rule out, so comments are stripped before matching.
+const stripComments = (t) => t.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
 const chk=(name,ok,detail)=>{ if(!ok) bad++; console.log(`${ok?'✅':'❌'} ${name.padEnd(46)} ${detail}`); };
 
 // ── Checkbox (Figma A08 + _Checkbox base)
@@ -108,10 +111,33 @@ for (const [name, row] of Object.entries(FIGMA)) {
     got ? got.join(' · ') : 'not found in the preset');
 }
 
+// ── A17 Badge ───────────────────────────────────────────────────────
+const bg2 = stripComments(read('Badge/Badge.tsx'));
+chk('badge sizes 20/24/24 pad 6/8/10', has(bg2,
+  'h-[20px] gap-[4px] px-[6px]', 'h-[24px] gap-[4px] px-[8px]', 'h-[24px] gap-[6px] px-[10px]'), '');
+chk('badge type Caption/SM · Caption/MD · Label/SM',
+  has(bg2, 'text-caption-sm', 'text-caption-md', 'text-label-sm'),
+  'Caption is regular — a Label ramp renders every badge semibold');
+chk('badge leading icon 12 at every size', has(bg2, '[&>svg]:size-[12px] [&>svg]:shrink-0'), '');
+chk('badge close 12 at SM, 16 at MD/LG',
+  has(bg2, 'sm: "[&>svg]:size-[12px]"', 'md: "[&>svg]:size-[16px]"'), '');
+chk('badge dot 6/6/8 and follows the label', has(bg2, 'bg-current', 'lg: "size-[8px]"'), 'Figma fills it with badge/*-text');
+chk('badge subtle reads badge/* tokens',
+  has(bg2, 'bg-badge-brand-bg text-badge-brand-text', 'bg-badge-error-bg text-badge-error-text'),
+  'not bg/*-subtle + text/*');
+chk('badge solid non-brand label is text/inverse',
+  has(bg2, 'bg-bg-blue text-text-inverse', 'bg-bg-success text-text-inverse'), 'not text/on-brand');
+chk('badge outline borders are semantic',
+  has(bg2, 'border-border-blue', 'border-border-success', 'border-border-warning')
+    && !bg2.includes('border-[var(--color-'), 'no raw primitive borders');
+
+// ── _Radio base state colours ───────────────────────────────────────
+chk('radio dot follows the ring on hover', has(rd, 'peer-checked:peer-hover:bg-bg-brand-hover'), '');
+chk('radio dot disabled is input/bg-disabled', has(rd, 'peer-disabled:bg-input-bg-disabled'), 'not text/disabled');
+chk('checkbox indeterminate hover', has(cb, 'indeterminate:hover:bg-bg-brand-hover'), '');
+chk('checkbox glyph disabled is icon/disabled', has(cb, 'peer-disabled:text-icon-disabled'), 'Figma strokes it icon/disabled');
+
 // ── A10 Toggle / _Toggle base ───────────────────────────────────────
-// Strip comments first — these checks assert on the class strings, and the
-// notes in this file mention the very things they rule out.
-const stripComments = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 const tg2 = stripComments(read('Toggle/Toggle.tsx'));
 chk('toggle track sm 36x20 / md 44x24', has(tg2, 'sm: "h-[20px] w-[36px]"', 'md: "h-[24px] w-[44px]"'), '');
 chk('toggle thumb 16 / 20, inset 2', has(tg2, 'size-[16px] left-[2px]', 'size-[20px] left-[2px]', 'top-[2px]'), '');

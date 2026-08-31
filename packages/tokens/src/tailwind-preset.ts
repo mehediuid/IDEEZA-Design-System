@@ -238,6 +238,13 @@ export const ideezaPreset = {
           error: "var(--color-border-error)",
           brand: "var(--color-border-brand)",
           ai: "var(--color-border-ai)",
+          blue: "var(--color-border-blue)",
+          info: "var(--color-border-info)",
+          success: "var(--color-border-success)",
+          warning: "var(--color-border-warning)",
+          "focus-danger": "var(--color-border-focus-danger)",
+          "focus-inverse": "var(--color-border-focus-inverse)",
+          "focus-on-fill": "var(--color-border-focus-on-fill)",
         },
         // Semantic — icon. Separate from `text` because Figma keeps them apart:
         // icon/secondary is gray-500 while text/secondary is gray-700, and
@@ -255,6 +262,44 @@ export const ideezaPreset = {
           warning: "var(--color-icon-warning)",
           error: "var(--color-icon-error)",
           ai: "var(--color-icon-ai)",
+        },
+        // Component-scoped families that mirror Figma's own component tokens.
+        // These have existed in tokens.css since the Figma port but had no
+        // utility classes, so components reached past them to bg/* and text/*
+        // and the component token was never actually used.
+        badge: {
+          "brand-bg": "var(--color-badge-brand-bg)",
+          "brand-text": "var(--color-badge-brand-text)",
+          "blue-bg": "var(--color-badge-blue-bg)",
+          "blue-text": "var(--color-badge-blue-text)",
+          "success-bg": "var(--color-badge-success-bg)",
+          "success-text": "var(--color-badge-success-text)",
+          "warning-bg": "var(--color-badge-warning-bg)",
+          "warning-text": "var(--color-badge-warning-text)",
+          "error-bg": "var(--color-badge-error-bg)",
+          "error-text": "var(--color-badge-error-text)",
+        },
+        tag: {
+          "brand-bg": "var(--color-tag-brand-bg)",
+          "brand-text": "var(--color-tag-brand-text)",
+          "neutral-bg": "var(--color-tag-neutral-bg)",
+          "neutral-text": "var(--color-tag-neutral-text)",
+        },
+        card: {
+          bg: "var(--color-card-bg)",
+          "bg-hover": "var(--color-card-bg-hover)",
+          border: "var(--color-card-border)",
+        },
+        modal: {
+          bg: "var(--color-modal-bg)",
+          border: "var(--color-modal-border)",
+          overlay: "var(--color-modal-overlay)",
+        },
+        toast: {
+          "success-bg": "var(--color-toast-success-bg)",
+          "warning-bg": "var(--color-toast-warning-bg)",
+          "error-bg": "var(--color-toast-error-bg)",
+          "info-bg": "var(--color-toast-info-bg)",
         },
         // Component-scoped — handy for direct utility access
         input: {

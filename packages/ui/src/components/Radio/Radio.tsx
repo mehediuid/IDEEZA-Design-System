@@ -73,8 +73,13 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             aria-hidden="true"
             className={cn(
               "pointer-events-none absolute inset-0 m-auto rounded-full bg-bg-brand",
+              "transition-colors duration-fast ease-standard",
               "opacity-0 peer-checked:opacity-100",
-              "peer-disabled:bg-text-disabled",
+              // Figma tracks the ring: Selected=On, State=Hover puts the dot on
+              // bg/brand-hover too, and Disabled drops it to input/bg-disabled
+              // — not text/disabled, which is a step darker.
+              "peer-checked:peer-hover:bg-bg-brand-hover",
+              "peer-disabled:bg-input-bg-disabled",
               dotClass[size]
             )}
           />

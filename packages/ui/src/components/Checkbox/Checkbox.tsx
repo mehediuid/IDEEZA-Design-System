@@ -80,7 +80,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               "transition-[colors,box-shadow] duration-fast ease-standard outline-none",
               "hover:border-input-border-hover",
               "checked:border-transparent checked:bg-bg-brand checked:hover:bg-bg-brand-hover",
-              "indeterminate:border-transparent indeterminate:bg-bg-brand",
+              "indeterminate:border-transparent indeterminate:bg-bg-brand indeterminate:hover:bg-bg-brand-hover",
               "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
               "disabled:pointer-events-none disabled:border-input-border-disabled",
               "disabled:checked:bg-input-bg-disabled disabled:indeterminate:bg-input-bg-disabled",
@@ -94,7 +94,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             className={cn(
               "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
               "opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-0",
-              "peer-disabled:text-text-disabled",
+              "peer-disabled:text-icon-disabled",
               glyphSize[size]
             )}
           />
@@ -102,7 +102,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             className={cn(
               "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
               "opacity-0 peer-indeterminate:opacity-100",
-              "peer-disabled:text-text-disabled",
+              "peer-disabled:text-icon-disabled",
               glyphSize[size]
             )}
           />
