@@ -19,10 +19,12 @@ export const tagVariants = cva(
   "inline-flex items-center rounded-full border font-sans whitespace-nowrap align-middle transition-colors duration-fast",
   {
     variants: {
+      // The leading icon is 16px at every size; only the X close shrinks to 12
+      // at SM. A blanket `[&_svg]` rule would size both, so they are separate.
       size: {
-        sm: "h-[24px] gap-[4px] px-[8px] text-caption-sm [&_svg]:size-[12px]",
-        md: "h-[28px] gap-[6px] px-[10px] text-caption-md [&_svg]:size-[16px]",
-        lg: "h-[32px] gap-[6px] px-[12px] text-label-sm [&_svg]:size-[16px]",
+        sm: "h-[24px] gap-[4px] px-[8px] text-caption-sm",
+        md: "h-[28px] gap-[6px] px-[10px] text-caption-md",
+        lg: "h-[32px] gap-[6px] px-[12px] text-label-sm",
       },
       selected: {
         true: "bg-bg-brand-subtle border-border-brand text-text-brand",
@@ -38,8 +40,17 @@ export const tagVariants = cva(
   }
 );
 
-/** Leading dot diameters — 7px at MD in Figma, scaled a step either side. */
-const dotSize: Record<string, string> = { sm: "size-[6px]", md: "size-[7px]", lg: "size-[8px]" };
+/** Leading dot — measured 6 / 7 / 8. */
+const dotSize = { sm: "size-[6px]", md: "size-[7px]", lg: "size-[8px]" } as const;
+
+/** Leading icon is 16px at every size. */
+const leadingIcon = "[&>svg]:size-[16px] [&>svg]:shrink-0";
+
+/** X close — 12 at SM, 16 at MD and LG. */
+const closeSize = { sm: "[&>svg]:size-[12px]", md: "[&>svg]:size-[16px]", lg: "[&>svg]:size-[16px]" } as const;
+
+/** Leading avatar — 12 / 16 / 18. Passed through so callers need not guess. */
+export const tagAvatarSize = { sm: 12, md: 16, lg: 18 } as const;
 
 export interface TagProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, "onSelect">,
@@ -78,8 +89,8 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
         {...props}
       >
         {dot && <span className={cn("shrink-0 rounded-full bg-text-primary", dotSize[key])} aria-hidden="true" />}
-        {avatar}
-        {leftIcon}
+        {avatar && <span className="inline-flex shrink-0 items-center">{avatar}</span>}
+        {leftIcon && <span className={cn("inline-flex shrink-0 items-center", leadingIcon)}>{leftIcon}</span>}
         {children}
         {onDismiss && (
           <button
@@ -90,7 +101,10 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
             }}
             disabled={disabled}
             aria-label="Remove"
-            className="-mr-[2px] inline-flex shrink-0 items-center justify-center rounded-full outline-none hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
+            className={cn(
+              "-mr-[2px] inline-flex shrink-0 items-center justify-center rounded-full outline-none hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+              closeSize[key]
+            )}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
               <path d="M6 6l12 12M18 6L6 18" />

@@ -33,11 +33,11 @@ export const AvatarSizes: Story = {
           <Avatar key={s} size={s} alt="User" />
         ))}
       </Row>
-      <Row label="Status dot">
+      <Row label="Status dot — Figma offers Online · Offline · Verified">
         <Avatar initials="MR" status="online" />
-        <Avatar initials="MR" status="busy" />
-        <Avatar initials="MR" status="away" />
         <Avatar initials="MR" status="offline" />
+        <Avatar initials="MR" status="verified" />
+        <Avatar size="xl" initials="MR" status="online" />
       </Row>
       <Row label="Interactive — hover wash, focus halo, disabled">
         <Avatar initials="MR" onClick={() => {}} />

@@ -48,17 +48,21 @@ export interface SkeletonProps
   shape?: "rectangle" | "line" | "circle" | "avatar" | "card";
 }
 
-/** Avatar and Card are compositions in Figma, so they get their own geometry. */
+/**
+ * Avatar and Card are compositions in Figma, so they carry their own geometry.
+ * Both line widths are explicit px: the sub-line is 75% of the name line at
+ * Avatar SM but 62.5% at Avatar LG, so no single ratio reproduces the file.
+ */
 const composed = {
   avatar: {
-    sm: { circle: "size-[24px]", gap: "gap-[8px]", lines: "gap-[6px]", w: "w-[80px]", l1: "h-[8px] w-full", l2: "h-[6px] w-[60%]" },
-    md: { circle: "size-[32px]", gap: "gap-[10px]", lines: "gap-[8px]", w: "w-[120px]", l1: "h-[10px] w-full", l2: "h-[8px] w-[60%]" },
-    lg: { circle: "size-[48px]", gap: "gap-[12px]", lines: "gap-[10px]", w: "w-[160px]", l1: "h-[12px] w-full", l2: "h-[12px] w-[60%]" },
+    sm: { circle: "size-[24px]", gap: "gap-[8px]", lines: "gap-[6px]", l1: "h-[8px] w-[80px]", l2: "h-[6px] w-[60px]" },
+    md: { circle: "size-[32px]", gap: "gap-[10px]", lines: "gap-[8px]", l1: "h-[10px] w-[120px]", l2: "h-[8px] w-[80px]" },
+    lg: { circle: "size-[48px]", gap: "gap-[12px]", lines: "gap-[10px]", l1: "h-[14px] w-[160px]", l2: "h-[10px] w-[100px]" },
   },
   card: {
-    sm: { img: "w-[160px] h-[80px]", gap: "gap-[12px]", lines: "gap-[8px]", w: "w-[120px]", l1: "h-[10px] w-full", l2: "h-[8px] w-[60%]" },
-    md: { img: "w-[240px] h-[140px]", gap: "gap-[14px]", lines: "gap-[10px]", w: "w-[180px]", l1: "h-[12px] w-full", l2: "h-[10px] w-[60%]" },
-    lg: { img: "w-[320px] h-[180px]", gap: "gap-[16px]", lines: "gap-[12px]", w: "w-[240px]", l1: "h-[14px] w-full", l2: "h-[12px] w-[60%]" },
+    sm: { img: "w-[160px] h-[80px]", gap: "gap-[12px]", lines: "gap-[8px]", l1: "h-[10px] w-[120px]", l2: "h-[8px] w-[80px]" },
+    md: { img: "w-[240px] h-[140px]", gap: "gap-[14px]", lines: "gap-[10px]", l1: "h-[12px] w-[180px]", l2: "h-[10px] w-[120px]" },
+    lg: { img: "w-[320px] h-[180px]", gap: "gap-[16px]", lines: "gap-[12px]", l1: "h-[16px] w-[240px]", l2: "h-[12px] w-[160px]" },
   },
 } as const;
 
@@ -72,7 +76,7 @@ export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
       return (
         <div ref={ref} aria-hidden="true" className={cn("inline-flex items-center", s.gap, className)} {...props}>
           <div className={cn("shrink-0 rounded-full bg-bg-subtle", s.circle, pulse)} />
-          <div className={cn("flex flex-col", s.lines, s.w)}>
+          <div className={cn("flex flex-col", s.lines)}>
             <div className={cn("rounded-sm bg-bg-subtle", s.l1, pulse)} />
             <div className={cn("rounded-sm bg-bg-subtle", s.l2, pulse)} />
           </div>
@@ -85,7 +89,7 @@ export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
       return (
         <div ref={ref} aria-hidden="true" className={cn("inline-flex flex-col", s.gap, className)} {...props}>
           <div className={cn("rounded-lg bg-bg-subtle", s.img, pulse)} />
-          <div className={cn("flex flex-col", s.lines, s.w)}>
+          <div className={cn("flex flex-col", s.lines)}>
             <div className={cn("rounded-sm bg-bg-subtle", s.l1, pulse)} />
             <div className={cn("rounded-sm bg-bg-subtle", s.l2, pulse)} />
           </div>

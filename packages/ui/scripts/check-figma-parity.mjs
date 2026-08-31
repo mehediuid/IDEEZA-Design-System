@@ -122,8 +122,19 @@ chk('avatar initials type ramp',
        'lg: "size-[48px] text-heading-h5"', 'xl: "size-[64px] text-heading-h3"'),
   'Overline/SM → Label/SM → Label/LG → H6 → H5 → H3');
 chk('avatar contrast border 1px → 2px', has(av, '"2xs": "ring-1 ring-inset ring-bg-surface"', 'sm: "ring-2 ring-inset ring-bg-surface"'), '1px at 20/24, 2px from 32');
+chk('avatar icon frame 12/14/18/22/26/36',
+  has(av, '"2xs": "size-[12px]"', 'xs: "size-[14px]"', 'sm: "size-[18px]"',
+       'md: "size-[22px]"', 'lg: "size-[26px]"', 'xl: "size-[36px]"'),
+  'measured per size — not one percentage');
 chk('avatar status dot ramp 6/7/9/11/13/16',
   has(av, 'size-[6px]', 'size-[7px]', 'size-[9px]', 'size-[11px]', 'size-[13px]', 'size-[16px]'), '');
+chk('avatar status dot inset 0 → 1px at LG/XL',
+  has(av, 'size-[11px] right-0 bottom-0', 'size-[13px] right-[1px] bottom-[1px]'), '');
+chk('avatar status dot is ring + 2/3 core', has(av, 'rounded-full bg-bg-surface', 'h-2/3 w-2/3'), '_Status dot: 12px ring, 8px dot');
+chk('avatar status set = online/offline/verified',
+  has(av, 'online: "bg-icon-success"', 'offline: "bg-icon-disabled"', 'verified: "bg-icon-blue"')
+    && !av.includes('busy:') && !av.includes('away:'),
+  'Figma has no busy or away');
 chk('avatar initials fill', has(av, 'bg-bg-brand-subtle text-text-brand'), 'bg/brand-subtle + text/brand');
 chk('avatar icon fill', has(av, 'bg-bg-surface-raised'), 'bg/surface-raised');
 chk('avatar hover wash 8%', has(av, 'hover:after:opacity-[0.08]'), 'text/primary at 8%');
@@ -137,14 +148,22 @@ chk('tag lg 32 pad 12 gap 6 Label/SM', has(tg, 'h-[32px] gap-[6px] px-[12px] tex
 chk('tag default surface-raised + border', has(tg, 'bg-bg-surface-raised border-border text-text-primary'), '');
 chk('tag hover subtle + strong border', has(tg, 'hover:bg-bg-subtle hover:border-border-strong'), '');
 chk('tag selected brand', has(tg, 'bg-bg-brand-subtle border-border-brand text-text-brand'), '');
-chk('tag close icon 12 / 16', has(tg, '[&_svg]:size-[12px]', '[&_svg]:size-[16px]'), 'SM 12, MD/LG 16');
+chk('tag leading icon 16 at every size', has(tg, "const leadingIcon = \"[&>svg]:size-[16px]"), 'does not shrink at SM');
+chk('tag close icon 12 at SM, 16 at MD/LG',
+  has(tg, 'sm: "[&>svg]:size-[12px]"', 'md: "[&>svg]:size-[16px]"', 'lg: "[&>svg]:size-[16px]"'), '');
+chk('tag leading dot 6/7/8', has(tg, 'sm: "size-[6px]"', 'md: "size-[7px]"', 'lg: "size-[8px]"'), '');
+chk('tag avatar sizes 12/16/18 exported', has(tg, 'tagAvatarSize = { sm: 12, md: 16, lg: 18 }'), '');
 
 // A20 Spinner — the Figma arc is 0.87→4.01 rad, exactly half the circle.
 const spn = read('Spinner/Spinner.tsx');
 chk('spinner size ramp 16/20/24/32', has(spn, 'size-[16px]', 'size-[20px]', 'size-[24px]', 'size-[32px]'), '');
-chk('spinner stroke ramp 2/2/2.5/3', has(spn, 'border-[2px]', 'border-[2.5px]', 'border-[3px]'), '');
-chk('spinner arc is half the circle', has(spn, 'border-r-transparent border-t-transparent'), '0.87→4.01 rad = 180°');
-chk('spinner ring track border/subtle', has(spn, 'border-border-subtle'), '');
+chk('spinner metrics box/stroke/dot',
+  has(spn, 'sm: { box: 16, stroke: 2, dot: 2.5 }', 'md: { box: 20, stroke: 2, dot: 3 }',
+       'lg: { box: 24, stroke: 2.5, dot: 3.5 }', 'xl: { box: 32, stroke: 3, dot: 4.5 }'), '');
+chk('spinner arc is half the circle', has(spn, 'const half = Math.PI * r'), '0.87→4.01 rad = 180°');
+chk('spinner arc has ROUND caps', has(spn, 'strokeLinecap="round"'), 'a CSS border ends square — Figma strokeCap ROUND');
+chk('spinner arc start 0.87 rad', has(spn, 'const START_DEG = (0.87 * 180) / Math.PI - 90'), '');
+chk('spinner ring track border/subtle', has(spn, 'var(--color-border-subtle)'), '');
 chk('spinner colours read icon/*', has(spn, 'text-icon-brand', 'text-icon-secondary', 'text-icon-on-brand', 'text-icon-error'), 'not text/*');
 chk('spinner dots = 12', has(spn, 'const DOTS = 12'), 'Figma bakes 12 nodes with a fade');
 
@@ -154,6 +173,14 @@ chk('skeleton rectangle ramp', has(sk, 'w-[120px] h-[60px]', 'w-[200px] h-[100px
 chk('skeleton line ramp', has(sk, 'w-[80px] h-[8px]', 'w-[160px] h-[12px]', 'w-[240px] h-[16px]'), '');
 chk('skeleton circle ramp 24/32/48', has(sk, 'size-[24px]', 'size-[32px]', 'size-[48px]'), '');
 chk('skeleton card image ramp', has(sk, 'w-[160px] h-[80px]', 'w-[240px] h-[140px]', 'w-[320px] h-[180px]'), '');
+chk('skeleton avatar lines exact',
+  has(sk, 'l1: "h-[8px] w-[80px]", l2: "h-[6px] w-[60px]"',
+       'l1: "h-[10px] w-[120px]", l2: "h-[8px] w-[80px]"',
+       'l1: "h-[14px] w-[160px]", l2: "h-[10px] w-[100px]"'), 'no percentage fallback');
+chk('skeleton card lines exact',
+  has(sk, 'l1: "h-[10px] w-[120px]", l2: "h-[8px] w-[80px]"',
+       'l1: "h-[12px] w-[180px]", l2: "h-[10px] w-[120px]"',
+       'l1: "h-[16px] w-[240px]", l2: "h-[12px] w-[160px]"'), '');
 chk('skeleton fill bg/subtle', has(sk, 'bg-bg-subtle'), '');
 
 // A24 Divider — 1px border/subtle, 16px gap, Body/SM label.
