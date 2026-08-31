@@ -108,6 +108,26 @@ for (const [name, row] of Object.entries(FIGMA)) {
     got ? got.join(' · ') : 'not found in the preset');
 }
 
+// ── A10 Toggle / _Toggle base ───────────────────────────────────────
+// Strip comments first — these checks assert on the class strings, and the
+// notes in this file mention the very things they rule out.
+const stripComments = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const tg2 = stripComments(read('Toggle/Toggle.tsx'));
+chk('toggle track sm 36x20 / md 44x24', has(tg2, 'sm: "h-[20px] w-[36px]"', 'md: "h-[24px] w-[44px]"'), '');
+chk('toggle thumb 16 / 20, inset 2', has(tg2, 'size-[16px] left-[2px]', 'size-[20px] left-[2px]', 'top-[2px]'), '');
+chk('toggle on position 18 / 22', has(tg2, 'data-[state=checked]:left-[18px]', 'data-[state=checked]:left-[22px]'), 'Figma thumb x when Pressed=On');
+chk('toggle moves with left, not translate',
+  has(tg2, 'transition-[left]') && !/\btranslate-[xy]-/.test(tg2),
+  'translate shares --tw-translate-x and can be pinned by any other transform');
+chk('toggle off fill input/border', has(tg2, 'bg-input-border hover:bg-input-border-hover'), 'not bg/surface-raised');
+chk('toggle on fill bg/brand + hover', has(tg2, 'data-[state=checked]:bg-bg-brand', 'data-[state=checked]:hover:bg-bg-brand-hover'), '');
+chk('toggle disabled swaps fill, not opacity',
+  has(tg2, 'disabled:!bg-input-bg-disabled') && !tg2.includes('disabled:opacity'), 'Figma: input/bg-disabled');
+chk('toggle track has no border',
+  !/(^|\s)border(\s|"|')/.test(tg2) && !tg2.includes('border-border'),
+  'Figma track carries no stroke');
+chk('toggle thumb fill bg/surface', has(tg2, 'bg-bg-surface'), 'not raw white');
+
 // ── cn() must tell text styles apart from text colours ──────────────
 // The styles sit in Tailwind's fontSize scale, so `text-label-lg` and
 // `text-button-primary-text` share a prefix. tailwind-merge cannot separate

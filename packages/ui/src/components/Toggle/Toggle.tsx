@@ -4,22 +4,37 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn";
 
 /**
- * Toggle — mirrors Figma `A10 Toggle` (Atoms — Input).
- * iOS-style switch built on Radix Switch (keyboard + ARIA for free).
+ * Toggle — mirrors Figma `_Toggle base` / `A10 Toggle` (Atoms — Input).
+ * Built on Radix Switch, so keyboard behaviour and ARIA come for free.
  *
- * Figma variant map:
- * - Pressed=On/Off → `checked` / `defaultChecked`
- * - State Default/Hover/Focused/Disabled → pseudo-classes + `disabled`
- * - Text=On/Off label → compose externally with a <label>
+ * Measured off the file:
+ *   SM  track 36×20 · thumb 16 · inset 2 · on at x=18
+ *   MD  track 44×24 · thumb 20 · inset 2 · on at x=22
+ *
+ * Track fill is a state ramp, not a single colour:
+ *   Off        input/border          On        bg/brand
+ *   Off hover  input/border-hover    On hover  bg/brand-hover
+ *   Disabled   input/bg-disabled (both states)
+ * The track carries no border in Figma, and Disabled changes the fill rather
+ * than dimming the whole control.
+ *
+ * The thumb is placed with `left`, not a translate. Tailwind's translate
+ * utilities all write through one `--tw-translate-x` variable and a shared
+ * `transform` declaration, so anything else that touches `transform` on this
+ * element silently pins the thumb at its off position and the switch reads as
+ * a colour change with no movement. `left` has no such shared channel.
  */
 const trackVariants = cva(
   [
-    "peer relative inline-flex shrink-0 cursor-pointer items-center rounded-full",
+    "group relative inline-flex shrink-0 cursor-pointer rounded-full align-middle",
     "transition-colors duration-fast ease-standard",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
-    "bg-bg-surface-raised data-[state=checked]:bg-bg-brand",
-    "border border-border data-[state=checked]:border-transparent",
-    "disabled:cursor-not-allowed disabled:opacity-50",
+    "bg-input-border hover:bg-input-border-hover",
+    "data-[state=checked]:bg-bg-brand data-[state=checked]:hover:bg-bg-brand-hover",
+    // Disabled outranks the checked fill in Figma. `disabled:` and
+    // `data-[state=checked]:` have equal specificity, so which one wins would
+    // otherwise depend on Tailwind's output order — hence the important flag.
+    "disabled:cursor-not-allowed disabled:!bg-input-bg-disabled",
   ],
   {
     variants: {
@@ -34,14 +49,14 @@ const trackVariants = cva(
 
 const thumbVariants = cva(
   [
-    "pointer-events-none block rounded-full bg-white shadow-1",
-    "transition-transform duration-fast ease-standard translate-x-[2px]",
+    "pointer-events-none absolute top-[2px] block rounded-full bg-bg-surface shadow-1",
+    "transition-[left] duration-fast ease-standard",
   ],
   {
     variants: {
       size: {
-        sm: "size-[16px] data-[state=checked]:translate-x-[18px]",
-        md: "size-[20px] data-[state=checked]:translate-x-[22px]",
+        sm: "size-[16px] left-[2px] data-[state=checked]:left-[18px]",
+        md: "size-[20px] left-[2px] data-[state=checked]:left-[22px]",
       },
     },
     defaultVariants: { size: "md" },
