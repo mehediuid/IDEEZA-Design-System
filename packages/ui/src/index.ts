@@ -1,6 +1,8 @@
 // Atoms — Action
 export * from "./components/Button/index.js";
 export * from "./components/IconButton/index.js";
+export * from "./components/Link/index.js";
+export * from "./components/ButtonGroup/index.js";
 
 // Atoms — Input
 export * from "./components/Field/index.js";
@@ -24,5 +26,7 @@ export * from "./components/Code/index.js";
 export * from "./components/DeltaChip/index.js";
 export * from "./components/ProgressBar/index.js";
 export * from "./components/ProgressRing/index.js";
+export * from "./components/InlineCta/index.js";
+export * from "./components/AvatarGroup/index.js";
 
 export { cn } from "./lib/cn.js";

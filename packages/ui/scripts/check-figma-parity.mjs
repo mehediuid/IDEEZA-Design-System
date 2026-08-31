@@ -146,6 +146,49 @@ chk('ring value type ramp', has(pring,'text-overline-sm','text-label-lg','text-h
 chk('gauge is half the circle', has(pring,'circumference / 2'), 'Figma track spans 180°');
 chk('ring starts at 12 o\'clock, gauge at 9', has(pring,'variant === "gauge" ? 180 : -90'), '');
 
+// ── A03 Link · A15 Button Group · A28 Inline CTA · A16b/A16c Avatar ──
+const lk = stripComments(read('Link/Link.tsx'));
+chk('link type ramp + icon 12/14/16',
+  has(lk,'text-body-xs-medium [&>svg]:size-[12px]','text-body-sm-medium [&>svg]:size-[14px]',
+        'text-body-md-medium [&>svg]:size-[16px]'), 'Figma SM is an unnamed 12/16 — nearest named style used');
+chk('link gap 4', has(lk,'gap-[4px]'), '');
+chk('link hover underlines in every colour', has(lk,'hover:underline'), '');
+chk('link brand/error also shift hue on hover',
+  has(lk,'text-text-brand hover:text-text-brand-hover','text-text-error hover:text-text-error-hover'),
+  'neutral and inverse keep theirs');
+chk('link colours brand/neutral/inverse/error',
+  has(lk,'neutral: "text-text-primary"','inverse: "text-text-inverse"'), '');
+
+const bgp = stripComments(read('ButtonGroup/ButtonGroup.tsx'));
+chk('segment ramp 32/36/40/44 pad 10/12/14/16',
+  has(bgp,'h-[32px] px-[10px]','h-[36px] px-[12px]','h-[40px] px-[14px]','h-[44px] px-[16px]'), '');
+chk('segment type Body XS/SM/MD Medium',
+  has(bgp,'text-body-xs-medium','text-body-sm-medium','text-body-md-medium'), '');
+chk('segment states surface/subtle/brand',
+  has(bgp,'bg-bg-surface text-text-primary','hover:bg-bg-subtle',
+        'aria-pressed:bg-bg-brand aria-pressed:text-text-on-brand'), '');
+chk('group radius 8 + 1px border', has(bgp,'rounded-[8px] border border-border'), '');
+chk('segment gap 6', has(bgp,'gap-[6px]'), '');
+
+const cta2 = stripComments(read('InlineCta/InlineCta.tsx'));
+chk('cta gap 6, icon 12/14/16',
+  has(cta2,'gap-[6px]','[&>svg]:size-[12px]','[&>svg]:size-[14px]','[&>svg]:size-[16px]'), '');
+chk('cta type Caption/MD then Medium',
+  has(cta2,'sm: "text-caption-md','md: "text-body-sm-medium','lg: "text-body-md-medium'),
+  'the SM jump is Figma\'s');
+chk('cta colours brand/neutral only', has(cta2,'brand: "text-text-brand"','neutral: "text-text-primary"'), '');
+chk('cta arrow right/down', has(cta2,'right: "hover:[&>svg]:translate-x-[2px]"','down: "hover:[&>svg]:translate-y-[2px]"'), '');
+
+const agp = stripComments(read('AvatarGroup/AvatarGroup.tsx'));
+chk('avatar group overlap -6/-8/-10/-12',
+  has(agp,'-space-x-[6px]','-space-x-[8px]','-space-x-[10px]','-space-x-[12px]'), '');
+chk('avatar label group gaps 8/12/14/16',
+  has(agp,'gap-[8px]','gap-[12px]','gap-[14px]','gap-[16px]'), '');
+chk('avatar label type ramp',
+  has(agp,'name: "text-body-sm-medium", sub: "text-caption-md"','name: "text-body-md-medium", sub: "text-body-sm"',
+        'name: "text-label-lg", sub: "text-body-md"','name: "text-label-xl", sub: "text-body-lg"'), '');
+chk('avatar label name/subtitle 2px apart', has(agp,'gap-[2px]'), '');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin
