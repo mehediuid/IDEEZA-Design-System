@@ -12,6 +12,10 @@ export * from "./components/Select/index.js";
 export * from "./components/Checkbox/index.js";
 export * from "./components/Radio/index.js";
 export * from "./components/Toggle/index.js";
+export * from "./components/Search/index.js";
+export * from "./components/NumberInput/index.js";
+export * from "./components/Slider/index.js";
+export * from "./components/ColorPicker/index.js";
 
 // Atoms — Display
 export * from "./components/Badge/index.js";

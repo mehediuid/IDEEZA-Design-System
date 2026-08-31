@@ -189,6 +189,36 @@ chk('avatar label type ramp',
         'name: "text-label-lg", sub: "text-body-md"','name: "text-label-xl", sub: "text-body-lg"'), '');
 chk('avatar label name/subtitle 2px apart', has(agp,'gap-[2px]'), '');
 
+// ── A07 Search · A12 Number Input · A11 Slider · A13 Color Picker ───
+// All four sit on the shared field ramp; the checks below cover what each one
+// adds on top, which is where they can drift.
+const srch = stripComments(read('Search/Search.tsx'));
+chk('search reuses the field ramp', has(srch,'controlChrome','controlClass[size]','valueClass[size]','iconClass[size]'),
+  'same height, radius, padding and gap as Text Input');
+chk('search has a fixed leading glyph', has(srch,'<SearchIcon'), 'not a free icon slot');
+chk('search clear only when filled', has(srch,'hasValue && onClear'), '');
+
+const num = stripComments(read('NumberInput/NumberInput.tsx'));
+chk('number input right padding drops to 4', has(num,'!pr-[2.5px]'), 'Figma pads 0/4/0/12 so the stepper meets the border');
+chk('number stepper buttons 32 r6 gap 2', has(num,'size-[32px]','rounded-[6px]','gap-[2px]'), '');
+chk('number both stepper types', has(num,'stepper === "plus-minus"','<ChevronUp','<ChevronDown'), 'Plus-minus and Arrows');
+chk('number hides the native spinners', has(num,'[&::-webkit-inner-spin-button]:appearance-none'), '');
+chk('number steps through the DOM input', has(num,'el.stepUp()','el.stepDown()'), 'keeps min/max clamping');
+
+const sld = stripComments(read('Slider/Slider.tsx'));
+chk('slider track 4/6/8', has(sld,'track: "h-[4px]"','track: "h-[6px]"','track: "h-[8px]"'), '');
+chk('slider thumb 12/16/20', has(sld,'thumb: 12','thumb: 16','thumb: 20'), '');
+chk('slider hover grows the thumb', has(sld,'hover: 18'), 'Figma MD goes 16 -> 18');
+chk('slider thumb is surface + 2px brand ring',
+  has(sld,'[&::-webkit-slider-thumb]:bg-bg-surface','[&::-webkit-slider-thumb]:border-bg-brand'), '');
+chk('slider disabled greys fill and ring', has(sld,'disabled ? "bg-border"','disabled:[&::-webkit-slider-thumb]:border-border'), '');
+
+const cp = stripComments(read('ColorPicker/ColorPicker.tsx'));
+chk('colour swatch 28 at size 40, radius 4', has(cp,'40: "size-[28px]"','rounded-[4px]'), '');
+chk('colour hex in Code/MD', has(cp,'text-code-md'), '');
+chk('colour hash is text/tertiary', has(cp,'text-code-md text-text-tertiary'), '');
+chk('colour swatch opens the native picker', has(cp,'type="color"'), '');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin
