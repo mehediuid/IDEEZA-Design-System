@@ -72,10 +72,8 @@ export const buttonVariants = cva(
           "hover:bg-button-ghost-bg-hover active:bg-bg-surface-raised",
         ],
         danger: [
-          // button/danger-text and button/primary-text hold the same value, but
-          // the Danger label belongs to the Danger token — reading primary-text
-          // here means a future change to danger-text would silently miss.
-          "bg-button-danger-bg text-button-danger-text shadow-depth-accent",
+          // Figma: Danger label is button/primary-text (white), same value as danger-text.
+          "bg-button-danger-bg text-button-primary-text shadow-depth-accent",
           "hover:bg-button-danger-bg-hover active:bg-button-danger-bg-pressed",
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-danger)]",
         ],
