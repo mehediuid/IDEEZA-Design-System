@@ -69,7 +69,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div className={cn("flex items-start gap-[16px]", containerClassName)}>
-        <span className="relative inline-flex shrink-0">
+        <span className={cn("relative inline-flex shrink-0", boxClass[size])}>
           <input
             ref={inner}
             id={boxId}

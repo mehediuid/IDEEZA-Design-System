@@ -111,6 +111,20 @@ for (const [name, row] of Object.entries(FIGMA)) {
     got ? got.join(' · ') : 'not found in the preset');
 }
 
+// ── Reset: UA metrics must not leak into control geometry ───────────
+// Storybook and consumers load this reset instead of Tailwind Preflight, so
+// anything Preflight normalises has to be here too. The radio's UA margin
+// (Chrome: 3px 3px 0 5px) sized the wrapper to the input's margin box, which
+// pushed the centred dot off the ring.
+const reset = fs.readFileSync(new URL('../../tokens/css/reset.css', import.meta.url).pathname, 'utf8');
+const formBlock = /input,\s*\n\s*button,\s*\n\s*textarea,\s*\n\s*select\s*\{([^}]*)\}/.exec(reset);
+chk('reset zeroes form-control margins', Boolean(formBlock) && /margin:\s*0/.test(formBlock[1]),
+  'UA margin on radio/checkbox otherwise offsets the dot');
+chk('reset sets border-box', /box-sizing:\s*border-box/.test(reset), '');
+chk('radio wrapper is control-sized', has(rd, 'relative inline-flex shrink-0", boxClass[size]'),
+  'so the dot centres on the ring, not on the input margin box');
+chk('checkbox wrapper is control-sized', has(cb, 'relative inline-flex shrink-0", boxClass[size]'), '');
+
 // ── A17 Badge ───────────────────────────────────────────────────────
 const bg2 = stripComments(read('Badge/Badge.tsx'));
 chk('badge sizes 20/24/24 pad 6/8/10', has(bg2,

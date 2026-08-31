@@ -55,6 +55,13 @@ textarea,
 select {
   font: inherit;
   color: inherit;
+  /* Browsers give radios and checkboxes a UA margin — Chrome uses
+     3px 3px 0 5px. Tailwind's Preflight zeroes it, but this reset is used
+     without Preflight, so it survived: the wrapper around a radio sized to
+     the input's margin box instead of the control, and the centred dot
+     landed off the ring. Zero it here, where the rest of the UA styling for
+     these elements is already being normalised. */
+  margin: 0;
 }
 
 button {
