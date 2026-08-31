@@ -108,6 +108,28 @@ for (const [name, row] of Object.entries(FIGMA)) {
     got ? got.join(' · ') : 'not found in the preset');
 }
 
+// ── cn() must tell text styles apart from text colours ──────────────
+// The styles sit in Tailwind's fontSize scale, so `text-label-lg` and
+// `text-button-primary-text` share a prefix. tailwind-merge cannot separate
+// them unaided, and when it guessed it dropped the colour — every filled
+// button rendered with inherited near-black text. cn.ts names the styles; if
+// the preset gains one and that list is not updated, the same bug returns.
+const cnSrc = fs.readFileSync(new URL('../src/lib/cn.ts', import.meta.url).pathname, 'utf8');
+const listed = new Set([...cnSrc.matchAll(/"([a-z0-9-]+)",/g)].map((m) => m[1]));
+// fontSize entries in the preset are `"label-sm": ["xs", "xs", "wider", "semibold"],`
+// inside a `fontSize: ts({ ... })` call — slice to that call's closing brace.
+const fsStart = preset.indexOf('fontSize: ts({');
+const fsBlock = preset.slice(fsStart, preset.indexOf('}),', fsStart));
+const presetSizes = new Set([...fsBlock.matchAll(/"([a-z0-9-]+)":\s*\[/g)].map((m) => m[1]));
+const missing = [...presetSizes].filter((k) => !listed.has(k));
+const extra = [...listed].filter((k) => !presetSizes.has(k));
+chk('cn() knows every text style', missing.length === 0 && extra.length === 0,
+  missing.length ? 'missing: ' + missing.join(', ')
+  : extra.length ? 'not in the preset: ' + extra.join(', ')
+  : `${presetSizes.size} styles, none treated as a colour`);
+chk('cn() uses extendTailwindMerge', cnSrc.includes('extendTailwindMerge') && cnSrc.includes('"font-size"'),
+  'plain twMerge conflates styles with colours');
+
 // ── Display atoms ───────────────────────────────────────────────────
 // Values read out of Atoms — Display with the plugin API, same as above.
 
