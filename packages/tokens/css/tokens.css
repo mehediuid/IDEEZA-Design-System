@@ -381,11 +381,11 @@
   --color-button-tonal-bg: #f8f5ff;
   --color-button-tonal-bg-hover: #ede5ff;
   --color-button-tonal-bg-pressed: #d9cafe;
-  --color-button-tonal-text: #6a1fa4;
+  --color-button-tonal-text: var(--color-violet-700);
   --color-button-inverse-bg: #ffffff;
   --color-button-inverse-bg-hover: #f1f5f9;
   --color-button-inverse-bg-pressed: #e2e8f0;
-  --color-button-inverse-text: #0c121d;
+  --color-button-inverse-text: var(--color-gray-900);
   --color-button-danger-bg-hover: #b91c1c;
   --color-button-danger-bg-pressed: #991b1b;
   --color-button-secondary-bg-hover: #f1f5f9;
@@ -485,44 +485,44 @@
   --chart-positive: var(--color-green-600);
 
   /* AI surfaces */
-  --color-ai-badge-bg: var(--color-violet-50);
-  --color-ai-badge-text: var(--color-violet-600);
-  --color-ai-prompt-bg: var(--color-white);
-  --color-ai-prompt-border: var(--color-violet-600);
+  --color-ai-badge-bg: var(--color-bg-ai-subtle);
+  --color-ai-badge-text: var(--color-text-ai);
+  --color-ai-prompt-bg: var(--color-bg-surface);
+  --color-ai-prompt-border: var(--color-border-brand);
 
   /* Badge */
-  --color-badge-brand-bg: var(--color-violet-50);
-  --color-badge-brand-text: var(--color-violet-600);
-  --color-badge-blue-bg: var(--color-blue-50);
-  --color-badge-blue-text: var(--color-blue-700);
-  --color-badge-success-bg: var(--color-green-50);
-  --color-badge-success-text: var(--color-green-800);
-  --color-badge-warning-bg: var(--color-yellow-50);
-  --color-badge-warning-text: var(--color-yellow-800);
-  --color-badge-error-bg: var(--color-red-50);
-  --color-badge-error-text: var(--color-red-700);
+  --color-badge-brand-bg: var(--color-bg-brand-subtle);
+  --color-badge-brand-text: var(--color-text-brand);
+  --color-badge-blue-bg: var(--color-bg-blue-subtle);
+  --color-badge-blue-text: var(--color-text-blue);
+  --color-badge-success-bg: var(--color-bg-success-subtle);
+  --color-badge-success-text: var(--color-text-success);
+  --color-badge-warning-bg: var(--color-bg-warning-subtle);
+  --color-badge-warning-text: var(--color-text-warning);
+  --color-badge-error-bg: var(--color-bg-error-subtle);
+  --color-badge-error-text: var(--color-text-error);
 
   /* Tag */
-  --color-tag-brand-bg: var(--color-violet-50);
-  --color-tag-brand-text: var(--color-violet-600);
-  --color-tag-neutral-bg: var(--color-gray-100);
-  --color-tag-neutral-text: var(--color-gray-700);
+  --color-tag-brand-bg: var(--color-bg-brand-subtle);
+  --color-tag-brand-text: var(--color-text-brand);
+  --color-tag-neutral-bg: var(--color-bg-subtle);
+  --color-tag-neutral-text: var(--color-text-secondary);
 
   /* Toast */
-  --color-toast-success-bg: var(--color-green-50);
-  --color-toast-warning-bg: var(--color-yellow-50);
-  --color-toast-error-bg: var(--color-red-50);
-  --color-toast-info-bg: var(--color-blue-50);
+  --color-toast-success-bg: var(--color-bg-success-subtle);
+  --color-toast-warning-bg: var(--color-bg-warning-subtle);
+  --color-toast-error-bg: var(--color-bg-error-subtle);
+  --color-toast-info-bg: var(--color-bg-info-subtle);
 
   /* Card */
-  --color-card-bg: var(--color-white);
-  --color-card-bg-hover: var(--color-gray-100);
-  --color-card-border: var(--color-gray-200);
+  --color-card-bg: var(--color-bg-surface);
+  --color-card-bg-hover: var(--color-bg-surface-raised);
+  --color-card-border: var(--color-border-default);
 
   /* Modal */
-  --color-modal-bg: var(--color-white);
-  --color-modal-border: var(--color-gray-200);
-  --color-modal-overlay: var(--color-gray-900);
+  --color-modal-bg: var(--color-bg-surface);
+  --color-modal-border: var(--color-border-default);
+  --color-modal-overlay: var(--color-bg-overlay);
 
   /* Info role */
   --color-border-info: var(--color-blue-500);
@@ -621,11 +621,10 @@
   --color-button-tonal-bg: #280850;
   --color-button-tonal-bg-hover: #3e0e68;
   --color-button-tonal-bg-pressed: #55168a;
-  --color-button-tonal-text: #d9cafe;
+  --color-button-tonal-text: var(--color-violet-200);
   --color-button-inverse-bg: #ffffff;
   --color-button-inverse-bg-hover: #f1f5f9;
   --color-button-inverse-bg-pressed: #e2e8f0;
-  --color-button-inverse-text: #0c121d;
   --color-button-danger-bg-hover: #b91c1c;
   --color-button-danger-bg-pressed: #991b1b;
   --color-button-secondary-bg-hover: #1e293b;
@@ -702,44 +701,18 @@
   --chart-positive: var(--color-green-400);
 
   /* AI surfaces */
-  --color-ai-badge-bg: var(--color-violet-950);
-  --color-ai-badge-text: var(--color-violet-200);
-  --color-ai-prompt-bg: var(--color-gray-900);
-  --color-ai-prompt-border: var(--color-violet-400);
+  --color-ai-prompt-border: var(--color-border-ai);
 
   /* Badge */
-  --color-badge-brand-bg: var(--color-violet-950);
-  --color-badge-brand-text: var(--color-violet-300);
-  --color-badge-blue-bg: var(--color-blue-950);
-  --color-badge-blue-text: var(--color-blue-300);
-  --color-badge-success-bg: var(--color-green-900);
-  --color-badge-success-text: var(--color-green-400);
-  --color-badge-warning-bg: var(--color-yellow-900);
-  --color-badge-warning-text: var(--color-yellow-400);
-  --color-badge-error-bg: var(--color-red-900);
   --color-badge-error-text: var(--color-red-200);
 
   /* Tag */
-  --color-tag-brand-bg: var(--color-violet-950);
-  --color-tag-brand-text: var(--color-violet-300);
-  --color-tag-neutral-bg: var(--color-gray-800);
-  --color-tag-neutral-text: var(--color-gray-300);
 
   /* Toast */
-  --color-toast-success-bg: var(--color-green-900);
-  --color-toast-warning-bg: var(--color-yellow-900);
-  --color-toast-error-bg: var(--color-red-900);
-  --color-toast-info-bg: var(--color-blue-950);
 
   /* Card */
-  --color-card-bg: var(--color-gray-900);
-  --color-card-bg-hover: var(--color-gray-800);
-  --color-card-border: var(--color-gray-800);
 
   /* Modal */
-  --color-modal-bg: var(--color-gray-900);
-  --color-modal-border: var(--color-gray-800);
-  --color-modal-overlay: var(--color-gray-950);
 
   /* Info role */
   --color-border-info: var(--color-blue-400);
@@ -754,6 +727,8 @@
   --elevation-5: 0px 12px 24px 0px rgba(0, 0, 0, 0.8);
   --elevation-6: 0px 16px 32px 0px rgba(0, 0, 0, 0.85);
   --elevation-inner: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.4);
+  --color-button-primary-bg-hover: var(--color-violet-600);
+  --color-button-primary-bg-pressed: var(--color-violet-700);
 }
 
 /* Honor system preference when no explicit theme is set */
@@ -824,11 +799,10 @@
     --color-button-tonal-bg: #280850;
     --color-button-tonal-bg-hover: #3e0e68;
     --color-button-tonal-bg-pressed: #55168a;
-    --color-button-tonal-text: #d9cafe;
+    --color-button-tonal-text: var(--color-violet-200);
     --color-button-inverse-bg: #ffffff;
     --color-button-inverse-bg-hover: #f1f5f9;
     --color-button-inverse-bg-pressed: #e2e8f0;
-    --color-button-inverse-text: #0c121d;
     --color-button-danger-bg-hover: #b91c1c;
     --color-button-danger-bg-pressed: #991b1b;
     --color-button-secondary-bg-hover: #1e293b;
@@ -905,44 +879,18 @@
     --chart-positive: var(--color-green-400);
 
     /* AI surfaces */
-    --color-ai-badge-bg: var(--color-violet-950);
-    --color-ai-badge-text: var(--color-violet-200);
-    --color-ai-prompt-bg: var(--color-gray-900);
-    --color-ai-prompt-border: var(--color-violet-400);
+    --color-ai-prompt-border: var(--color-border-ai);
 
     /* Badge */
-    --color-badge-brand-bg: var(--color-violet-950);
-    --color-badge-brand-text: var(--color-violet-300);
-    --color-badge-blue-bg: var(--color-blue-950);
-    --color-badge-blue-text: var(--color-blue-300);
-    --color-badge-success-bg: var(--color-green-900);
-    --color-badge-success-text: var(--color-green-400);
-    --color-badge-warning-bg: var(--color-yellow-900);
-    --color-badge-warning-text: var(--color-yellow-400);
-    --color-badge-error-bg: var(--color-red-900);
     --color-badge-error-text: var(--color-red-200);
 
     /* Tag */
-    --color-tag-brand-bg: var(--color-violet-950);
-    --color-tag-brand-text: var(--color-violet-300);
-    --color-tag-neutral-bg: var(--color-gray-800);
-    --color-tag-neutral-text: var(--color-gray-300);
 
     /* Toast */
-    --color-toast-success-bg: var(--color-green-900);
-    --color-toast-warning-bg: var(--color-yellow-900);
-    --color-toast-error-bg: var(--color-red-900);
-    --color-toast-info-bg: var(--color-blue-950);
 
     /* Card */
-    --color-card-bg: var(--color-gray-900);
-    --color-card-bg-hover: var(--color-gray-800);
-    --color-card-border: var(--color-gray-800);
 
     /* Modal */
-    --color-modal-bg: var(--color-gray-900);
-    --color-modal-border: var(--color-gray-800);
-    --color-modal-overlay: var(--color-gray-950);
 
     /* Info role */
     --color-border-info: var(--color-blue-400);
@@ -957,5 +905,7 @@
     --elevation-5: 0px 12px 24px 0px rgba(0, 0, 0, 0.8);
     --elevation-6: 0px 16px 32px 0px rgba(0, 0, 0, 0.85);
     --elevation-inner: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.4);
+    --color-button-primary-bg-hover: var(--color-violet-600);
+    --color-button-primary-bg-pressed: var(--color-violet-700);
   }
 }
