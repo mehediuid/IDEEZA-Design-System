@@ -48,4 +48,9 @@ export * from "./components/StateView/index.js";
 export * from "./components/LoadingState/index.js";
 export * from "./components/SkeletonLayout/index.js";
 
+// Molecules — Navigation
+export * from "./components/Tabs/index.js";
+export * from "./components/Breadcrumb/index.js";
+export * from "./components/Pagination/index.js";
+
 export { cn } from "./lib/cn.js";

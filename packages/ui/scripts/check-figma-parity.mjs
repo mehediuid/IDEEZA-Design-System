@@ -329,6 +329,37 @@ chk('skeleton layout article 640 r8 pad 24 gap 20', has(skl,'w-[640px] flex-col 
 chk('skeleton layout chart 336, no border', has(skl,'w-[336px] flex-col gap-[16px] rounded-[8px] p-[20px]'), '');
 chk('skeleton layout reuses the A21 atom', has(skl,'import { Skeleton }','<Skeleton'), 'only the frame is new');
 
+// ── Molecules — Navigation: M14 · M19 · M20 ─────────────────────────
+const tbs = stripComments(read('Tabs/Tabs.tsx'));
+chk('tab fill ramp 36/38/44', has(tbs,'h-[36px] rounded-[6px] px-[12px] py-[8px]',
+  'h-[38px] rounded-[8px] px-[14px] py-[9px]','h-[44px] rounded-[8px] px-[16px] py-[10px]'), '');
+chk('tab line ramp 36/40/48', has(tbs,'h-[36px] px-[4px] py-[8px]','h-[40px] px-[4px] py-[10px]',
+  'h-[48px] px-[4px] py-[12px]'), 'its own ramp, not Fill\'s');
+chk('tab toggle ramp 32/36/44', has(tbs,'h-[32px] rounded-[6px] px-[12px] py-[6px]',
+  'h-[36px] rounded-[8px] px-[14px] py-[8px]'), '');
+chk('tab gap 6 everywhere', has(tbs,'gap-[6px]'), 'the one thing the three styles share');
+chk('tab active differs in kind',
+  has(tbs,'bg-bg-brand text-text-inverse','text-text-brand border-b-[2px] border-border-brand',
+        'bg-bg-surface text-text-primary border border-border-subtle'), 'fill / underline / lift');
+chk('tab line underline is 2px', has(tbs,'border-b-[2px]'), 'measured, not assumed');
+chk('tabs line-full rule is 1px', has(tbs,'"line-full": "h-[40px] gap-0 border-b border-border-subtle"'), '');
+chk('tabs toggle tray r12 pad 4 gap 4', has(tbs,'toggle: "h-[44px] gap-[4px] rounded-[12px] bg-bg-subtle p-[4px]"'), '');
+chk('tab counter 20 tall, radius full, bg/subtle',
+  has(tbs,'h-[20px] min-w-[19px] items-center justify-center rounded-full bg-bg-subtle'), '');
+
+const bcr = stripComments(read('Breadcrumb/Breadcrumb.tsx'));
+chk('breadcrumb gap 8', has(bcr,'items-center gap-[8px]'), '');
+chk('breadcrumb trail is quiet, last is emphasised',
+  has(bcr,'text-body-sm text-text-tertiary','text-body-sm-medium text-text-primary'), '');
+chk('breadcrumb separator is a literal /', has(bcr,'separator = "/"'), 'not an icon');
+chk('breadcrumb marks the current page', has(bcr,'aria-current="page"'), '');
+
+const pgn = stripComments(read('Pagination/Pagination.tsx'));
+chk('pagination cells 32/40 r8', has(pgn,'sm: "size-[32px] rounded-[8px]','md: "size-[40px] rounded-[8px]'), '');
+chk('pagination gap 4 / 6', has(pgn,'sm: "gap-[4px]", md: "gap-[6px]"'), '');
+chk('pagination current on brand-subtle', has(pgn,'bg-bg-brand-subtle text-text-brand'), 'others transparent');
+chk('pagination truncates like Figma', has(pgn,'paginationRange'), '1 2 3 … 8 9 10');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin
