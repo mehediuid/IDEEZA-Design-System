@@ -45,6 +45,7 @@ const REQUIRED = {
   'press scale': 'active:scale-[0.97]',
   'instant press': 'active:duration-instant',
   'hover lift': 'hover:-translate-y-px',
+  'hover swell': 'hover:scale-[1.02]',
   'lift shadow': 'hover:shadow-2',
   'lift release': 'active:translate-y-0',
   'the 120ms step': 'duration-interaction',
@@ -64,7 +65,7 @@ for (const [label, name] of Object.entries(REQUIRED)) {
 // check is that the class appears somewhere in a rule that has it.
 const transformRules = flat.match(/[^{}]*\{[^{}]*transform:translate\(var\(--tw-translate-x\)[^{}]*\}/g) || [];
 const moves = (name) => transformRules.some((r) => r.split('{')[0].includes(cls(name)));
-for (const name of ['active:scale-[0.97]', 'hover:-translate-y-px', 'active:translate-y-0']) {
+for (const name of ['active:scale-[0.97]', 'hover:scale-[1.02]', 'hover:-translate-y-px', 'active:translate-y-0']) {
   const ok = moves(name);
   if (!ok) bad++;
   console.log(`${ok ? '✅' : '❌'} ${'…and actually transforms'.padEnd(30)} ${name}`);

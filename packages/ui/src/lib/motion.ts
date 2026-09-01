@@ -16,6 +16,10 @@
  * - `lift` raises a surface 1px and steps the shadow up on hover. Only for
  *   things that already sit on a shadow; a flat control that lifts looks
  *   detached.
+ * - `swell` is what a flat control does instead: it grows 2% in place. No
+ *   shadow, no lift, nothing to detach from — it just meets the pointer.
+ *   The pair reads as one system rather than two, because both say "this
+ *   responds to you" while respecting whether the surface is raised.
  * - `spring` is for a mark that travels — a toggle thumb, a tick, an
  *   indicator. The curve overshoots slightly and settles, which reads as
  *   weight. It is wrong for colour, which cannot overshoot meaningfully, and
@@ -45,6 +49,15 @@ export const motionPress =
  * `motionPress` so the same element still presses.
  */
 export const motionLift = "hover:-translate-y-px hover:shadow-2 active:translate-y-0";
+
+/**
+ * Hover for a flat control — grows in place, stays flat. Pair with
+ * `motionPress`, which shrinks it back past its resting size on the press.
+ *
+ * 2%, not 1%: on a 40px control 1% is under half a pixel, which is below the
+ * threshold of noticing and so does the job of nothing.
+ */
+export const motionSwell = "hover:scale-[1.02]";
 
 /**
  * For a mark that travels. Overshoots and settles, at the slower step so the

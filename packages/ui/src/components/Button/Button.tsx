@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn";
-import { motionPress, motionLift } from "../../lib/motion";
+import { motionPress, motionLift, motionSwell } from "../../lib/motion";
 
 /**
  * Button — mirrors Figma `A01 Button` (Atoms — Action), 480 variants.
@@ -34,6 +34,10 @@ import { motionPress, motionLift } from "../../lib/motion";
  * Depth: Primary, Danger and AI carry the Figma `Depth/Top-line accent`
  * effect (`shadow-depth-accent`). Every other hierarchy is flat — Inverse
  * was deliberately flattened.
+ *
+ * That split decides the hover motion too: the three raised hierarchies
+ * lift, and the five flat ones swell in place. A flat control that lifts
+ * looks detached from the surface, and one that does nothing looks dead.
  */
 export const buttonVariants = cva(
   [
@@ -61,7 +65,7 @@ export const buttonVariants = cva(
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
         ],
         secondary: [
-          "bg-button-secondary-bg text-button-secondary-text",
+          "bg-button-secondary-bg text-button-secondary-text", motionSwell,
           "border-solid border-[1.5px] border-button-secondary-border [--bd:1.5px]",
           "hover:bg-button-secondary-bg-hover hover:border-button-secondary-border-hover",
           "active:bg-button-secondary-bg-pressed active:border-button-secondary-border-hover",
@@ -69,7 +73,7 @@ export const buttonVariants = cva(
         ],
         ghost: [
           // Figma: Ghost label uses button/secondary-text, not ghost-text.
-          "bg-transparent text-button-secondary-text",
+          "bg-transparent text-button-secondary-text", motionSwell,
           "hover:bg-button-ghost-bg-hover active:bg-bg-surface-raised",
         ],
         danger: [
@@ -79,18 +83,18 @@ export const buttonVariants = cva(
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-danger)]",
         ],
         tonal: [
-          "bg-button-tonal-bg text-button-tonal-text",
+          "bg-button-tonal-bg text-button-tonal-text", motionSwell,
           "hover:bg-button-tonal-bg-hover active:bg-button-tonal-bg-pressed",
           "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo-on-fill)]",
         ],
         outline: [
           // Border stays brand in every state — only the fill changes.
-          "bg-transparent text-text-brand",
+          "bg-transparent text-text-brand", motionSwell,
           "border-solid border-[1.5px] border-border-brand [--bd:1.5px]",
           "hover:bg-button-outline-bg-hover active:bg-button-outline-bg-pressed",
         ],
         inverse: [
-          "bg-button-inverse-bg text-button-inverse-text",
+          "bg-button-inverse-bg text-button-inverse-text", motionSwell,
           "hover:bg-button-inverse-bg-hover active:bg-button-inverse-bg-pressed",
           "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo-inverse)]",
         ],

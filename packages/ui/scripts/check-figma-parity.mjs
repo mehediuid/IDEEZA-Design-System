@@ -471,9 +471,23 @@ const notPressing = pressables.filter((f) => !/motionPress|active:scale-\[0\.97\
 chk('everything clickable presses', notPressing.length === 0,
   notPressing.length ? notPressing.join(', ') : `${pressables.length} components`);
 
-chk('lift only on the raised hierarchies',
-  (read('Button/Button.tsx').match(/motionLift/g) || []).length === 4,
-  'primary, danger and AI carry a shadow; the flat ones would look detached');
+// One rule, applied twice: a hierarchy lifts if and only if it is raised.
+// The shadow is what makes it raised, so the shadow is what the check reads —
+// not a hand-kept list that can drift from the variants it describes.
+for (const file of ['Button/Button.tsx', 'IconButton/IconButton.tsx']) {
+  const src = stripComments(read(file));
+  const rows = [...src.matchAll(/^\s{8}(\w+): \[\n([\s\S]*?)^\s{8}\],/gm)]
+    .map(([, name, body]) => ({ name, raised: body.includes('shadow-depth-accent'),
+                                lift: body.includes('motionLift'), swell: body.includes('motionSwell') }));
+  const wrong = rows.filter((r) => r.lift !== r.raised || r.swell === r.raised);
+  chk(`${file.split('/')[0]}: raised lifts, flat swells`, rows.length > 0 && wrong.length === 0,
+    wrong.length ? wrong.map((r) => r.name).join(', ')
+      : rows.filter((r) => r.raised).map((r) => r.name).join('/') + ' lift · '
+        + rows.filter((r) => !r.raised).map((r) => r.name).join('/') + ' swell');
+}
+chk('swell is smaller than the press',
+  /motionSwell = "hover:scale-\[1\.0[12]\]"/.test(motionLib) && motionLib.includes('active:scale-[0.97]'),
+  'hover grows a little, press shrinks more — the press must still read as a press');
 
 chk('toggle thumb travels on the spring', has(read('Toggle/Toggle.tsx'),'"transition-[left] " + motionSpring'), '');
 chk('a static Tag does not press',

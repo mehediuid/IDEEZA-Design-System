@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn";
+import { motionPress, motionLift, motionSwell } from "../../lib/motion";
 
 /**
  * IconButton — mirrors Figma `A02 Icon Button` (Atoms — Action), 80 variants.
@@ -24,7 +25,7 @@ export const iconButtonVariants = cva(
   [
     "inline-flex items-center justify-center shrink-0 select-none",
     "[--bd:0px]",
-    "transition-[color,background-color,border-color,box-shadow,transform] duration-interaction ease-decelerate active:duration-instant active:scale-[0.97]",
+    motionPress,
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     "disabled:pointer-events-none disabled:shadow-none",
     "disabled:bg-button-disabled-bg disabled:text-button-disabled-text disabled:border-transparent",
@@ -33,23 +34,23 @@ export const iconButtonVariants = cva(
     variants: {
       variant: {
         primary: [
-          "bg-button-primary-bg text-button-primary-text shadow-depth-accent",
+          "bg-button-primary-bg text-button-primary-text shadow-depth-accent", motionLift,
           "hover:bg-button-primary-bg-hover active:bg-button-primary-bg-pressed",
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
         ],
         secondary: [
-          "bg-button-secondary-bg text-button-secondary-text",
+          "bg-button-secondary-bg text-button-secondary-text", motionSwell,
           "border-solid border-[1.5px] border-button-secondary-border [--bd:1.5px]",
           "hover:bg-button-secondary-bg-hover hover:border-button-secondary-border-hover",
           "active:bg-button-secondary-bg-pressed",
         ],
         ghost: [
-          "bg-transparent text-icon-default",
+          "bg-transparent text-icon-default", motionSwell,
           "hover:bg-button-ghost-bg-hover hover:text-text-primary",
           "active:bg-bg-surface-raised",
         ],
         danger: [
-          "bg-button-danger-bg text-button-danger-text shadow-depth-accent",
+          "bg-button-danger-bg text-button-danger-text shadow-depth-accent", motionLift,
           "hover:bg-button-danger-bg-hover active:bg-button-danger-bg-pressed",
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-danger)]",
         ],
