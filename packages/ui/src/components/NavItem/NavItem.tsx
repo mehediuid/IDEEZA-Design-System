@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { motionPress } from "../../lib/motion";
 
 /**
  * NavItem — the row shared by Figma's `M18 Dropdown Menu` and the
@@ -41,7 +42,7 @@ export interface NavItemProps extends Omit<React.HTMLAttributes<HTMLElement>, "c
 export const navItemSurface = (selected?: boolean, disabled?: boolean) =>
   cn(
     "flex h-[40px] w-full items-center gap-[10px] rounded-[6px] px-[12px] text-left",
-    "outline-none transition-colors duration-interaction ease-decelerate",
+    "outline-none " + motionPress,
     "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     disabled
       ? "pointer-events-none"

@@ -2,6 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn";
+import { motionPress, motionLift } from "../../lib/motion";
 
 /**
  * Button — mirrors Figma `A01 Button` (Atoms — Action), 480 variants.
@@ -42,7 +43,7 @@ export const buttonVariants = cva(
     // unbordered one. CSS border-box adds the border on top, so bordered
     // hierarchies subtract it back out through --bd.
     "[--bd:0px]",
-    "font-sans transition-[colors,box-shadow] duration-interaction ease-decelerate",
+    "font-sans " + motionPress,
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     // Figma: every hierarchy collapses to the same Disabled treatment —
     // disabled-bg + disabled-text, no border, no depth. Ghost and Outline
@@ -55,7 +56,7 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          "bg-button-primary-bg text-button-primary-text shadow-depth-accent",
+          "bg-button-primary-bg text-button-primary-text shadow-depth-accent", motionLift,
           "hover:bg-button-primary-bg-hover active:bg-button-primary-bg-pressed",
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
         ],
@@ -73,7 +74,7 @@ export const buttonVariants = cva(
         ],
         danger: [
           // Figma: Danger label is button/primary-text (white), same value as danger-text.
-          "bg-button-danger-bg text-button-primary-text shadow-depth-accent",
+          "bg-button-danger-bg text-button-primary-text shadow-depth-accent", motionLift,
           "hover:bg-button-danger-bg-hover active:bg-button-danger-bg-pressed",
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-danger)]",
         ],
@@ -95,7 +96,7 @@ export const buttonVariants = cva(
         ],
         ai: [
           // Figma paint style `Brand/AI gradient` — violet/600 → blue/600.
-          "bg-ai text-text-on-brand shadow-depth-accent",
+          "bg-ai text-text-on-brand shadow-depth-accent", motionLift,
           "hover:bg-ai-hover active:bg-ai-pressed",
           "focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
         ],

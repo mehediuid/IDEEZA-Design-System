@@ -26,6 +26,9 @@ importers:
 
   apps/storybook:
     dependencies:
+      '@ideeza/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
       '@ideeza/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens

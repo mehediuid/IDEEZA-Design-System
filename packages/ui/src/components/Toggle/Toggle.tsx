@@ -2,6 +2,7 @@ import * as React from "react";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn";
+import { motionSpring } from "../../lib/motion";
 
 /**
  * Toggle — mirrors Figma `_Toggle base` / `A10 Toggle` (Atoms — Input).
@@ -50,7 +51,7 @@ const trackVariants = cva(
 const thumbVariants = cva(
   [
     "pointer-events-none absolute top-[2px] block rounded-full bg-bg-surface shadow-1",
-    "transition-[left] duration-interaction ease-decelerate",
+    "transition-[left] " + motionSpring,
   ],
   {
     variants: {

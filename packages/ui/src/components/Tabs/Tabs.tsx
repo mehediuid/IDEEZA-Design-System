@@ -1,5 +1,8 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { motionPress, motionSpring } from "../../lib/motion";
+import { mergeRefs } from "../../lib/refs";
+import { useIsomorphicLayoutEffect } from "../../lib/use-isomorphic-layout-effect";
 
 /**
  * Tabs — mirrors Figma `M14 Tabs` with `_TabFill`, `_TabLine` and
@@ -21,6 +24,17 @@ import { cn } from "../../lib/cn";
  *   Toggle  lifts onto bg/surface with a 1px border/subtle
  * Line Full adds a 1px border/subtle under the whole strip so the inactive
  * tabs sit on a rule; Toggle wraps the set in a bg/subtle tray at radius 12.
+ *
+ * The active treatment is painted by one absolutely positioned element that
+ * slides between tabs, rather than by the selected tab drawing its own. At
+ * rest the two are pixel-identical — the indicator is measured from the tab's
+ * own box — so this changes nothing about the Figma geometry; it only means
+ * the mark travels instead of blinking from one tab to the next. It travels on
+ * the spring, which is what distinguishes it from a cross-fade.
+ *
+ * The indicator is measured, so it cannot exist in server-rendered markup; it
+ * appears in the layout effect, before the browser paints. Under SSR the very
+ * first painted frame is therefore the hydrated one, not the server one.
  */
 export type TabsVariant = "fill" | "line" | "line-full" | "toggle";
 export type TabsSize = "sm" | "md" | "lg";
@@ -43,22 +57,43 @@ const item = {
   },
 } as const;
 
+// The active row carries only what does not move: the label colour, and the
+// transparent border that reserves the Line underline's 2px so selecting a tab
+// never changes its height. The fill, the tray card and the underline itself
+// are drawn by the sliding indicator below.
 const state = {
   fill: {
     idle: "text-text-tertiary hover:bg-bg-subtle hover:text-text-primary",
-    active: "bg-bg-brand text-text-inverse",
+    active: "text-text-inverse",
     disabled: "bg-bg-subtle text-text-disabled",
   },
   line: {
     idle: "text-text-tertiary border-b-[2px] border-transparent hover:border-border-subtle hover:text-text-primary",
-    active: "text-text-brand border-b-[2px] border-border-brand",
+    active: "text-text-brand border-b-[2px] border-transparent",
     disabled: "text-text-disabled border-b-[2px] border-transparent",
   },
   toggle: {
     idle: "text-text-tertiary hover:bg-bg-subtle hover:text-text-primary",
-    active: "bg-bg-surface text-text-primary border border-border-subtle",
+    active: "text-text-primary",
     disabled: "text-text-disabled",
   },
+} as const;
+
+/**
+ * The indicator's own paint, per style. Radius matches the item so the pill
+ * lands exactly on the tab's corners; `line` is the 2px rule and is pinned to
+ * the tab's bottom edge rather than filling it.
+ */
+const indicator = {
+  fill: { sm: "rounded-[6px]", md: "rounded-[8px]", lg: "rounded-[8px]" },
+  toggle: { sm: "rounded-[6px]", md: "rounded-[8px]", lg: "rounded-[8px]" },
+  line: { sm: "", md: "", lg: "" },
+} as const;
+
+const indicatorPaint = {
+  fill: "bg-bg-brand",
+  line: "bg-border-brand",
+  toggle: "bg-bg-surface border border-border-subtle",
 } as const;
 
 const container = {
@@ -97,14 +132,63 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
       if (value === undefined) setInner(v);
       onValueChange?.(v);
     };
+
+    const style = itemStyleFor(variant);
+    const list = React.useRef<HTMLDivElement>(null);
+    const [box, setBox] = React.useState<{ left: number; top: number; width: number; height: number } | null>(null);
+    // First placement must not animate, or the indicator slides in from the
+    // left edge on mount. Only movement between tabs travels.
+    const placed = React.useRef(false);
+
+    useIsomorphicLayoutEffect(() => {
+      const el = list.current;
+      if (!el) return;
+      const measure = () => {
+        const tab = el.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
+        setBox(
+          tab
+            ? { left: tab.offsetLeft, top: tab.offsetTop, width: tab.offsetWidth, height: tab.offsetHeight }
+            : null
+        );
+      };
+      measure();
+      // Width=FILL tabs and any label that reflows change the geometry without
+      // changing the selection, so the indicator has to follow the box, not
+      // just the value.
+      const ro = new ResizeObserver(measure);
+      ro.observe(el);
+      el.querySelectorAll('[role="tab"]').forEach((t) => ro.observe(t));
+      return () => ro.disconnect();
+    }, [current, variant, size, fill, children]);
+
+    React.useEffect(() => {
+      if (box) placed.current = true;
+    }, [box]);
+
     return (
       <TabsContext.Provider value={{ variant, size, value: current, onValueChange: change }}>
         <div
-          ref={ref}
+          ref={mergeRefs(ref, list)}
           role="tablist"
-          className={cn("flex items-center", container[variant], fill && "w-full", className)}
+          className={cn("relative flex items-center", container[variant], fill && "w-full", className)}
           {...props}
         >
+          {box && (
+            <span
+              aria-hidden="true"
+              className={cn(
+                "pointer-events-none absolute",
+                indicatorPaint[style],
+                indicator[style][size],
+                placed.current && "transition-[left,top,width,height] " + motionSpring
+              )}
+              style={
+                style === "line"
+                  ? { left: box.left, width: box.width, top: box.top + box.height - 2, height: 2 }
+                  : { left: box.left, top: box.top, width: box.width, height: box.height }
+              }
+            />
+          )}
           {children}
         </div>
       </TabsContext.Provider>
@@ -139,8 +223,10 @@ export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
           onClick?.(e);
         }}
         className={cn(
-          "inline-flex items-center justify-center gap-[6px] whitespace-nowrap font-sans",
-          "outline-none transition-colors duration-interaction ease-decelerate",
+          // `relative` puts the label above the absolutely positioned indicator;
+          // it changes no geometry.
+          "relative inline-flex items-center justify-center gap-[6px] whitespace-nowrap font-sans",
+          "outline-none " + motionPress,
           "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
           "disabled:pointer-events-none",
           item[style][ctx.size],

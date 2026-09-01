@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn";
+import { motionState, motionPress } from "../../lib/motion";
 
 /**
  * Tag — mirrors Figma `A18 Tag` (Atoms — Display).
@@ -16,7 +17,7 @@ import { cn } from "../../lib/cn";
  * carries a border in every state and has no colour prop.
  */
 export const tagVariants = cva(
-  "inline-flex items-center rounded-full border font-sans whitespace-nowrap align-middle transition-colors duration-interaction ease-decelerate",
+  "inline-flex items-center rounded-full border font-sans whitespace-nowrap align-middle " + motionState,
   {
     variants: {
       // The leading icon is 16px at every size; only the X close shrinks to 12
@@ -30,7 +31,8 @@ export const tagVariants = cva(
         true: "bg-bg-brand-subtle border-border-brand text-text-brand",
         false: "bg-bg-surface-raised border-border text-text-primary",
       },
-      interactive: { true: "cursor-pointer", false: "" },
+      // Only a selectable chip presses; a static one must not react to :active.
+      interactive: { true: "cursor-pointer " + motionPress, false: "" },
     },
     compoundVariants: [
       // Figma `State=Hover` — only on the unselected chip.
@@ -102,7 +104,7 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
             disabled={disabled}
             aria-label="Remove"
             className={cn(
-              "-mr-[2px] inline-flex shrink-0 items-center justify-center rounded-full outline-none hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+              "-mr-[2px] inline-flex shrink-0 items-center justify-center rounded-full outline-none transition-opacity duration-interaction ease-decelerate hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
               closeSize[key]
             )}
           >

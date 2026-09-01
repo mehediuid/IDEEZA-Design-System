@@ -14,6 +14,7 @@ let bad=0;
 // These checks assert on class strings; the notes in each file mention the very
 // things they rule out, so comments are stripped before matching.
 const stripComments = (t) => t.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+const motionLib = stripComments(fs.readFileSync(new URL('../src/lib/motion.ts', import.meta.url).pathname, 'utf8'));
 const chk=(name,ok,detail)=>{ if(!ok) bad++; console.log(`${ok?'✅':'❌'} ${name.padEnd(46)} ${detail}`); };
 
 // ── Checkbox (Figma A08 + _Checkbox base)
@@ -338,9 +339,22 @@ chk('tab line ramp 36/40/48', has(tbs,'h-[36px] px-[4px] py-[8px]','h-[40px] px-
 chk('tab toggle ramp 32/36/44', has(tbs,'h-[32px] rounded-[6px] px-[12px] py-[6px]',
   'h-[36px] rounded-[8px] px-[14px] py-[8px]'), '');
 chk('tab gap 6 everywhere', has(tbs,'gap-[6px]'), 'the one thing the three styles share');
+// The three active treatments now live on the sliding indicator rather than on
+// the selected tab, so the paint is checked where it is actually applied. The
+// label colour stays on the tab, because text cannot slide.
 chk('tab active differs in kind',
-  has(tbs,'bg-bg-brand text-text-inverse','text-text-brand border-b-[2px] border-border-brand',
-        'bg-bg-surface text-text-primary border border-border-subtle'), 'fill / underline / lift');
+  has(tbs,"fill: \"bg-bg-brand\"","line: \"bg-border-brand\"","toggle: \"bg-bg-surface border border-border-subtle\"")
+    && has(tbs,'active: "text-text-inverse"','active: "text-text-brand','active: "text-text-primary"'),
+  'fill / underline / lift');
+chk('selecting a tab never changes its height',
+  (tbs.match(/border-b-\[2px\] border-transparent/g) || []).length === 3,
+  'all three Line rows reserve the 2px, active included');
+chk('tab indicator slides on the spring',
+  has(tbs,'transition-[left,top,width,height] " + motionSpring'), '');
+chk('first placement does not animate', has(tbs,'placed.current &&'),
+  'otherwise it flies in from the left edge on mount');
+chk('tab label paints above the indicator', has(tbs,'"relative inline-flex items-center'),
+  'the indicator is the only positioned sibling');
 chk('tab line underline is 2px', has(tbs,'border-b-[2px]'), 'measured, not assumed');
 chk('tabs line-full rule is 1px', has(tbs,'"line-full": "h-[40px] gap-0 border-b border-border-subtle"'), '');
 chk('tabs toggle tray r12 pad 4 gap 4', has(tbs,'toggle: "h-[44px] gap-[4px] rounded-[12px] bg-bg-subtle p-[4px]"'), '');
@@ -398,7 +412,15 @@ chk('motion scale carries the 120ms interaction step',
 chk('preset exposes duration-interaction',
   /interaction:\s*"var\(--motion-duration-interaction\)"/.test(preset), '');
 
-const uiFiles = srcFiles.map((f) => [f.split('/src/')[1], stripComments(fs.readFileSync(f, 'utf8'))]);
+// The motion recipes moved into lib/motion.ts, so a file that presses now says
+// `motionPress` rather than carrying the class string. These checks are about
+// what ships in the class attribute, so the recipes are expanded back in first
+// — otherwise a file would silently "pass" by not mentioning transitions at all.
+const RECIPES = Object.fromEntries(
+  [...motionLib.matchAll(/export const (motion\w+)\s*=\s*([\s\S]*?);\n/g)]
+    .map(([, name, body]) => [name, (body.match(/"([^"]*)"/g) || []).map((q) => q.slice(1, -1)).join(' ')]));
+const expand = (t) => t.replace(/\bmotion(State|Press|Lift|Spring)\b/g, (m) => RECIPES[m] ?? m);
+const uiFiles = srcFiles.map((f) => [f.split('/src/')[1], expand(stripComments(fs.readFileSync(f, 'utf8')))]);
 // An interaction must not animate on the standard curve — Figma says ease-out.
 const wrongEasing = uiFiles.filter(([, t]) => /duration-interaction ease-standard/.test(t));
 chk('interactions use ease-decelerate', wrongEasing.length === 0,
@@ -426,6 +448,37 @@ const resetCss = fs.readFileSync(new URL('../../tokens/css/reset.css', import.me
 chk('reduced motion is honoured',
   /prefers-reduced-motion:\s*reduce/.test(resetCss) && /transition-duration:[^;]*!important/.test(resetCss),
   'motion can trigger nausea and migraine — the OS request is explicit');
+
+// ── Motion recipes ──────────────────────────────────────────────────
+// A colour cross-fade alone reads as inert, so pressables also move. This
+// part is not in Figma — the file specifies the cross-fade and nothing else —
+// so it lives in one place and is checked rather than sprinkled.
+chk('motion recipes go through the tokens',
+  has(motionLib,'duration-interaction ease-decelerate','active:duration-instant','duration-normal ease-spring')
+    && !/\d+ms/.test(motionLib),
+  'no raw milliseconds');
+chk('press is instant down, eased up',
+  has(motionLib,'active:duration-instant active:scale-[0.97]'),
+  'lag between finger and pixel reads as slow');
+chk('lift is hover only, released on press',
+  has(motionLib,'hover:-translate-y-px hover:shadow-2 active:translate-y-0'), '');
+chk('spring is reserved for travel', has(motionLib,'motionSpring') && has(motionLib,'ease-spring'),
+  'wrong for colour, which cannot overshoot');
+
+const pressables = ['Button/Button.tsx','IconButton/IconButton.tsx','Tabs/Tabs.tsx','NavItem/NavItem.tsx',
+  'Pagination/Pagination.tsx','ButtonGroup/ButtonGroup.tsx','Tag/Tag.tsx'];
+const notPressing = pressables.filter((f) => !/motionPress|active:scale-\[0\.97\]/.test(read(f)));
+chk('everything clickable presses', notPressing.length === 0,
+  notPressing.length ? notPressing.join(', ') : `${pressables.length} components`);
+
+chk('lift only on the raised hierarchies',
+  (read('Button/Button.tsx').match(/motionLift/g) || []).length === 4,
+  'primary, danger and AI carry a shadow; the flat ones would look detached');
+
+chk('toggle thumb travels on the spring', has(read('Toggle/Toggle.tsx'),'"transition-[left] " + motionSpring'), '');
+chk('a static Tag does not press',
+  has(read('Tag/Tag.tsx'),'interactive: { true: "cursor-pointer " + motionPress, false: "" }'),
+  'only a selectable chip reacts to :active');
 
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
