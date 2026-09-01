@@ -18,7 +18,8 @@ ideeza-design-system/
 │   └── icons/         @ideeza/icons   ─ Lucide icon set (planned)
 ├── apps/
 │   └── storybook/     @ideeza/storybook ─ component playground
-└── scripts/           double-click runners for macOS (see Local development)
+├── RUN-KORO.command   double-click: builds and opens Storybook
+└── PUSH-KORO.command  double-click: reviews, commits and pushes
 ```
 
 ### Token coverage
@@ -113,12 +114,12 @@ pnpm test
 
 ### Double-click runners (macOS)
 
-Two `.command` scripts in `scripts/` do the same things without a terminal — open Finder and double-click. Both `cd` to the repo root themselves, so they work from wherever they sit.
+Two `.command` scripts sit at the repo root so they are the first thing you see when you open the folder — double-click either one, no terminal needed.
 
 | Script | Does |
 | --- | --- |
-| `scripts/RUN-KORO.command` | Checks Node 18+, finds or fetches pnpm, installs dependencies only when they're actually stale, builds in turbo dependency order, frees port 6006, then starts Storybook and opens the browser once the port really responds. |
-| `scripts/PUSH-KORO.command` | Shows uncommitted files, warns if any look like secrets (`.env`, `*.pem`, `*.key`, `id_rsa`, `.npmrc`, …), asks before committing, checks whether `origin/main` is ahead, then pushes. |
+| `RUN-KORO.command` | Checks Node 18+, finds or fetches pnpm, installs dependencies only when they're actually stale, builds in turbo dependency order, frees port 6006, then starts Storybook and opens the browser once the port really responds. |
+| `PUSH-KORO.command` | Shows uncommitted files, warns if any look like secrets (`.env`, `*.pem`, `*.key`, `id_rsa`, `.npmrc`, …), asks before committing, checks whether `origin/main` is ahead, then pushes. |
 
 `RUN-KORO` decides whether to reinstall by comparing a `.deps-platform` marker (gitignored) against the current platform and the hash of `pnpm-lock.yaml` — so it reinstalls after a lockfile change or when `node_modules` came from a different machine, and skips the wait otherwise.
 

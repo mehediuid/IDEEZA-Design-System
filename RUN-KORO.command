@@ -1,5 +1,5 @@
 #!/bin/bash
-cd "$(dirname "$0")/.." || { echo "Folder-e jete parlam na."; read -n 1; exit 1; }
+cd "$(dirname "$0")" || { echo "Folder-e jete parlam na."; read -n 1; exit 1; }
 
 PORT=6006
 
