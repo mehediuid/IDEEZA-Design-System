@@ -16,6 +16,7 @@ export * from "./components/Search/index.js";
 export * from "./components/NumberInput/index.js";
 export * from "./components/Slider/index.js";
 export * from "./components/ColorPicker/index.js";
+export * from "./components/MultiSelect/index.js";
 
 // Atoms — Display
 export * from "./components/Badge/index.js";
@@ -32,5 +33,6 @@ export * from "./components/ProgressBar/index.js";
 export * from "./components/ProgressRing/index.js";
 export * from "./components/InlineCta/index.js";
 export * from "./components/AvatarGroup/index.js";
+export * from "./components/Tooltip/index.js";
 
 export { cn } from "./lib/cn.js";

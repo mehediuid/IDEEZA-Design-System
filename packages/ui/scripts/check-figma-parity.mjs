@@ -219,6 +219,23 @@ chk('colour hex in Code/MD', has(cp,'text-code-md'), '');
 chk('colour hash is text/tertiary', has(cp,'text-code-md text-text-tertiary'), '');
 chk('colour swatch opens the native picker', has(cp,'type="color"'), '');
 
+// ── A14 Multi-select · A19 Tooltip ──────────────────────────────────
+const mse = stripComments(read('MultiSelect/MultiSelect.tsx'));
+chk('multi-select reuses the field ramp', has(mse,'controlChrome','controlClass[size]','iconClass[size]'), '');
+chk('multi-select vertical padding drops to 4', has(mse,'!py-[2.5px]'), 'Figma pads 4/12 so the chip row centres');
+chk('multi-select chips are A18 Tag at SM', has(mse,'<Tag','size="sm"'), 'the real component, not a lookalike');
+chk('multi-select chip gap 4', has(mse,'gap-[4px]'), '');
+chk('multi-select is a listbox, not a native select',
+  has(mse,'role="combobox"','role="listbox"','aria-multiselectable'), 'a native select cannot show chips');
+
+const tip = stripComments(read('Tooltip/Tooltip.tsx'));
+chk('tooltip bubble r8 pad 8/12 on bg/inverse',
+  has(tip,'rounded-[8px] bg-bg-inverse px-[12px] py-[8px]'), '');
+chk('tooltip type Body/XS Medium on text/inverse', has(tip,'text-body-xs-medium text-text-inverse'), '');
+chk('tooltip arrow 10x6', has(tip,'width={10} height={6}'), '');
+chk('tooltip arrow is optional', has(tip,'arrow = true','arrow &&'), 'Figma splits arrow / no arrow into variants');
+chk('tooltip does not need tailwindcss-animate', !tip.includes('animate-in'), 'not a dependency');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin
