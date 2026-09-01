@@ -101,3 +101,68 @@ a:hover {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Tailwind utility defaults ───────────────────────────────────────────
+   Tailwind builds `transform`, `box-shadow`, `filter` and friends out of
+   custom properties:
+
+     .hover\:-translate-y-px:hover {
+       --tw-translate-y: -1px;
+       transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+                  rotate(var(--tw-rotate)) … scaleY(var(--tw-scale-y));
+     }
+
+   The utility sets one of them. Preflight is what defines the other six —
+   and this project loads `@tailwind utilities` only, deliberately, because
+   this file is the reset. So the rest were never defined anywhere.
+
+   A `var()` with no value and no fallback makes the whole declaration
+   invalid at computed-value time, so `transform` fell back to `none`. Every
+   translate, scale, rotate, shadow and ring utility in the system was inert:
+   the class was in the markup, the rule was in the stylesheet, and the
+   browser threw the result away. Colour transitions worked, which is why it
+   read as "the motion is basic" rather than as something broken.
+
+   These are Tailwind's own Preflight values, and nothing but Tailwind's
+   utilities reads them. */
+*,
+*::before,
+*::after {
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-ring-inset: ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+
+  --tw-blur: ;
+  --tw-brightness: ;
+  --tw-contrast: ;
+  --tw-grayscale: ;
+  --tw-hue-rotate: ;
+  --tw-invert: ;
+  --tw-saturate: ;
+  --tw-sepia: ;
+  --tw-drop-shadow: ;
+
+  --tw-content: "";
+  --tw-ordinal: ;
+  --tw-slashed-zero: ;
+  --tw-numeric-figure: ;
+  --tw-numeric-spacing: ;
+  --tw-numeric-fraction: ;
+  --tw-space-x-reverse: 0;
+  --tw-space-y-reverse: 0;
+  --tw-divide-x-reverse: 0;
+  --tw-divide-y-reverse: 0;
+}

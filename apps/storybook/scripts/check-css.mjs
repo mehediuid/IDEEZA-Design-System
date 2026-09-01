@@ -77,5 +77,28 @@ const ordered = at('duration-interaction') > at('transition-[color,background-co
 if (!ordered) bad++;
 console.log(`${ordered ? '✅' : '❌'} ${'duration overrides the default'.padEnd(30)} duration-interaction comes after transition-property`);
 
+
+// ── Every --tw-* var a utility reads must have a default ────────────────
+// Tailwind builds transform/box-shadow/filter out of custom properties and
+// relies on Preflight to define them. This project loads `@tailwind
+// utilities` only — reset.css is the base — so the defaults have to live
+// there. A var() with no value and no fallback invalidates the whole
+// declaration, which is how every transform in the system silently became
+// `transform: none` while the class sat right there in the markup.
+const reset = fs.readFileSync(
+  path.join(app, '../../packages/tokens/css/reset.css'), 'utf8');
+// Only vars read by a real CSS property matter. One read solely inside
+// another custom property (`--tw-shadow-colored: … var(--tw-shadow-color)`)
+// invalidates just that property, and the utility that uses it sets it.
+const loadBearing = css.replace(/^\s*--[a-z0-9-]+\s*:[^;]*;?$/gm, '');
+const referenced = new Set([...loadBearing.matchAll(/var\((--tw-[a-z0-9-]+)\)/g)].map((m) => m[1]));
+const defined = new Set([...reset.matchAll(/^\s*(--tw-[a-z0-9-]+)\s*:/gm)].map((m) => m[1]));
+const undefaulted = [...referenced].filter((v) => !defined.has(v)).sort();
+if (undefaulted.length) bad++;
+console.log(`${undefaulted.length ? '❌' : '✅'} ${'--tw-* vars have defaults'.padEnd(30)} ` +
+  (undefaulted.length
+    ? `${undefaulted.length} read by utilities, absent from reset.css: ${undefaulted.join(', ')}`
+    : `all ${referenced.size} defined in reset.css`));
+
 console.log(bad ? `\n❌ ${bad} class${bad > 1 ? 'es' : ''} the components use but the CSS does not define` : '\n✅ every motion class the components use exists in the built CSS');
 process.exit(bad ? 1 : 0);
