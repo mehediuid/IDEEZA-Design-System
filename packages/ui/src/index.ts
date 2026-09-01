@@ -40,5 +40,7 @@ export * from "./components/Alert/index.js";
 export * from "./components/InlineMessage/index.js";
 export * from "./components/Banner/index.js";
 export * from "./components/Snackbar/index.js";
+export * from "./components/Toast/index.js";
+export * from "./components/StatusBlock/index.js";
 
 export { cn } from "./lib/cn.js";

@@ -271,6 +271,30 @@ chk('snackbar surface is inverse in every severity',
 chk('snackbar badge 20, glyph 14', has(snk,'size-[20px]','size-[14px] text-icon-on-brand'), '');
 chk('snackbar message Body/SM Medium on text/inverse', has(snk,'text-body-sm-medium text-text-inverse'), '');
 
+// ── M02 Toast · M06 Status Block ────────────────────────────────────
+const tst = stripComments(read('Toast/Toast.tsx'));
+chk('toast r12 pad 14/14/14/16 gap 12',
+  has(tst,'rounded-[12px] border border-border-subtle bg-bg-surface-raised p-[14px] pl-[16px]','gap-[12px]'), '');
+chk('toast title Body/MD Medium, supporting Body/SM',
+  has(tst,'text-body-md-medium text-text-primary','text-body-sm text-text-secondary'), 'content gap 4');
+chk('toast icon badges: brand/gray/success/warning/error',
+  has(tst,'primary: "bg-bg-brand"','gray: "bg-icon-secondary"','success: "bg-icon-success"',
+        'warning: "bg-icon-warning"','error: "bg-icon-error"'), 'five variants differ only in the badge fill');
+chk('toast image 40 r8, avatar 32 round', has(tst,'size-[40px]','rounded-[8px]'), '');
+chk('toast no-icon keeps the 1px spacer', has(tst,'w-px shrink-0'), 'text starts in the same place');
+chk('toast progress restacks vertically', has(tst,'leading === "progress"','flex-col gap-[12px]'), '');
+
+const stb = stripComments(read('StatusBlock/StatusBlock.tsx'));
+chk('status block r6 pad 6/8 gap 6',
+  has(stb,'gap-[6px] rounded-[6px] border border-border bg-bg-subtle px-[8px] py-[6px]'), '');
+chk('status block surface stays neutral',
+  has(stb,'operational: "", degraded: "", outage: "", maintenance: ""'), 'only the dot carries the status');
+chk('status dot 10px, four colours',
+  has(stb,'size-[10px]','operational: "bg-icon-success"','maintenance: "bg-icon-blue"'),
+  'Maintenance is blue — planned, not a fault');
+chk('status label Body/SM Medium, detail Caption/MD at 2px',
+  has(stb,'text-body-sm-medium text-text-primary','gap-[2px]','text-caption-md text-text-secondary'), '');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin

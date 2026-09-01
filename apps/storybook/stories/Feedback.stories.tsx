@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { Alert, InlineMessage, Banner, Snackbar, Button } from "@ideeza/ui";
+import { Alert, InlineMessage, Banner, Snackbar, Toast, StatusBlock, Button, Avatar } from "@ideeza/ui";
 
 /** M01, M05, M03 and M04 — the four ways the system reports something. */
 const meta = { title: "Molecules/Feedback" } satisfies Meta;
@@ -73,6 +73,46 @@ export const Snackbars: Story = {
         </Snackbar>
       ))}
       <Snackbar severity="success">Message only</Snackbar>
+    </div>
+  ),
+};
+
+export const Toasts: Story = {
+  name: "M02 Toast",
+  render: () => (
+    <div className="flex w-[570px] flex-col gap-[12px]">
+      {(["primary", "gray", "success", "warning", "error"] as const).map((l) => (
+        <Toast
+          key={l}
+          leading={l}
+          title="Notification"
+          description="Supporting description goes here."
+          onDismiss={() => {}}
+        />
+      ))}
+      <Toast
+        leading="avatar"
+        media={<Avatar size="sm" initials="MH" />}
+        title="Mehedi commented"
+        description="“Ship it once parity is green.”"
+        actions={<Button size="sm" variant="secondary">Reply</Button>}
+        onDismiss={() => {}}
+      />
+      <Toast leading="none" title="No leading slot" description="The text still starts in the same place." onDismiss={() => {}} />
+      <Toast leading="progress" progress={60} title="Uploading assets" description="3 of 5 files" onDismiss={() => {}} />
+    </div>
+  ),
+};
+
+export const StatusBlocks: Story = {
+  name: "M06 Status Block",
+  render: () => (
+    <div className="flex flex-col items-start gap-[12px]">
+      <StatusBlock status="operational" label="All systems operational" detail="Updated 2 min ago" />
+      <StatusBlock status="degraded" label="Degraded performance" detail="Search is slow" />
+      <StatusBlock status="outage" label="Partial outage" detail="Exports unavailable" />
+      <StatusBlock status="maintenance" label="Scheduled maintenance" detail="Sunday 02:00–04:00 UTC" />
+      <StatusBlock status="operational" label="Label only" />
     </div>
   ),
 };
