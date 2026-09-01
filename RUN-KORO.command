@@ -106,6 +106,27 @@ grep -E "^ *(Tasks|Cached|Time): *" "$BUILD_LOG" | sed 's/^ */  /'
 rm -f "$BUILD_LOG"
 echo ""
 
+# ── Cache mucha ─────────────────────────────────────────────────
+# Vite CSS ar dependency cache rakhe. tailwind.config bodlale purono
+# CSS-i serve korte thake — code thik, screen-e kono poriborton nei.
+# Ei ek jinis onek somoy nosto koreche, tai proti bar-i muchhe di.
+echo "▸ Purono cache muchhe felchi..."
+rm -rf node_modules/.cache apps/storybook/node_modules/.cache \
+       node_modules/.vite apps/storybook/node_modules/.vite 2>/dev/null
+echo ""
+
+# ── CSS-e motion sotti ache kina ────────────────────────────────
+# Class-er naam component-e thakle-o CSS-e rule na thakle kichui nore.
+# Tai browser kholar age-i bole di, ache na nei.
+echo "▸ CSS-e motion ache kina dekhchi..."
+if $PNPM --filter @ideeza/storybook test >/tmp/ideeza-css.log 2>&1; then
+  echo "  ✅ Motion CSS-e ache — hover ar click kaj korar kotha."
+else
+  echo "  ❌ Motion CSS-e NEI. Nicher line gulo dekhao:"
+  grep -E "^(✅|❌)" /tmp/ideeza-css.log | sed 's/^/     /'
+fi
+echo ""
+
 # ── Port khali kore nei ─────────────────────────────────────────
 # Port dhora thakle Storybook onno port-e chole jay, ar amra bhul
 # instance browser-e khule feli.
