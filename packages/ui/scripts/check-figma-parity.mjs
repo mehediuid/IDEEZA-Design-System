@@ -295,6 +295,40 @@ chk('status dot 10px, four colours',
 chk('status label Body/SM Medium, detail Caption/MD at 2px',
   has(stb,'text-body-sm-medium text-text-primary','gap-[2px]','text-caption-md text-text-secondary'), '');
 
+// ── Molecules — States: M48-M59 · M50 · M51 ─────────────────────────
+const sv = stripComments(read('StateView/StateView.tsx'));
+chk('state view gap 10 pad 12 centred on bg/surface',
+  has(sv,'flex-col items-center gap-[10px] bg-bg-surface p-[12px] text-center'), 'identical in all ten');
+chk('state badge 80 round, glyph 40', has(sv,'size-[80px]','rounded-full','size-[40px]'), '');
+chk('state text gap 4, H3 over Body/SM',
+  has(sv,'gap-[4px]','text-heading-h3 text-text-primary','text-body-sm text-text-secondary'), '');
+chk('state actions gap 6', has(sv,'items-center gap-[6px]'), '');
+chk('state badge and glyph are set independently',
+  has(sv,'badgeTone[badge]','glyphTone[glyph]'), 'Figma does not derive one from the other');
+chk('state presets keep Figma pairings',
+  has(sv,'"not-found": { icon: AlertCircle, badge: "brand", glyph: "secondary" }',
+        'empty: { icon: Inbox, badge: "neutral", glyph: "inherit" }',
+        'maintenance: { icon: Wrench01, badge: "info", glyph: "blue" }'),
+  'brand badge with a secondary glyph is deliberate');
+chk('state presets cover all ten', ['empty','error','success','no-results','permission-denied',
+  'no-connection','maintenance','not-found','coming-soon','server-error'].every(k=>sv.includes(k)), '');
+
+const lst = stripComments(read('LoadingState/LoadingState.tsx'));
+chk('loading page/inline/compact geometry',
+  has(lst,'page: "flex-col gap-[16px] p-[48px]"','inline: "flex-col gap-[16px] p-[32px]"',
+        'compact: "flex-row gap-[10px] p-[20px]"'), 'compact is the only horizontal one');
+chk('loading spinner ramp xl/lg/md', has(lst,'page: "xl", inline: "lg", compact: "md"'), '');
+chk('loading label ramp H4/H6/Body SM Medium',
+  has(lst,'text-heading-h4','text-heading-h6','text-body-sm-medium'), '');
+chk('loading description is Body/MD tertiary', has(lst,'text-body-md text-text-tertiary'), 'Figma shows it on Page only');
+
+const skl = stripComments(read('SkeletonLayout/SkeletonLayout.tsx'));
+chk('skeleton layout card 360 r8 pad 20 gap 16', has(skl,'w-[360px] flex-col gap-[16px] rounded-[8px] p-[20px]'), '');
+chk('skeleton layout list item 480x56 r6 pad 12/16', has(skl,'w-[480px] items-center gap-[12px] rounded-[6px] px-[16px] py-[12px]'), '');
+chk('skeleton layout article 640 r8 pad 24 gap 20', has(skl,'w-[640px] flex-col gap-[20px] rounded-[8px] p-[24px]'), '');
+chk('skeleton layout chart 336, no border', has(skl,'w-[336px] flex-col gap-[16px] rounded-[8px] p-[20px]'), '');
+chk('skeleton layout reuses the A21 atom', has(skl,'import { Skeleton }','<Skeleton'), 'only the frame is new');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin

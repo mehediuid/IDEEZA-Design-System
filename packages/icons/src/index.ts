@@ -15,19 +15,25 @@ export { Calendar01 } from "./icons/Calendar01.js";
 export { Cancel01 } from "./icons/Cancel01.js";
 export { CheckmarkCircle02 } from "./icons/CheckmarkCircle02.js";
 export { Clock01 } from "./icons/Clock01.js";
+export { Clock02 } from "./icons/Clock02.js";
+export { CloudServer } from "./icons/CloudServer.js";
 export { ColorPicker } from "./icons/ColorPicker.js";
 export { Copy01 } from "./icons/Copy01.js";
 export { CreditCard } from "./icons/CreditCard.js";
 export { HelpCircle } from "./icons/HelpCircle.js";
+export { Inbox } from "./icons/Inbox.js";
 export { InformationCircle } from "./icons/InformationCircle.js";
+export { Lock } from "./icons/Lock.js";
 export { Mail01 } from "./icons/Mail01.js";
 export { Remove01 } from "./icons/Remove01.js";
 export { Search01 } from "./icons/Search01.js";
+export { SearchRemove } from "./icons/SearchRemove.js";
 export { Star } from "./icons/Star.js";
 export { Tick02 } from "./icons/Tick02.js";
 export { User } from "./icons/User.js";
 export { View } from "./icons/View.js";
 export { ViewOff } from "./icons/ViewOff.js";
+export { Wrench01 } from "./icons/Wrench01.js";
 
 /** Every icon name in this package, as they are named in Figma. */
 export const iconNames = [
@@ -45,18 +51,24 @@ export const iconNames = [
   "cancel-01",
   "checkmark-circle-02",
   "clock-01",
+  "clock-02",
+  "cloud-server",
   "color-picker",
   "copy-01",
   "credit-card",
   "help-circle",
+  "inbox",
   "information-circle",
+  "lock",
   "mail-01",
   "remove-01",
   "search-01",
+  "search-remove",
   "star",
   "tick-02",
   "user",
   "view",
   "view-off",
+  "wrench-01",
 ] as const;
 export type IconName = (typeof iconNames)[number];
