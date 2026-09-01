@@ -17,6 +17,7 @@ export {
   Add01 as Plus,
   Cancel01 as Close,
   Search01 as Search,
+  CheckmarkCircle02 as CheckCircle,
   AlertCircle,
   HelpCircle,
   InformationCircle,

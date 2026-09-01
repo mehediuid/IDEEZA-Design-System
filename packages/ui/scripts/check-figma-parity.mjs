@@ -236,6 +236,41 @@ chk('tooltip arrow 10x6', has(tip,'width={10} height={6}'), '');
 chk('tooltip arrow is optional', has(tip,'arrow = true','arrow &&'), 'Figma splits arrow / no arrow into variants');
 chk('tooltip does not need tailwindcss-animate', !tip.includes('animate-in'), 'not a dependency');
 
+// ── Molecules — Feedback: M01 · M05 · M03 · M04 ─────────────────────
+const al = stripComments(read('Alert/Alert.tsx'));
+chk('alert sm r8 pad 12/14 gap 10', has(al,'gap-[10px] rounded-[8px] px-[14px] py-[12px]'), '');
+chk('alert md r12 pad 16/18 gap 12', has(al,'gap-[12px] rounded-[12px] px-[18px] py-[16px]'), '');
+chk('alert badge 18/20, glyph 12/14',
+  has(al,'badge: "size-[18px]", glyph: "size-[12px]"','badge: "size-[20px]", glyph: "size-[14px]"'), '');
+chk('alert badge is a filled circle, glyph white',
+  has(al,'rounded-full', 'text-icon-on-brand', 'info: "bg-icon-blue"'), 'not a tinted glyph on the surface');
+chk('alert surfaces are the subtle ramp',
+  has(al,'bg-bg-info-subtle border-border-blue','bg-bg-error-subtle border-border-error'), '');
+chk('alert title/description stay neutral',
+  has(al,'text-text-primary','text-text-secondary'), 'only surface, border, badge and action take the colour');
+chk('alert type ramp', has(al,'title: "text-body-sm-medium", body: "text-caption-md"','title: "text-body-md-medium", body: "text-body-sm"'), '');
+
+const inm = stripComments(read('InlineMessage/InlineMessage.tsx'));
+chk('inline message gap 4, Caption/MD', has(inm,'gap-[4px] text-caption-md'), '');
+chk('inline message glyph 14', has(inm,'size-[14px]'), '');
+chk('inline message severities incl helper',
+  has(inm,'helper: "text-text-secondary"','info: "text-icon-blue"','success: "text-text-success"',
+        'warning: "text-text-warning"','error: "text-text-error"'), '');
+
+const bnr = stripComments(read('Banner/Banner.tsx'));
+chk('banner r6 pad 8/8/8/12 gap 6', has(bnr,'gap-[6px] rounded-[6px] border py-[8px] pl-[12px] pr-[8px]'), '');
+chk('banner icon 24, content gap 4, actions gap 6',
+  has(bnr,'size-[24px]','gap-[4px]','items-center gap-[6px]'), '');
+chk('banner has the Neutral severity', has(bnr,'neutral: "bg-bg-subtle border-border"'), 'Alert has no equivalent');
+
+const snk = stripComments(read('Snackbar/Snackbar.tsx'));
+chk('snackbar r8 pad 6/6/6/8 gap 6', has(snk,'gap-[6px] rounded-[8px] bg-bg-inverse py-[6px] pl-[8px] pr-[6px]'), '');
+chk('snackbar surface is inverse in every severity',
+  has(snk,'bg-bg-inverse') && has(snk,'info: "", success: "", warning: "", error: ""'),
+  'colour lives in the badge and the action only');
+chk('snackbar badge 20, glyph 14', has(snk,'size-[20px]','size-[14px] text-icon-on-brand'), '');
+chk('snackbar message Body/SM Medium on text/inverse', has(snk,'text-body-sm-medium text-text-inverse'), '');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin

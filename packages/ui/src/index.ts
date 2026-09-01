@@ -35,4 +35,10 @@ export * from "./components/InlineCta/index.js";
 export * from "./components/AvatarGroup/index.js";
 export * from "./components/Tooltip/index.js";
 
+// Molecules — Feedback
+export * from "./components/Alert/index.js";
+export * from "./components/InlineMessage/index.js";
+export * from "./components/Banner/index.js";
+export * from "./components/Snackbar/index.js";
+
 export { cn } from "./lib/cn.js";
