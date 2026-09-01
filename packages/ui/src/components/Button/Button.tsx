@@ -42,7 +42,7 @@ export const buttonVariants = cva(
     // unbordered one. CSS border-box adds the border on top, so bordered
     // hierarchies subtract it back out through --bd.
     "[--bd:0px]",
-    "font-sans transition-[colors,box-shadow] duration-fast ease-standard",
+    "font-sans transition-[colors,box-shadow] duration-interaction ease-decelerate",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     // Figma: every hierarchy collapses to the same Disabled treatment —
     // disabled-bg + disabled-text, no border, no depth. Ghost and Outline

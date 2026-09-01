@@ -223,6 +223,10 @@
   /* ── Motion ─────────────────────────────────────────────────── */
   --motion-duration-instant: 0ms;
   --motion-duration-fast: 100ms;
+  /* Every interaction in the Figma file animates at 120ms with EASE_OUT —
+     7,194 of its 7,199 prototype reactions. It sits between fast and normal,
+     so it is its own step rather than a rounding of either. */
+  --motion-duration-interaction: 120ms;
   --motion-duration-normal: 200ms;
   --motion-duration-slow: 300ms;
   --motion-duration-slower: 500ms;

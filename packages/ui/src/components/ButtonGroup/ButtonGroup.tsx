@@ -20,7 +20,7 @@ export const buttonGroupSegmentVariants = cva(
   [
     "relative inline-flex flex-1 items-center justify-center gap-[6px] font-sans whitespace-nowrap",
     "bg-bg-surface text-text-primary",
-    "transition-colors duration-fast ease-standard",
+    "transition-colors duration-interaction ease-decelerate",
     "outline-none focus-visible:z-10 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     "hover:bg-bg-subtle",
     "aria-pressed:bg-bg-brand aria-pressed:text-text-on-brand aria-pressed:hover:bg-bg-brand",

@@ -77,7 +77,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             disabled={disabled}
             className={cn(
               "peer appearance-none border-solid border-[2px] bg-input-bg border-input-border",
-              "transition-[colors,box-shadow] duration-fast ease-standard outline-none",
+              "transition-[colors,box-shadow] duration-interaction ease-decelerate outline-none",
               "hover:border-input-border-hover",
               "checked:border-transparent checked:bg-bg-brand checked:hover:bg-bg-brand-hover",
               "indeterminate:border-transparent indeterminate:bg-bg-brand indeterminate:hover:bg-bg-brand-hover",

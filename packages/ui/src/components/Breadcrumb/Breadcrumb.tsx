@@ -37,7 +37,7 @@ export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
           <a
             href={item.href}
             onClick={item.onClick}
-            className="rounded-[2px] text-body-sm text-text-tertiary outline-none hover:text-text-primary hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
+            className="rounded-[2px] text-body-sm text-text-tertiary outline-none transition-colors duration-interaction ease-decelerate hover:text-text-primary hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
           >
             {item.label}
           </a>

@@ -76,7 +76,7 @@ export const iconClass: Record<FieldSize, string> = {
 export const controlChrome = [
   "flex w-full items-center bg-input-bg text-input-text",
   "border-solid border-[1.5px] border-input-border",
-  "transition-[colors,box-shadow] duration-fast ease-standard",
+  "transition-[colors,box-shadow] duration-interaction ease-decelerate",
   "hover:border-input-border-hover",
   "outline-none",
   "focus-within:border-input-border-focus",

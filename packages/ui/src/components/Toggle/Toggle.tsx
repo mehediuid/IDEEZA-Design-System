@@ -27,7 +27,7 @@ import { cn } from "../../lib/cn";
 const trackVariants = cva(
   [
     "group relative inline-flex shrink-0 cursor-pointer rounded-full align-middle",
-    "transition-colors duration-fast ease-standard",
+    "transition-colors duration-interaction ease-decelerate",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     "bg-input-border hover:bg-input-border-hover",
     "data-[state=checked]:bg-bg-brand data-[state=checked]:hover:bg-bg-brand-hover",
@@ -50,7 +50,7 @@ const trackVariants = cva(
 const thumbVariants = cva(
   [
     "pointer-events-none absolute top-[2px] block rounded-full bg-bg-surface shadow-1",
-    "transition-[left] duration-fast ease-standard",
+    "transition-[left] duration-interaction ease-decelerate",
   ],
   {
     variants: {

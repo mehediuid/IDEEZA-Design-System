@@ -78,7 +78,7 @@ export const Snackbar = React.forwardRef<HTMLDivElement, SnackbarProps>(
             onClick={onActionClick}
             className={cn(
               "shrink-0 rounded-[4px] px-[4px] text-body-sm-medium outline-none",
-              "hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+              "transition-colors duration-interaction ease-decelerate hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
               accent[severity]
             )}
           >
@@ -91,7 +91,7 @@ export const Snackbar = React.forwardRef<HTMLDivElement, SnackbarProps>(
             type="button"
             onClick={onDismiss}
             aria-label="Dismiss"
-            className="inline-flex size-[20px] shrink-0 items-center justify-center rounded-[4px] text-text-inverse outline-none hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
+            className="inline-flex size-[20px] shrink-0 items-center justify-center rounded-[4px] text-text-inverse outline-none transition-opacity duration-interaction ease-decelerate hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
           >
             <Close className="size-[14px]" aria-hidden="true" />
           </button>

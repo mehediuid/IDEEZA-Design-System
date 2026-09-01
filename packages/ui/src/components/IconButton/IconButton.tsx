@@ -24,7 +24,7 @@ export const iconButtonVariants = cva(
   [
     "inline-flex items-center justify-center shrink-0 select-none",
     "[--bd:0px]",
-    "transition-[colors,box-shadow] duration-fast ease-standard",
+    "transition-[colors,box-shadow] duration-interaction ease-decelerate",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
     "disabled:pointer-events-none disabled:shadow-none",
     "disabled:bg-button-disabled-bg disabled:text-button-disabled-text disabled:border-transparent",

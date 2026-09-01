@@ -59,7 +59,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             disabled={disabled}
             className={cn(
               "peer appearance-none rounded-full border-solid border-[2px] bg-input-bg border-input-border",
-              "transition-[colors,box-shadow] duration-fast ease-standard outline-none",
+              "transition-[colors,box-shadow] duration-interaction ease-decelerate outline-none",
               "hover:border-input-border-hover",
               "checked:border-bg-brand checked:hover:border-bg-brand-hover",
               "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
@@ -73,7 +73,7 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             aria-hidden="true"
             className={cn(
               "pointer-events-none absolute inset-0 m-auto rounded-full bg-bg-brand",
-              "transition-colors duration-fast ease-standard",
+              "transition-colors duration-interaction ease-decelerate",
               "opacity-0 peer-checked:opacity-100",
               // Figma tracks the ring: Selected=On, State=Hover puts the dot on
               // bg/brand-hover too, and Disabled drops it to input/bg-disabled

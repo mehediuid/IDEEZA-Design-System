@@ -22,10 +22,10 @@ import { cn } from "../../lib/cn";
 export const inlineCtaVariants = cva(
   [
     "inline-flex items-center gap-[6px] font-sans cursor-pointer",
-    "transition-colors duration-fast ease-standard",
+    "transition-colors duration-interaction ease-decelerate",
     "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]",
     "aria-disabled:pointer-events-none aria-disabled:text-text-disabled",
-    "[&>svg]:transition-transform [&>svg]:duration-fast",
+    "[&>svg]:transition-transform [&>svg]:duration-interaction ease-decelerate",
   ],
   {
     variants: {

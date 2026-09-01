@@ -38,6 +38,7 @@ const controlPad: Record<FieldSize, string> = {
 
 const stepBtn =
   "inline-flex size-[32px] shrink-0 items-center justify-center rounded-[6px] text-icon outline-none " +
+  "transition-colors duration-interaction ease-decelerate " +
   "hover:bg-bg-subtle active:bg-bg-surface-raised disabled:pointer-events-none disabled:text-text-disabled " +
   "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]";
 
@@ -132,10 +133,10 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             </span>
           ) : (
             <span className="flex size-[32px] shrink-0 flex-col items-center justify-center rounded-[6px]">
-              <button type="button" className="flex h-[16px] w-[32px] items-center justify-center rounded-t-[6px] text-icon outline-none hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] disabled:text-text-disabled" onClick={() => nudge(1)} disabled={disabled} aria-label="Increase">
+              <button type="button" className="flex h-[16px] w-[32px] items-center justify-center rounded-t-[6px] text-icon outline-none transition-colors duration-interaction ease-decelerate hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] disabled:text-text-disabled" onClick={() => nudge(1)} disabled={disabled} aria-label="Increase">
                 <ChevronUp className="size-[16px]" aria-hidden="true" />
               </button>
-              <button type="button" className="flex h-[16px] w-[32px] items-center justify-center rounded-b-[6px] text-icon outline-none hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] disabled:text-text-disabled" onClick={() => nudge(-1)} disabled={disabled} aria-label="Decrease">
+              <button type="button" className="flex h-[16px] w-[32px] items-center justify-center rounded-b-[6px] text-icon outline-none transition-colors duration-interaction ease-decelerate hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] disabled:text-text-disabled" onClick={() => nudge(-1)} disabled={disabled} aria-label="Decrease">
                 <ChevronDown className="size-[16px]" aria-hidden="true" />
               </button>
             </span>

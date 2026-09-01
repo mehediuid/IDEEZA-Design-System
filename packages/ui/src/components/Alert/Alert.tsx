@@ -93,7 +93,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
               type="button"
               onClick={onActionClick}
               className={cn(
-                "w-fit text-left outline-none hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]",
+                "w-fit text-left outline-none transition-colors duration-interaction ease-decelerate hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]",
                 s.title,
                 accent[severity]
               )}
@@ -110,7 +110,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
             aria-label="Dismiss"
             className={cn(
               "inline-flex shrink-0 items-center justify-center rounded-[4px] text-icon outline-none",
-              "hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+              "transition-colors duration-interaction ease-decelerate hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
               s.dismiss
             )}
           >

@@ -63,7 +63,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
             aria-hidden="true"
             className={cn(
               "pointer-events-none absolute bottom-[calc(100%+6px)] -translate-x-1/2 rounded-full bg-bg-inverse px-[8px] py-[3px] text-caption-sm text-text-inverse",
-              "opacity-0 transition-opacity duration-fast group-hover:opacity-100 group-focus-within:opacity-100"
+              "opacity-0 transition-opacity duration-interaction ease-decelerate group-hover:opacity-100 group-focus-within:opacity-100"
             )}
             style={{ left: `${pct}%` }}
           >

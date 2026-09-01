@@ -58,7 +58,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
     const base = cn(
       "inline-flex items-center justify-center font-sans outline-none",
-      "transition-colors duration-fast ease-standard",
+      "transition-colors duration-interaction ease-decelerate",
       "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
       "disabled:pointer-events-none disabled:text-text-disabled",
       cell[size]

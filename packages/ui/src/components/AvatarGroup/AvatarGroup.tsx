@@ -72,7 +72,7 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
             className={cn(
               "inline-flex shrink-0 items-center justify-center rounded-full",
               "border border-dashed border-border-strong bg-bg-surface text-icon",
-              "outline-none hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+              "outline-none transition-colors duration-interaction ease-decelerate hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
               chipType[size]
             )}
           >

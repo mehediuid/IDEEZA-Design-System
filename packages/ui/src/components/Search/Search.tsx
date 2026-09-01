@@ -94,7 +94,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
               type="button"
               onClick={onClear}
               aria-label="Clear search"
-              className={cn("shrink-0 rounded-full text-icon outline-none hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]", iconClass[size])}
+              className={cn("shrink-0 rounded-full text-icon outline-none transition-colors duration-interaction ease-decelerate hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]", iconClass[size])}
             >
               <Close className="size-full" aria-hidden="true" />
             </button>

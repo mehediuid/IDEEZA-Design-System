@@ -105,7 +105,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
           onClick={onDismiss}
           aria-label="Remove"
           className={cn(
-            "-mr-[2px] inline-flex shrink-0 items-center justify-center rounded-full outline-none hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+            "-mr-[2px] inline-flex shrink-0 items-center justify-center rounded-full outline-none transition-opacity duration-interaction ease-decelerate hover:opacity-70 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
             closeSize[size ?? "md"]
           )}
         >

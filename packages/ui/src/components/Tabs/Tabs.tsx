@@ -140,7 +140,7 @@ export const Tab = React.forwardRef<HTMLButtonElement, TabProps>(
         }}
         className={cn(
           "inline-flex items-center justify-center gap-[6px] whitespace-nowrap font-sans",
-          "outline-none transition-colors duration-fast ease-standard",
+          "outline-none transition-colors duration-interaction ease-decelerate",
           "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
           "disabled:pointer-events-none",
           item[style][ctx.size],

@@ -33,7 +33,7 @@ export const avatarVariants = cva(
         image: "bg-bg-surface-raised",
       },
       interactive: {
-        true: "cursor-pointer outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+        true: "cursor-pointer outline-none transition-[colors,box-shadow] duration-interaction ease-decelerate focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
         false: "",
       },
     },
@@ -129,7 +129,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
             avatarVariants({ size, tone, interactive: Boolean(onClick) && !disabled }),
             ringClass[key],
             // `Hover overlay` — text/primary at 8% over the fill.
-            onClick && !disabled && "after:absolute after:inset-0 after:bg-text-primary after:opacity-0 hover:after:opacity-[0.08]",
+            onClick && !disabled && "after:absolute after:inset-0 after:bg-text-primary after:opacity-0 after:transition-opacity after:duration-interaction after:ease-decelerate hover:after:opacity-[0.08]",
             disabled && "pointer-events-none opacity-50",
             className
           )}

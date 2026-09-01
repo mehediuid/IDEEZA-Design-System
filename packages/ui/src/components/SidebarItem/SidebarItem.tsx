@@ -63,7 +63,7 @@ export const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
               {trailing}
               {hasChildren && (
                 <ChevronDown
-                  className={cn("size-[16px] text-icon transition-transform duration-fast", open && "rotate-180")}
+                  className={cn("size-[16px] text-icon transition-transform duration-interaction ease-decelerate", open && "rotate-180")}
                   aria-hidden="true"
                 />
               )}
@@ -87,7 +87,7 @@ export const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
                     // 40px of left padding is the indent that lines the label
                     // up under the parent's, past its 20px icon.
                     "flex h-[36px] w-full items-center rounded-[6px] pl-[40px] pr-[12px] text-left",
-                    "text-body-sm-medium outline-none transition-colors duration-fast",
+                    "text-body-sm-medium outline-none transition-colors duration-interaction ease-decelerate",
                     "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
                     sub.disabled
                       ? "pointer-events-none text-text-disabled"

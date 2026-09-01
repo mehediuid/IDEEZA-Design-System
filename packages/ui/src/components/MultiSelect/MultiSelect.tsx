@@ -159,7 +159,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
               )}
             </span>
             <ChevronDown
-              className={cn(iconClass[size], "shrink-0 text-icon transition-transform", open && "rotate-180")}
+              className={cn(iconClass[size], "shrink-0 text-icon transition-transform duration-interaction ease-decelerate", open && "rotate-180")}
               aria-hidden="true"
             />
           </div>

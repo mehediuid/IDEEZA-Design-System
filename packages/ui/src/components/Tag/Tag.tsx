@@ -16,7 +16,7 @@ import { cn } from "../../lib/cn";
  * carries a border in every state and has no colour prop.
  */
 export const tagVariants = cva(
-  "inline-flex items-center rounded-full border font-sans whitespace-nowrap align-middle transition-colors duration-fast",
+  "inline-flex items-center rounded-full border font-sans whitespace-nowrap align-middle transition-colors duration-interaction ease-decelerate",
   {
     variants: {
       // The leading icon is 16px at every size; only the X close shrinks to 12

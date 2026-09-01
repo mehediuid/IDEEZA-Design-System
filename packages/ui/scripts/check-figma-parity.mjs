@@ -387,6 +387,46 @@ chk('dropdown row is the shared NavItem', has(ddm,'<NavItem ref={ref} role="menu
 chk('dropdown panel matches the overlay chrome',
   has(ddm,'rounded-[12px] border border-border bg-bg-surface p-[4px] shadow-3'), 'same as the MultiSelect list');
 
+// ── Motion ──────────────────────────────────────────────────────────
+// Figma carries 7,199 prototype reactions and 7,194 of them are the same
+// spec: SMART_ANIMATE, EASE_OUT, 120ms. EASE_OUT is the decelerate curve, and
+// 120 sits between fast and normal, so it is its own token rather than a
+// rounding. These checks keep interactions on that spec.
+const tokensCss = fs.readFileSync(new URL('../../tokens/css/tokens.css', import.meta.url).pathname, 'utf8');
+chk('motion scale carries the 120ms interaction step',
+  /--motion-duration-interaction:\s*120ms/.test(tokensCss), 'the value 7,194 reactions use');
+chk('preset exposes duration-interaction',
+  /interaction:\s*"var\(--motion-duration-interaction\)"/.test(preset), '');
+
+const uiFiles = srcFiles.map((f) => [f.split('/src/')[1], stripComments(fs.readFileSync(f, 'utf8'))]);
+// An interaction must not animate on the standard curve — Figma says ease-out.
+const wrongEasing = uiFiles.filter(([, t]) => /duration-interaction ease-standard/.test(t));
+chk('interactions use ease-decelerate', wrongEasing.length === 0,
+  wrongEasing.length ? wrongEasing.map(([n]) => n).join(', ') : 'EASE_OUT, not the standard curve');
+
+// Every transition must name a motion token; a bare or arbitrary duration is
+// how a scale stops being one.
+const rawDuration = uiFiles.filter(([, t]) => /duration-\[\d/.test(t));
+chk('no arbitrary durations', rawDuration.length === 0,
+  rawDuration.length ? rawDuration.map(([n]) => n).join(', ') : 'every duration is a token');
+
+const bareTransition = uiFiles.filter(([, t]) =>
+  /transition(-\[[a-z,\-]+\]|-colors|-opacity|-transform|-shadow)?(?![a-z-])/.test(t) &&
+  !/duration-(instant|fast|interaction|normal|slow|slower)/.test(t));
+chk('every transition carries a duration token', bareTransition.length === 0,
+  bareTransition.length ? bareTransition.map(([n]) => n).join(', ') : '');
+
+// Anything with a hover or focus treatment should animate it.
+const unanimated = uiFiles.filter(([, t]) =>
+  /hover:|focus-visible:|aria-pressed:|checked:|data-\[state=/.test(t) && !/transition/.test(t));
+chk('interactive components all animate', unanimated.length === 0,
+  unanimated.length ? unanimated.map(([n]) => n).join(', ') : `${uiFiles.length} files checked`);
+
+const resetCss = fs.readFileSync(new URL('../../tokens/css/reset.css', import.meta.url).pathname, 'utf8');
+chk('reduced motion is honoured',
+  /prefers-reduced-motion:\s*reduce/.test(resetCss) && /transition-duration:[^;]*!important/.test(resetCss),
+  'motion can trigger nausea and migraine — the OS request is explicit');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin

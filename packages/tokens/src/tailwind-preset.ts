@@ -153,6 +153,7 @@ export const ideezaPreset = {
       transitionDuration: {
         instant: "var(--motion-duration-instant)",
         fast: "var(--motion-duration-fast)",
+        interaction: "var(--motion-duration-interaction)",
         normal: "var(--motion-duration-normal)",
         slow: "var(--motion-duration-slow)",
         slower: "var(--motion-duration-slower)",

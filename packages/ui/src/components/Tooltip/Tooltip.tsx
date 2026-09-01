@@ -66,7 +66,7 @@ export const Tooltip = ({
           "text-body-xs-medium text-text-inverse shadow-3",
           // Plain data-state transitions rather than tailwindcss-animate — the
           // package is not a dependency and one tooltip does not justify it.
-          "transition-opacity duration-fast ease-standard",
+          "transition-opacity duration-interaction ease-decelerate",
           "data-[state=delayed-open]:opacity-100 data-[state=instant-open]:opacity-100 data-[state=closed]:opacity-0",
           className
         )}
