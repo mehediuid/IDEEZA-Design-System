@@ -112,6 +112,17 @@ pnpm typecheck
 pnpm test
 ```
 
+### When a style change does not show up
+
+Tailwind generates only the classes it finds in the files named by `content`.
+A brand-new class — the first use of `hover:scale-[1.02]`, say — means a new
+rule, and the running dev server keeps the stylesheet it already compiled;
+touching the CSS entry does not dislodge it. Editing a value in a class that
+already exists is picked up fine. So if a change is in the source and on the
+element but nothing moves on screen, restart Storybook before looking for a
+bug — `Ctrl + C`, then `RUN-KORO.command` again, which also clears the Vite
+cache and prints whether the motion rules made it into the build.
+
 ### Double-click runners (macOS)
 
 Two `.command` scripts sit at the repo root so they are the first thing you see when you open the folder — double-click either one, no terminal needed.
