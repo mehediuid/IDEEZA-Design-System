@@ -1,0 +1,81 @@
+/**
+ * Does the CSS that actually ships contain the classes the components ask for?
+ *
+ * check-figma-parity.mjs reads the component source. That is necessary and it
+ * is not sufficient: the motion recipes moved into `lib/motion.ts`, the
+ * Tailwind `content` glob only matched `.tsx`, and so every motion class was
+ * silently dropped from the build. Source was right, CSS was empty, parity
+ * passed, and nothing on the page moved.
+ *
+ * So this compiles the real stylesheet with the real config and greps the
+ * output. A class that no rule defines is a class that does nothing.
+ *
+ *   node apps/storybook/scripts/check-css.mjs
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import postcss from 'postcss';
+import tailwindcss from 'tailwindcss';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const app = path.join(here, '..');
+
+const input = fs.readFileSync(path.join(app, '.storybook/tailwind.css'), 'utf8');
+const { default: config } = await import(path.join(app, 'tailwind.config.ts'));
+
+// Tailwind resolves `content` globs relative to cwd, not to the config file.
+process.chdir(app);
+const { css } = await postcss([tailwindcss(config)]).process(input, { from: undefined });
+
+/**
+ * Tailwind escapes a comma in an arbitrary value as the CSS escape `\2c `.
+ * Whitespace is squashed on both sides so the same check works against the
+ * minified build and the readable one — the previous version only matched
+ * minified output and reported false failures on the other.
+ */
+const squash = (s) => s.replace(/\s+/g, '');
+const cls = (name) => squash('.' + name.replace(/([:[\]().%#])/g, '\\$1').replace(/,/g, '\\2c '));
+const flat = squash(css);
+
+const REQUIRED = {
+  'the press transition': 'transition-[color,background-color,border-color,box-shadow,transform]',
+  'the state transition': 'transition-[color,background-color,border-color,box-shadow]',
+  'the tab indicator transition': 'transition-[left,top,width,height]',
+  'press scale': 'active:scale-[0.97]',
+  'instant press': 'active:duration-instant',
+  'hover lift': 'hover:-translate-y-px',
+  'lift shadow': 'hover:shadow-2',
+  'lift release': 'active:translate-y-0',
+  'the 120ms step': 'duration-interaction',
+  'the spring easing': 'ease-spring',
+  'the decelerate easing': 'ease-decelerate',
+};
+
+let bad = 0;
+for (const [label, name] of Object.entries(REQUIRED)) {
+  const ok = flat.includes(cls(name));
+  if (!ok) bad++;
+  console.log(`${ok ? '✅' : '❌'} ${label.padEnd(30)} ${name}`);
+}
+
+// A transform utility that never emits `transform:` sets two custom properties
+// and moves nothing. Tailwind groups the declaration across selectors, so the
+// check is that the class appears somewhere in a rule that has it.
+const transformRules = flat.match(/[^{}]*\{[^{}]*transform:translate\(var\(--tw-translate-x\)[^{}]*\}/g) || [];
+const moves = (name) => transformRules.some((r) => r.split('{')[0].includes(cls(name)));
+for (const name of ['active:scale-[0.97]', 'hover:-translate-y-px', 'active:translate-y-0']) {
+  const ok = moves(name);
+  if (!ok) bad++;
+  console.log(`${ok ? '✅' : '❌'} ${'…and actually transforms'.padEnd(30)} ${name}`);
+}
+
+// `.transition-[…]` carries Tailwind's default 150ms. The duration token only
+// wins if its rule comes later in the sheet.
+const at = (name) => flat.indexOf(cls(name) + '{');
+const ordered = at('duration-interaction') > at('transition-[color,background-color,border-color,box-shadow,transform]');
+if (!ordered) bad++;
+console.log(`${ordered ? '✅' : '❌'} ${'duration overrides the default'.padEnd(30)} duration-interaction comes after transition-property`);
+
+console.log(bad ? `\n❌ ${bad} class${bad > 1 ? 'es' : ''} the components use but the CSS does not define` : '\n✅ every motion class the components use exists in the built CSS');
+process.exit(bad ? 1 : 0);
