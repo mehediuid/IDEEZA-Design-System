@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ideeza/icons": "workspace:*",
     "@ideeza/tokens": "workspace:*",
     "@ideeza/ui": "workspace:*",
     "react": "^18.3.1",

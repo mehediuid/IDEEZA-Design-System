@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { Tabs, Tab, Breadcrumb, Pagination } from "@ideeza/ui";
+import { Tabs, Tab, Breadcrumb, Pagination, SidebarItem, DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel, Badge, Kbd, Dot } from "@ideeza/ui";
+import { Search01, User, Star, Calendar01, Mail01 } from "@ideeza/icons";
 
 /** M14, M19 and M20 — the first half of Molecules — Navigation. */
 const meta = { title: "Molecules/Navigation" } satisfies Meta;
@@ -106,4 +107,59 @@ export const Paginations: Story = {
       </div>
     );
   },
+};
+
+export const SidebarItems: Story = {
+  name: "M16 Sidebar Item",
+  render: () => {
+    const [active, setActive] = React.useState("overview");
+    return (
+      <div className="flex w-[280px] flex-col gap-[2px] rounded-lg border border-border-subtle p-[8px]">
+        <SidebarItem
+          leading={<Star />}
+          label="Overview"
+          selected={active === "overview"}
+          onClick={() => setActive("overview")}
+        />
+        <SidebarItem
+          leading={<Calendar01 />}
+          label="Projects"
+          defaultExpanded
+          items={[
+            { label: "All projects", selected: true },
+            { label: "Shared with me" },
+            { label: "Archived", disabled: true },
+          ]}
+        />
+        <SidebarItem leading={<Mail01 />} label="Inbox" trailing={<Badge size="sm" color="brand">12</Badge>} />
+        <SidebarItem leading={<User />} label="Disabled" disabled />
+      </div>
+    );
+  },
+};
+
+export const DropdownMenus: Story = {
+  name: "M18 Dropdown Menu",
+  render: () => (
+    <div className="flex items-start gap-[24px]">
+      <DropdownMenu>
+        <DropdownMenuLabel>Account</DropdownMenuLabel>
+        <DropdownMenuItem leading={<User />} label="Profile" trailing={<Kbd size="sm">⌘P</Kbd>} />
+        <DropdownMenuItem leading={<Search01 />} label="Search" trailing={<Kbd size="sm">⌘K</Kbd>} />
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          leading={<Star />}
+          label="Starred"
+          description="Items you follow"
+          selected
+        />
+        <DropdownMenuItem
+          dot={<Dot size="sm" color="success" />}
+          label="Status"
+          description="All systems operational"
+        />
+        <DropdownMenuItem label="Disabled item" disabled />
+      </DropdownMenu>
+    </div>
+  ),
 };

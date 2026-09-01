@@ -360,6 +360,33 @@ chk('pagination gap 4 / 6', has(pgn,'sm: "gap-[4px]", md: "gap-[6px]"'), '');
 chk('pagination current on brand-subtle', has(pgn,'bg-bg-brand-subtle text-text-brand'), 'others transparent');
 chk('pagination truncates like Figma', has(pgn,'paginationRange'), '1 2 3 … 8 9 10');
 
+// ── M18 Dropdown Menu row · M16 Sidebar Item ────────────────────────
+const nvi = stripComments(read('NavItem/NavItem.tsx'));
+chk('nav item row 40 r6 gap 10 pad 12',
+  has(nvi,'h-[40px] w-full items-center gap-[10px] rounded-[6px] px-[12px]'), 'shared by M18 and M16');
+chk('nav item slots dot/leading/content/trailing',
+  has(nvi,'size-[8px]','size-[20px]','gap-[2px]','items-center gap-[8px]'), '');
+chk('nav item states none/subtle/brand-subtle',
+  has(nvi,'bg-bg-brand-subtle','hover:bg-bg-subtle'), '');
+chk('nav item selected shifts the description too',
+  has(nvi,'const tone = disabled ? "text-text-disabled" : selected ? "text-text-brand" : undefined',
+        'tone ?? "text-text-secondary"'), 'not just the label');
+chk('nav item label Body/SM Medium, description Caption/MD',
+  has(nvi,'text-body-sm-medium','text-caption-md'), '');
+
+const sbi = stripComments(read('SidebarItem/SidebarItem.tsx'));
+chk('sidebar item reuses the shared row', has(sbi,'import { NavItem','<NavItem'), 'M16 instances M18 in Figma');
+chk('sidebar sub-items 36 r6, stack gap 2', has(sbi,'h-[36px]','rounded-[6px]','gap-[2px]'), '');
+chk('sidebar sub-item indent 40', has(sbi,'pl-[40px] pr-[12px]'), 'lines the label up past the parent icon');
+chk('sidebar sub-item states match the parent',
+  has(sbi,'bg-bg-brand-subtle text-text-brand','hover:bg-bg-subtle','text-text-disabled'), '');
+chk('sidebar chevron rotates when open', has(sbi,'open && "rotate-180"'), '');
+
+const ddm = stripComments(read('DropdownMenu/DropdownMenu.tsx'));
+chk('dropdown row is the shared NavItem', has(ddm,'<NavItem ref={ref} role="menuitem"'), 'M18 is the row, not the panel');
+chk('dropdown panel matches the overlay chrome',
+  has(ddm,'rounded-[12px] border border-border bg-bg-surface p-[4px] shadow-3'), 'same as the MultiSelect list');
+
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
 // anything Preflight normalises has to be here too. The radio's UA margin

@@ -52,5 +52,8 @@ export * from "./components/SkeletonLayout/index.js";
 export * from "./components/Tabs/index.js";
 export * from "./components/Breadcrumb/index.js";
 export * from "./components/Pagination/index.js";
+export * from "./components/NavItem/index.js";
+export * from "./components/SidebarItem/index.js";
+export * from "./components/DropdownMenu/index.js";
 
 export { cn } from "./lib/cn.js";
