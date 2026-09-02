@@ -10,7 +10,7 @@
  * to debug from the outside.
  *
  * So we run Tailwind here, over our own built output, and ship the result.
- * `import "ideeza-design-system/styles.css"` and the components work — no
+ * `import "ideeza-ds/styles.css"` and the components work — no
  * Tailwind, no config, no content globs.
  *
  * The scan target is `dist/index.js`, the bundle, not `src`. What matters is

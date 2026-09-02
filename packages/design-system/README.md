@@ -7,12 +7,12 @@ rather than eyeballed, and a parity check in the repo fails if a component
 drifts from it.
 
 ```bash
-npm install ideeza-design-system
+npm install ideeza-ds
 ```
 
 ```jsx
-import { Button, Input } from "ideeza-design-system";
-import "ideeza-design-system/styles.css";
+import { Button, Input } from "ideeza-ds";
+import "ideeza-ds/styles.css";
 
 export default function App() {
   return (
@@ -52,7 +52,7 @@ Icon names are namespaced, because a few of them (`Link`, `Menu`) would
 otherwise collide with component names:
 
 ```jsx
-import { Icons } from "ideeza-design-system";
+import { Icons } from "ideeza-ds";
 
 <Icons.Add01 />
 <Icons.Search01 className="size-[20px]" />
@@ -76,7 +76,7 @@ the components. The components themselves need none of this.
 
 ```js
 // tailwind.config.js
-import preset from "ideeza-design-system/tailwind-preset";
+import preset from "ideeza-ds/tailwind-preset";
 
 export default {
   presets: [preset],
@@ -85,12 +85,12 @@ export default {
 ```
 
 If you go this route, note that this package's `styles.css` already includes a
-reset and the token variables — so import `ideeza-design-system/tokens.css`
+reset and the token variables — so import `ideeza-ds/tokens.css`
 alone if you would rather bring your own reset:
 
 ```css
-@import "ideeza-design-system/reset.css";   /* optional */
-@import "ideeza-design-system/tokens.css";  /* the variables */
+@import "ideeza-ds/reset.css";   /* optional */
+@import "ideeza-ds/tokens.css";  /* the variables */
 ```
 
 One caveat worth stating plainly, because it costs hours when it bites:

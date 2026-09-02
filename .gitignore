@@ -48,3 +48,8 @@ ideeza-color-changes.pdf
 
 # Local, per-machine agent settings — not shared state.
 .claude/settings.local.json
+
+# This is a pnpm workspace. An npm lockfile here means someone ran `npm` in
+# the repo root by accident, and leaving it invites the two package managers
+# to disagree about what is installed.
+package-lock.json

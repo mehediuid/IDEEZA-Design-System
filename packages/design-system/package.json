@@ -1,18 +1,31 @@
 {
-  "name": "ideeza-design-system",
+  "name": "ideeza-ds",
   "version": "0.1.0",
-  "description": "The IDEEZA design system — React components, design tokens and icons, built from the Figma library.",
-  "keywords": ["design-system", "react", "components", "ui", "design-tokens", "tailwind", "ideeza", "accessibility"],
+  "description": "The IDEEZA design system \u2014 React components, design tokens and icons, built from the Figma library.",
+  "keywords": [
+    "design-system",
+    "react",
+    "components",
+    "ui",
+    "design-tokens",
+    "tailwind",
+    "ideeza",
+    "accessibility"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/mehediuid/IDEEZA-Design-System#readme",
-  "bugs": { "url": "https://github.com/mehediuid/IDEEZA-Design-System/issues" },
+  "bugs": {
+    "url": "https://github.com/mehediuid/IDEEZA-Design-System/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mehediuid/IDEEZA-Design-System.git",
     "directory": "packages/design-system"
   },
   "type": "module",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,16 +45,27 @@
     },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "README.md", "LICENSE"],
-  "publishConfig": { "access": "public" },
-  "engines": { "node": ">=18" },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsup && node scripts/build-css.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/check-package.mjs",
     "clean": "rm -rf dist"
   },
-  "peerDependencies": { "react": ">=18", "react-dom": ">=18" },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",

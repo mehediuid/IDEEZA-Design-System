@@ -7,8 +7,8 @@
  * get it wrong. So this one bundles all three, and nothing here re-exports a
  * dependency a consumer would also have to add.
  *
- *   import { Button, Input, Add01 } from "ideeza-design-system";
- *   import "ideeza-design-system/styles.css";
+ *   import { Button, Input, Add01 } from "ideeza-ds";
+ *   import "ideeza-ds/styles.css";
  *
  * Icons are namespaced under `Icons` as well as exported flat, because a few
  * icon names (Link, Menu) collide with component names.

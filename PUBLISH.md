@@ -1,6 +1,6 @@
 # npm-e publish korar guide
 
-Package-er naam: **`ideeza-design-system`**
+Package-er naam: **`ideeza-ds`**
 
 Eta scoped noy (`@ideeza/` nei), tai kono org-e membership lagbe na — je kono
 npm account holei cholbe.
@@ -58,7 +58,7 @@ Ki bhul dhora porlo seta lekha thakbe.
 Sesh-e emon ekta line ashbe:
 
 ```
-ideeza-design-system-0.1.0.tgz
+ideeza-ds-0.1.0.tgz
 ```
 
 Ei file-ta `packages/design-system/` folder-e toiri hoyeche.
@@ -66,7 +66,7 @@ Ei file-ta `packages/design-system/` folder-e toiri hoyeche.
 ### 5. Ki publish hocche ekbar dekhe nao
 
 ```bash
-tar tzf packages/design-system/ideeza-design-system-0.1.0.tgz
+tar tzf packages/design-system/ideeza-ds-0.1.0.tgz
 ```
 
 20-ta file-er ekta list ashbe — `dist/`, `README.md`, `LICENSE`, `package.json`.
@@ -77,7 +77,7 @@ thamo, amake bolo.
 ### 6. Publish
 
 ```bash
-npm publish packages/design-system/ideeza-design-system-0.1.0.tgz
+npm publish packages/design-system/ideeza-ds-0.1.0.tgz
 ```
 
 Phone-e ekta code chaite pare (2FA) — dile hoye jabe.
@@ -85,10 +85,10 @@ Phone-e ekta code chaite pare (2FA) — dile hoye jabe.
 ### 7. Sotti giyeche kina dekho
 
 ```bash
-npm view ideeza-design-system
+npm view ideeza-ds
 ```
 
-Ba browser-e: <https://www.npmjs.com/package/ideeza-design-system>
+Ba browser-e: <https://www.npmjs.com/package/ideeza-ds>
 
 ---
 
@@ -97,12 +97,12 @@ Ba browser-e: <https://www.npmjs.com/package/ideeza-design-system>
 Je keu ekhon eta install korte parbe:
 
 ```bash
-npm install ideeza-design-system
+npm install ideeza-ds
 ```
 
 ```jsx
-import { Button } from "ideeza-design-system";
-import "ideeza-design-system/styles.css";
+import { Button } from "ideeza-ds";
+import "ideeza-ds/styles.css";
 ```
 
 ---

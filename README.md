@@ -119,12 +119,12 @@ because that split is useful while building. It is not useful to install, so
 one package ships to npm with all three bundled in:
 
 ```bash
-npm install ideeza-design-system
+npm install ideeza-ds
 ```
 
 ```jsx
-import { Button } from "ideeza-design-system";
-import "ideeza-design-system/styles.css";
+import { Button } from "ideeza-ds";
+import "ideeza-ds/styles.css";
 ```
 
 No Tailwind required — `styles.css` is prebuilt from the components' own
