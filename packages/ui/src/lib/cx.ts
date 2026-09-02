@@ -7,8 +7,8 @@
  * tailwind-merge plus a hand-maintained list of our custom font sizes. It got
  * that wrong once and dropped the label colour off every button.
  *
- * Component classes do not collide. `.ideeza-button--primary` and
- * `.ideeza-button--lg` set different properties, and where they set the same
+ * Component classes do not collide. `.ids-button--primary` and
+ * `.ids-button--lg` set different properties, and where they set the same
  * one the cascade already has an answer. So there is nothing to merge, and
  * this is nine lines instead of a dependency.
  */

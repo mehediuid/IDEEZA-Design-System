@@ -19,7 +19,7 @@ import oldCss from "./old/styles.css?raw";
  *
  * The two stylesheets can share a page: the token variables are identical in
  * both, and the class names do not overlap — the old build uses Tailwind
- * utilities, the new one `.ideeza-button`.
+ * utilities, the new one `.ids-button`.
  */
 const meta: Meta = { title: "_Migration/Button diff", parameters: { layout: "padded" } };
 export default meta;

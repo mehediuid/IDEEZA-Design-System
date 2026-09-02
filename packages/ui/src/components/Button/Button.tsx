@@ -52,17 +52,17 @@ export function buttonVariants(
   const variant = props.variant ?? "primary";
   const size = props.size ?? "lg";
   return cx(
-    "ideeza-button",
-    `ideeza-button--${variant}`,
-    `ideeza-button--${size}`,
-    RAISED.includes(variant) ? "ideeza-button--raised" : "ideeza-button--flat",
+    "ids-button",
+    `ids-button--${variant}`,
+    `ids-button--${size}`,
+    RAISED.includes(variant) ? "ids-button--raised" : "ids-button--flat",
     props.className
   );
 }
 
 function Spinner() {
   return (
-    <svg className="ideeza-button__spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg className="ids-button__spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.25" strokeWidth="4" />
       <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
     </svg>
@@ -97,7 +97,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={buttonVariants({
           variant,
           size,
-          className: cx(loading && "ideeza-button--loading", className),
+          className: cx(loading && "ids-button--loading", className),
         })}
         disabled={disabled || undefined}
         aria-busy={loading || undefined}
