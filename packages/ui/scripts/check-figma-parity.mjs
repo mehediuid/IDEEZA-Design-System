@@ -14,6 +14,9 @@ let bad=0;
 // These checks assert on class strings; the notes in each file mention the very
 // things they rule out, so comments are stripped before matching.
 const stripComments = (t) => t.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+// Components that have moved off Tailwind keep their measurements in a
+// stylesheet, so their checks read declarations rather than class strings.
+const css = (name) => stripComments(fs.readFileSync(R + `${name}/${name}.css`, 'utf8')).replace(/\s+/g, ' ');
 const motionLib = stripComments(fs.readFileSync(new URL('../src/lib/motion.ts', import.meta.url).pathname, 'utf8'));
 const chk=(name,ok,detail)=>{ if(!ok) bad++; console.log(`${ok?'✅':'❌'} ${name.padEnd(46)} ${detail}`); };
 
@@ -114,18 +117,35 @@ for (const [name, row] of Object.entries(FIGMA)) {
 
 // ── A26 Dot · A25 KBD · A27 Code · A30 Delta Chip · A22/A23 Progress ─
 const dt = stripComments(read('Dot/Dot.tsx'));
-chk('dot ramp 6/8/10/12', has(dt,'xs: "size-[6px]"','sm: "size-[8px]"','md: "size-[10px]"','lg: "size-[12px]"'), '');
-chk('dot 2px surface ring', has(dt,'ring-2 ring-bg-surface'), 'Figma ring ellipse is 4px wider');
-chk('dot neutral is bg/inverse', has(dt,'neutral: "bg-bg-inverse"'), 'flips with the theme');
+const dtc = css('Dot');
+chk('dot ramp 6/8/10/12', has(dtc,
+  '--xs { width: 6px; height: 6px', '--sm { width: 8px; height: 8px',
+  '--md { width: 10px; height: 10px', '--lg { width: 12px; height: 12px'), '');
+chk('dot 2px surface ring', has(dtc,'box-shadow: 0 0 0 2px var(--color-bg-surface)'),
+  'Figma ring ellipse is 4px wider');
+chk('dot neutral is bg/inverse', has(dtc,'--neutral { background-color: var(--color-bg-inverse)'),
+  'flips with the theme');
 
-const kb = stripComments(read('Kbd/Kbd.tsx'));
-chk('kbd 22/24/30 pad 6/8/10', has(kb,'h-[22px] px-[6px] py-[2px]','h-[24px] px-[8px] py-[3px]','h-[30px] px-[10px] py-[5px]'), '');
-chk('kbd raised: surface-raised + border', has(kb,'border border-border bg-bg-surface-raised text-text-secondary'), '');
-chk('kbd type Code/SM · Code/MD', has(kb,'text-code-sm','text-code-md'), '');
+const kb = css('Kbd');
+chk('kbd 22/24/30 pad 6/8/10', has(kb,
+  'height: 22px; padding-left: 6px; padding-right: 6px; padding-top: 2px',
+  'height: 24px; padding-left: 8px; padding-right: 8px; padding-top: 3px',
+  'height: 30px; padding-left: 10px; padding-right: 10px; padding-top: 5px'), '');
+chk('kbd raised: surface-raised + border', has(kb,
+  'border-color: var(--color-border-default)',
+  'background-color: var(--color-bg-surface-raised)',
+  'color: var(--color-text-secondary)'), '');
+chk('kbd type Code/SM · Code/MD', has(kb,
+  'font-size: var(--font-size-sm)','font-size: var(--font-size-md)'), '');
 
-const cd2 = stripComments(read('Code/Code.tsx'));
-chk('code 22/24/28 pad 6/8/10', has(cd2,'h-[22px] px-[6px] py-[2px]','h-[24px] px-[8px] py-[3px]','h-[28px] px-[10px] py-[4px]'), '');
-chk('code flat: bg/subtle, no border', has(cd2,'bg-bg-subtle text-text-primary') && !/border/.test(cd2), '');
+const cd2 = css('Code');
+chk('code 22/24/28 pad 6/8/10', has(cd2,
+  'height: 22px; padding-left: 6px; padding-right: 6px; padding-top: 2px',
+  'height: 24px; padding-left: 8px; padding-right: 8px; padding-top: 3px',
+  'height: 28px; padding-left: 10px; padding-right: 10px; padding-top: 4px'), '');
+chk('code flat: bg/subtle, no border',
+  has(cd2,'background-color: var(--color-bg-subtle)','color: var(--color-text-primary)')
+    && !/border(-width|-color)?:/.test(cd2), '');
 
 const dc = stripComments(read('DeltaChip/DeltaChip.tsx'));
 chk('delta sm 20 gap 3 icon 12', has(dc,'h-[20px] gap-[3px] px-[8px] py-[2px] text-label-sm','[&>svg]:size-[12px]'), '');
@@ -465,7 +485,8 @@ chk('lift is hover only, released on press',
 chk('spring is reserved for travel', has(motionLib,'motionSpring') && has(motionLib,'ease-spring'),
   'wrong for colour, which cannot overshoot');
 
-const pressables = ['Button/Button.tsx','IconButton/IconButton.tsx','Tabs/Tabs.tsx','NavItem/NavItem.tsx',
+// Button has moved to its own CSS; the rest still carry the recipe as classes.
+const pressables = ['IconButton/IconButton.tsx','Tabs/Tabs.tsx','NavItem/NavItem.tsx',
   'Pagination/Pagination.tsx','ButtonGroup/ButtonGroup.tsx','Tag/Tag.tsx'];
 const notPressing = pressables.filter((f) => !/motionPress|active:scale-\[0\.97\]/.test(read(f)));
 chk('everything clickable presses', notPressing.length === 0,
@@ -474,7 +495,21 @@ chk('everything clickable presses', notPressing.length === 0,
 // One rule, applied twice: a hierarchy lifts if and only if it is raised.
 // The shadow is what makes it raised, so the shadow is what the check reads —
 // not a hand-kept list that can drift from the variants it describes.
-for (const file of ['Button/Button.tsx', 'IconButton/IconButton.tsx']) {
+const btn = css('Button');
+chk('button presses: instant down, eased up', has(btn,
+  ':active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)'),
+  'lag between finger and pixel reads as slow');
+chk('button raised lifts, flat swells', has(btn,
+  '--raised:hover { transform: translateY(-1px); box-shadow: var(--elevation-2)',
+  '--raised:active { transform: translateY(0) scale(0.97)',
+  '--flat:hover { transform: scale(1.02)'),
+  'a flat control that lifts looks detached');
+chk('button raised set = the three with depth',
+  ['primary','danger','ai'].every((v) => has(btn, `--${v} { background`) && has(btn, 'box-shadow: var(--shadow-depth-accent)'))
+    && has(read('Button/Button.tsx'), 'RAISED: readonly ButtonVariant[] = ["primary", "danger", "ai"]'),
+  'the CSS split and the component list have to agree');
+
+for (const file of ['IconButton/IconButton.tsx']) {
   const src = stripComments(read(file));
   const rows = [...src.matchAll(/^\s{8}(\w+): \[\n([\s\S]*?)^\s{8}\],/gm)]
     .map(([, name, body]) => ({ name, raised: body.includes('shadow-depth-accent'),
@@ -657,3 +692,7 @@ chk('divider fill pad 10/16 on bg/subtle', has(dv, 'bg-bg-subtle px-[16px] py-[1
 chk('divider left align drops the leading line', has(dv, 'align !== "left" && <Line'), '');
 
 console.log('\n' + (bad ? `❌ ${bad} mismatch` : '✅ everything matches the Figma extraction'));
+// This exited 0 no matter what for as long as it has existed, so a failing
+// check printed a ❌ and the build carried on. A check that cannot fail the
+// build is decoration.
+process.exit(bad ? 1 : 0);

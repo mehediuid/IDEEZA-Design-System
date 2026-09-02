@@ -38,7 +38,7 @@ const table = new Map();
 postcss.parse(fs.readFileSync(sheet, 'utf8')).walkRules((rule) => {
   for (const sel of rule.selector.split(',')) {
     const s = sel.trim();
-    const m = s.match(/^\.((?:\\2c |\\.|[^\s.:[\]])+)(.*)$/);
+    const m = s.match(/^\.((?:\\2c |\\.|[^\s.:[\]>~+])+)(.*)$/);
     if (!m) continue;
     const name = m[1].replace(/\\2c /g, ',').replace(/\\/g, '');
     const decls = [];
@@ -91,6 +91,16 @@ function declsFor(classes) {
         // nothing.
         if (value.includes('--tw-')) { unknown.push(`${c} (${prop} \u2192 --tw-*)`); continue; }
         byPseudo.get(pseudo).set(prop, value);
+      }
+      // Tailwind assembles box-shadow out of --tw-shadow and two ring
+      // placeholders. The placeholders paint nothing, so the shadow the class
+      // actually produces is just --tw-shadow — written out, that is a plain
+      // box-shadow and needs none of the plumbing.
+      const shadow = decls.find(([p]) => p === '--tw-shadow');
+      if (shadow && shadow[1] !== '0 0 #0000' && !shadow[1].includes('--tw-')) {
+        byPseudo.get(pseudo).set('box-shadow', shadow[1]);
+        const idx = unknown.findIndex((u) => u.startsWith(`${c} (box-shadow`));
+        if (idx !== -1) unknown.splice(idx, 1);
       }
     }
   }
@@ -178,6 +188,28 @@ if (variantsAt !== -1) {
   }
 }
 
+/**
+ * `compoundVariants` — a rule that only applies when two modifiers are both
+ * present. In CSS that is exactly what chaining the two classes says, so
+ * `{ variant: "subtle", trend: "up" }` becomes
+ * `.ids-x--subtle.ids-x--up`, with the specificity that implies. The entries
+ * are emitted in source order after the single-modifier rules, which is the
+ * order cva resolved them in too.
+ */
+const compounds = [];
+const compoundAt = src.indexOf('compoundVariants: [');
+if (compoundAt !== -1) {
+  const arr = src.slice(compoundAt, src.indexOf('defaultVariants', compoundAt));
+  for (const [, entry] of arr.matchAll(/\{([^{}]*)\}/g)) {
+    const cls = entry.match(/class:\s*"([^"]*)"/);
+    if (!cls) continue;
+    const keys = [...entry.matchAll(/(\w+):\s*"([\w-]+)"/g)]
+      .filter(([, k]) => k !== 'class')
+      .map(([, , v]) => v);
+    if (keys.length) compounds.push([keys, cls[1]]);
+  }
+}
+
 const out = [];
 const allUnknown = new Set();
 for (const [name, body] of groups) {
@@ -188,6 +220,17 @@ for (const [name, body] of groups) {
   for (const [pseudo, decls] of byPseudo) {
     if (!decls.size) continue;
     // `[&_svg]` and friends resolve to a descendant suffix, not a pseudo-class.
+    const sel = selector + (pseudo.startsWith(':') ? pseudo : pseudo ? ` ${pseudo.trim()}` : '');
+    out.push(`${sel} {\n${[...decls].map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`);
+  }
+}
+
+for (const [keys, cls] of compounds) {
+  const { byPseudo, unknown } = declsFor(cls.split(/\s+/).filter(Boolean));
+  unknown.forEach((u) => allUnknown.add(u));
+  const selector = keys.map((k) => `.${prefix}--${k}`).join('');
+  for (const [pseudo, decls] of byPseudo) {
+    if (!decls.size) continue;
     const sel = selector + (pseudo.startsWith(':') ? pseudo : pseudo ? ` ${pseudo.trim()}` : '');
     out.push(`${sel} {\n${[...decls].map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`);
   }

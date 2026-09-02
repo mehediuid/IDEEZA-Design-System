@@ -1,7 +1,7 @@
 {
   "name": "@ideeza/ui",
   "version": "0.1.0",
-  "description": "IDEEZA Design System — React components built on @ideeza/tokens",
+  "description": "IDEEZA Design System \u2014 React components built on @ideeza/tokens",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -21,7 +21,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/check-figma-parity.mjs",
+    "test": "node scripts/check-figma-parity.mjs && node ../../tools/find-dead-classes.mjs",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {

@@ -31,9 +31,12 @@ postcss.parse(fs.readFileSync(sheet, 'utf8')).walkRules((rule) => {
     const s = sel.trim();
     // The escape alternative has to come first: a bare backslash otherwise
     // matches as an ordinary character and the escaped bracket after it fails.
+    // Unescaped combinators end the class name — without excluding them the
+    // match was greedy and `.\[\&\>svg\]\:size-\[12px\]>svg` came back as a
+    // class called `[&>svg]:size-[12px]>svg`, which of course matched nothing.
     // `\2c ` is how Tailwind escapes a comma in an arbitrary value, and the
     // trailing space is part of the escape rather than the end of the class.
-    const m = s.match(/^\.((?:\\2c |\\.|[^\s.:[\]])+)(.*)$/);
+    const m = s.match(/^\.((?:\\2c |\\.|[^\s.:[\]>~+])+)(.*)$/);
     if (!m) continue;
     const name = m[1].replace(/\\2c /g, ',').replace(/\\/g, '');
     const decls = [];

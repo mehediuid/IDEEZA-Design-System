@@ -148,7 +148,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         >
           {options}
         </select>
-        <ChevronDown className="shrink-0 text-icon-default" />
+        <ChevronDown className="shrink-0 text-icon" />
       </span>
     );
 
@@ -173,7 +173,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             // The addon supplies the edge padding, so drop it from the shell.
             (prefix || prefixSelect) && "pl-[1.5px]",
             (suffix || suffixSelect) && "pr-[1.5px]",
-            "[&_svg]:shrink-0 [&_svg]:text-icon-default"
+            "[&_svg]:shrink-0 [&_svg]:text-icon"
           )}
         >
           {prefixSelect ? selectAddon(prefixSelect, "l", prefixSelectProps) : null}

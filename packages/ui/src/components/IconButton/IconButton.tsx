@@ -46,7 +46,7 @@ export const iconButtonVariants = cva(
           "active:bg-button-secondary-bg-pressed",
         ],
         ghost: [
-          "bg-transparent text-icon-default", motionSwell,
+          "bg-transparent text-icon", motionSwell,
           "hover:bg-button-ghost-bg-hover hover:text-text-primary",
           "active:bg-bg-surface-raised",
         ],
