@@ -42,8 +42,13 @@ Sesh hole abar `npm whoami` chaliye dekho — tomar username dekhale thik ache.
 
 ```bash
 cd ~/Downloads/IDEEZA-Design-System
+pnpm install
 pnpm release
 ```
+
+`pnpm install` ta prothom bar-e ba git theke notun kichu tanle lagbe — notun
+package-er dependency gulo na thakle build `tsup: command not found` bole
+bondho hoye jay.
 
 Eta tinta kaj kore: **build** kore, **test** kore, ar **package file** banay.
 
@@ -135,6 +140,12 @@ Ei version agei geche. Version bariye Step 4 theke abar koro.
 
 **`npm ERR! 400 ... name can no longer contain capital letters`**
 Package-er naam-e boro hater okkhor dhuke geche. Chhoto hater rakhte hobe.
+
+**`tsup: command not found`**
+`pnpm install` chalao, tarpor abar `pnpm release`.
+
+**`Unknown option: 'recursive'`**
+Purono `release` script cholche. `git pull` kore nao — thik kora ache.
 
 **`pnpm release`-e `❌` dekhcho**
 Publish korona. Ja lekha ache take amake dekhao — ki bhul seta lekhai thake.
