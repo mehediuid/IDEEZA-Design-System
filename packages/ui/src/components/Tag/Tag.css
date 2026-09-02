@@ -1,0 +1,163 @@
+/*
+ * Tag — Figma `A18 Tag` (Atoms — Display).
+ *
+ * Not Badge. Badge is a status marker with colour families; Tag is a neutral
+ * chip the reader can select or remove, so it carries a border in every state
+ * and has no colour prop.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped. Written by hand because the
+ * motion came from the shared recipes as identifiers, which the generator
+ * cannot resolve — it reads string literals.
+ */
+
+.ids-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  border-width: 1px;
+  border-style: solid;
+  font-family: var(--font-family-body);
+  white-space: nowrap;
+  vertical-align: middle;
+
+  /* Figma's cross-fade. A static chip only recolours — the press below is
+     added by `--interactive`, because a chip nobody can click must not react
+     to :active. */
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+
+/* ── Selection ───────────────────────────────────────────────────────── */
+
+.ids-tag--unselected {
+  background-color: var(--color-bg-surface-raised);
+  border-color: var(--color-border-default);
+  color: var(--color-text-primary);
+}
+.ids-tag--selected {
+  background-color: var(--color-bg-brand-subtle);
+  border-color: var(--color-border-brand);
+  color: var(--color-text-brand);
+}
+
+/* ── Interactive ─────────────────────────────────────────────────────── */
+
+.ids-tag--interactive {
+  cursor: pointer;
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-tag--interactive:active {
+  transition-duration: var(--motion-duration-instant);
+  transform: scale(0.97);
+}
+.ids-tag--interactive:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+/* Figma `State=Hover` — only on the unselected chip. */
+.ids-tag--interactive.ids-tag--unselected:hover {
+  background-color: var(--color-bg-subtle);
+  border-color: var(--color-border-strong);
+}
+
+/* Figma `State=Disabled` is a flat 50% on the whole chip. */
+.ids-tag--disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────── */
+
+.ids-tag--sm {
+  height: 24px;
+  gap: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-tag--md {
+  height: 28px;
+  gap: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-tag--lg {
+  height: 32px;
+  gap: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── Parts ───────────────────────────────────────────────────────────── */
+
+/* The leading dot is the only part that scales with the chip. */
+.ids-tag__dot {
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-text-primary);
+  width: 7px;
+  height: 7px;
+}
+.ids-tag--sm .ids-tag__dot {
+  width: 6px;
+  height: 6px;
+}
+.ids-tag--lg .ids-tag__dot {
+  width: 8px;
+  height: 8px;
+}
+
+.ids-tag__avatar,
+.ids-tag__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+/* The leading icon is 16px at every size; only the X shrinks at SM. */
+.ids-tag__icon > svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.ids-tag__dismiss {
+  margin-right: -2px;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: opacity;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-tag__dismiss:hover {
+  opacity: 0.7;
+}
+.ids-tag__dismiss:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-tag__dismiss > svg {
+  width: 16px;
+  height: 16px;
+}
+.ids-tag--sm .ids-tag__dismiss > svg {
+  width: 12px;
+  height: 12px;
+}

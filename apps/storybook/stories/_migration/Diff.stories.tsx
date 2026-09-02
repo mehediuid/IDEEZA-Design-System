@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner, Banner, Snackbar } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner, Banner, Snackbar, Tag, ButtonGroupSegment } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -277,6 +277,34 @@ const bannerSeverity: Record<string, string> = {
 const snackbarBase =
   "flex items-center gap-[6px] rounded-[8px] bg-bg-inverse py-[6px] pl-[8px] pr-[6px] shadow-3";
 
+const tagBase =
+  "inline-flex items-center rounded-full border font-sans whitespace-nowrap align-middle " +
+  "transition-[color,background-color,border-color,box-shadow] duration-interaction ease-decelerate";
+const tagSize: Record<string, string> = {
+  sm: "h-[24px] gap-[4px] px-[8px] text-caption-sm",
+  md: "h-[28px] gap-[6px] px-[10px] text-caption-md",
+  lg: "h-[32px] gap-[6px] px-[12px] text-label-sm",
+};
+const tagSelected: Record<string, string> = {
+  unselected: "bg-bg-surface-raised border-border text-text-primary",
+  selected: "bg-bg-brand-subtle border-border-brand text-text-brand",
+};
+
+const segmentBase =
+  "relative inline-flex flex-1 items-center justify-center gap-[6px] font-sans whitespace-nowrap" +
+  " bg-bg-surface text-text-primary " + PRESS +
+  " outline-none focus-visible:z-10 focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]" +
+  " hover:bg-bg-subtle" +
+  " aria-pressed:bg-bg-brand aria-pressed:text-text-on-brand aria-pressed:hover:bg-bg-brand" +
+  " disabled:pointer-events-none disabled:bg-bg-subtle disabled:text-text-disabled" +
+  " border-l border-border first:border-l-0";
+const segmentSize: Record<string, string> = {
+  sm: "h-[32px] px-[10px] text-body-xs-medium [&>svg]:size-[14px]",
+  md: "h-[36px] px-[12px] text-body-sm-medium [&>svg]:size-[16px]",
+  lg: "h-[40px] px-[14px] text-body-md-medium [&>svg]:size-[16px]",
+  xl: "h-[44px] px-[16px] text-body-md-medium [&>svg]:size-[16px]",
+};
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -522,6 +550,35 @@ const CASES: Case[] = [
     ),
   },
   {
+    name: "Tag",
+    tag: "span",
+    old: Object.fromEntries(
+      Object.entries(tagSize).flatMap(([sz, szc]) =>
+        Object.entries(tagSelected).map(([sel, sc]) => [`${sz}/${sel}`, `${tagBase} ${szc} ${sc}`])
+      )
+    ),
+    children: "Design",
+    render: (key) => {
+      const [size, sel] = key.split("/");
+      return (
+        <Tag size={size as never} selected={sel === "selected"}>
+          Design
+        </Tag>
+      );
+    },
+  },
+  {
+    name: "ButtonGroupSegment",
+    tag: "button",
+    // The segment on its own, outside the group: the container only clips and
+    // rounds, and comparing inside one would measure the container's border.
+    old: Object.fromEntries(
+      Object.entries(segmentSize).map(([sz, c]) => [sz, `${segmentBase} ${c}`])
+    ),
+    children: "Day",
+    render: (key) => <ButtonGroupSegment size={key as never}>Day</ButtonGroupSegment>,
+  },
+  {
     name: "Dot",
     tag: "span",
     old: Object.fromEntries(
@@ -649,12 +706,20 @@ export const Diff: StoryObj = {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
               {Object.entries(c.old).map(([key, classes]) => (
                 <React.Fragment key={key}>
-                  {React.createElement(
-                    c.tag,
-                    { "data-old": `${c.name}:${key}`, className: classes },
-                    typeof c.children === "function" ? c.children(key) : c.children
-                  )}
-                  <span data-new-wrap={key} style={{ display: "contents" }}>
+                  {/* Both sides sit alone inside an identical wrapper, so a
+                      structural selector resolves the same for each. Without
+                      it the new side was the only child of its wrapper while
+                      the old side was one of many, and ButtonGroup's
+                      `:first-child` border rule matched one and not the other
+                      — 18 differences that were purely the harness's shape. */}
+                  <span style={{ display: "contents" }}>
+                    {React.createElement(
+                      c.tag,
+                      { "data-old": `${c.name}:${key}`, className: classes },
+                      typeof c.children === "function" ? c.children(key) : c.children
+                    )}
+                  </span>
+                  <span style={{ display: "contents" }}>
                     {React.cloneElement(
                       c.render(key) as React.ReactElement,
                       { "data-new": `${c.name}:${key}` } as never

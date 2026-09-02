@@ -1,0 +1,133 @@
+/*
+ * ButtonGroup — Figma `A15 Button Group` (Atoms — Action).
+ *
+ * One rounded, clipped container with a row of segments inside. The segments
+ * carry no radius of their own: the container's `overflow: hidden` rounds the
+ * two on the ends, which is why adding a segment in the middle needs no change
+ * anywhere.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped. Written by hand because the press
+ * came from the shared recipe as an identifier.
+ */
+
+.ids-button-group {
+  display: inline-flex;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-default);
+  vertical-align: middle;
+}
+
+.ids-button-group__segment {
+  /* `relative` so the focus halo can sit above its neighbours; without a
+     stacking position the ring is clipped by the next segment's background. */
+  position: relative;
+  display: inline-flex;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-family-body);
+  white-space: nowrap;
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+
+  /* A rule between segments, not around them — the container draws the
+     outside. The first segment has nothing to its left. */
+  border-left: 1px solid var(--color-border-default);
+}
+.ids-button-group__segment:first-child {
+  border-left-width: 0;
+}
+
+.ids-button-group__segment:active {
+  transition-duration: var(--motion-duration-instant);
+  transform: scale(0.97);
+}
+.ids-button-group__segment:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-button-group__segment:focus-visible {
+  z-index: 10;
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Selection is `aria-pressed`, so the state the screen reader announces and
+   the state the eye sees cannot drift apart. */
+.ids-button-group__segment[aria-pressed="true"],
+.ids-button-group__segment[aria-pressed="true"]:hover {
+  background-color: var(--color-bg-brand);
+  color: var(--color-text-on-brand);
+}
+
+.ids-button-group__segment:disabled {
+  pointer-events: none;
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-disabled);
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────── */
+
+.ids-button-group__segment--sm {
+  height: 32px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-button-group__segment--sm > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ids-button-group__segment--md {
+  height: 36px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-button-group__segment--md > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ids-button-group__segment--lg {
+  height: 40px;
+  padding-left: 14px;
+  padding-right: 14px;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-button-group__segment--lg > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ids-button-group__segment--xl {
+  height: 44px;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-button-group__segment--xl > svg {
+  width: 16px;
+  height: 16px;
+}

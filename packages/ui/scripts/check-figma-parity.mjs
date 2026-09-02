@@ -191,15 +191,21 @@ chk('link colours brand/neutral/inverse/error', has(lk,
   '--neutral { color: var(--color-text-primary)','--inverse { color: var(--color-text-inverse)'), '');
 
 const bgp = stripComments(read('ButtonGroup/ButtonGroup.tsx'));
-chk('segment ramp 32/36/40/44 pad 10/12/14/16',
-  has(bgp,'h-[32px] px-[10px]','h-[36px] px-[12px]','h-[40px] px-[14px]','h-[44px] px-[16px]'), '');
-chk('segment type Body XS/SM/MD Medium',
-  has(bgp,'text-body-xs-medium','text-body-sm-medium','text-body-md-medium'), '');
-chk('segment states surface/subtle/brand',
-  has(bgp,'bg-bg-surface text-text-primary','hover:bg-bg-subtle',
-        'aria-pressed:bg-bg-brand aria-pressed:text-text-on-brand'), '');
-chk('group radius 8 + 1px border', has(bgp,'rounded-[8px] border border-border'), '');
-chk('segment gap 6', has(bgp,'gap-[6px]'), '');
+const bgrp = css('ButtonGroup');
+chk('segment ramp 32/36/40/44 pad 10/12/14/16', has(bgrp,
+  '--sm { height: 32px; padding-left: 10px','--md { height: 36px; padding-left: 12px',
+  '--lg { height: 40px; padding-left: 14px','--xl { height: 44px; padding-left: 16px'), '');
+chk('segment type Body XS/SM/MD Medium', has(bgrp,
+  '--sm { height: 32px; padding-left: 10px; padding-right: 10px; font-size: var(--font-size-sm)',
+  '--md { height: 36px; padding-left: 12px; padding-right: 12px; font-size: var(--font-size-md)',
+  '--lg { height: 40px; padding-left: 14px; padding-right: 14px; font-size: var(--font-size-lg)'), '');
+chk('segment states surface/subtle/brand', has(bgrp,
+  'background-color: var(--color-bg-surface); color: var(--color-text-primary)',
+  '__segment:hover { background-color: var(--color-bg-subtle)',
+  '[aria-pressed="true"]:hover { background-color: var(--color-bg-brand); color: var(--color-text-on-brand)'), '');
+chk('group radius 8 + 1px border',
+  has(bgrp,'.ids-button-group { display: inline-flex; overflow: hidden; border-radius: 8px; border: 1px solid var(--color-border-default)'), '');
+chk('segment gap 6', has(bgrp,'gap: 6px'), '');
 
 const cta2 = css('InlineCta');
 chk('cta gap 6, icon 12/14/16', has(cta2,
@@ -538,8 +544,7 @@ chk('spring is reserved for travel', has(motionLib,'motionSpring') && has(motion
 
 // Button and IconButton have moved to their own CSS; the rest still carry the
 // recipe as classes.
-const pressables = ['Tabs/Tabs.tsx','NavItem/NavItem.tsx',
-  'Pagination/Pagination.tsx','ButtonGroup/ButtonGroup.tsx','Tag/Tag.tsx'];
+const pressables = ['Tabs/Tabs.tsx','NavItem/NavItem.tsx','Pagination/Pagination.tsx'];
 const notPressing = pressables.filter((f) => !/motionPress|active:scale-\[0\.97\]/.test(read(f)));
 chk('everything clickable presses', notPressing.length === 0,
   notPressing.length ? notPressing.join(', ') : `${pressables.length} components`);
@@ -587,8 +592,11 @@ chk('swell is smaller than the press',
 
 chk('toggle thumb travels on the spring', has(read('Toggle/Toggle.tsx'),'"transition-[left] " + motionSpring'), '');
 chk('a static Tag does not press',
-  has(read('Tag/Tag.tsx'),'interactive: { true: "cursor-pointer " + motionPress, false: "" }'),
+  has(css('Tag'),'--interactive:active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)')
+    && !/\.ids-tag:active/.test(css('Tag')),
   'only a selectable chip reacts to :active');
+chk('button group segments press', has(css('ButtonGroup'),
+  '__segment:active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)'), '');
 
 // ── Reset: UA metrics must not leak into control geometry ───────────
 // Storybook and consumers load this reset instead of Tailwind Preflight, so
@@ -717,16 +725,27 @@ chk('avatar disabled 50%', has(av, 'opacity-50'), '');
 
 // A18 Tag — border in every state; Badge is the coloured one, Tag is neutral.
 const tg = read('Tag/Tag.tsx');
-chk('tag sm 24 pad 8 gap 4 Caption/SM', has(tg, 'h-[24px] gap-[4px] px-[8px] text-caption-sm'), '');
-chk('tag md 28 pad 10 gap 6 Caption/MD', has(tg, 'h-[28px] gap-[6px] px-[10px] text-caption-md'), '');
-chk('tag lg 32 pad 12 gap 6 Label/SM', has(tg, 'h-[32px] gap-[6px] px-[12px] text-label-sm'), '');
-chk('tag default surface-raised + border', has(tg, 'bg-bg-surface-raised border-border text-text-primary'), '');
-chk('tag hover subtle + strong border', has(tg, 'hover:bg-bg-subtle hover:border-border-strong'), '');
-chk('tag selected brand', has(tg, 'bg-bg-brand-subtle border-border-brand text-text-brand'), '');
-chk('tag leading icon 16 at every size', has(tg, "const leadingIcon = \"[&>svg]:size-[16px]"), 'does not shrink at SM');
-chk('tag close icon 12 at SM, 16 at MD/LG',
-  has(tg, 'sm: "[&>svg]:size-[12px]"', 'md: "[&>svg]:size-[16px]"', 'lg: "[&>svg]:size-[16px]"'), '');
-chk('tag leading dot 6/7/8', has(tg, 'sm: "size-[6px]"', 'md: "size-[7px]"', 'lg: "size-[8px]"'), '');
+const tgc = css('Tag');
+chk('tag sm 24 pad 8 gap 4 Caption/SM',
+  has(tgc, '--sm { height: 24px; gap: 4px; padding-left: 8px; padding-right: 8px; font-size: var(--font-size-xs)'), '');
+chk('tag md 28 pad 10 gap 6 Caption/MD',
+  has(tgc, '--md { height: 28px; gap: 6px; padding-left: 10px; padding-right: 10px; font-size: var(--font-size-sm)'), '');
+chk('tag lg 32 pad 12 gap 6 Label/SM',
+  has(tgc, '--lg { height: 32px; gap: 6px; padding-left: 12px; padding-right: 12px; font-size: var(--font-size-xs)'), '');
+chk('tag default surface-raised + border', has(tgc,
+  '--unselected { background-color: var(--color-bg-surface-raised); border-color: var(--color-border-default); color: var(--color-text-primary)'), '');
+chk('tag hover subtle + strong border', has(tgc,
+  '--interactive.ids-tag--unselected:hover { background-color: var(--color-bg-subtle); border-color: var(--color-border-strong)'), '');
+chk('tag selected brand', has(tgc,
+  '--selected { background-color: var(--color-bg-brand-subtle); border-color: var(--color-border-brand); color: var(--color-text-brand)'), '');
+chk('tag leading icon 16 at every size',
+  has(tgc, '__icon > svg { width: 16px; height: 16px') && !/--(sm|lg) \.ids-tag__icon/.test(tgc),
+  'does not shrink at SM');
+chk('tag close icon 12 at SM, 16 at MD/LG', has(tgc,
+  '__dismiss > svg { width: 16px; height: 16px','--sm .ids-tag__dismiss > svg { width: 12px; height: 12px'), '');
+chk('tag leading dot 6/7/8', has(tgc,
+  '__dot { flex-shrink: 0; border-radius: var(--radius-full); background-color: var(--color-text-primary); width: 7px',
+  '--sm .ids-tag__dot { width: 6px','--lg .ids-tag__dot { width: 8px'), '');
 chk('tag avatar sizes 12/16/18 exported', has(tg, 'tagAvatarSize = { sm: 12, md: 16, lg: 18 }'), '');
 
 // A20 Spinner — the Figma arc is 0.87→4.01 rad, exactly half the circle.
