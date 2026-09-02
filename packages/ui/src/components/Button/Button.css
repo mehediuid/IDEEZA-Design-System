@@ -289,8 +289,3 @@
   animation: ids-spin 1s linear infinite;
 }
 
-@keyframes ids-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}

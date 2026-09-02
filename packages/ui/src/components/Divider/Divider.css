@@ -1,0 +1,80 @@
+/*
+ * Divider — Figma `A24 Divider` (Atoms — Display).
+ *
+ * Three shapes rather than one: a bare rule, a rule with a label in the
+ * middle, and a filled band. They share the token colours and nothing else,
+ * so each gets its own block instead of a pile of modifiers on one.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+/* The bare rule. 1px in border/subtle, filling its axis. */
+.ids-divider {
+  flex-shrink: 0;
+  background-color: var(--color-border-subtle);
+  height: 1px;
+  width: 100%;
+}
+.ids-divider--vertical {
+  height: 100%;
+  width: 1px;
+  align-self: stretch;
+}
+
+/* With a label: two rules and the text between them, 16px apart. */
+.ids-divider--labelled {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: auto;
+  background-color: transparent;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+.ids-divider--labelled.ids-divider--vertical {
+  flex-direction: column;
+  height: 100%;
+  width: auto;
+}
+.ids-divider__line {
+  flex-shrink: 0;
+  flex: 1 1 0%;
+  background-color: var(--color-border-subtle);
+  height: 1px;
+}
+.ids-divider--vertical .ids-divider__line {
+  width: 1px;
+  height: auto;
+}
+.ids-divider__label {
+  flex-shrink: 0;
+}
+
+/* The filled band — a section break rather than a rule. */
+.ids-divider--fill {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  background-color: var(--color-bg-subtle);
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: auto;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+.ids-divider--center {
+  justify-content: center;
+}
+.ids-divider--right {
+  justify-content: flex-end;
+}

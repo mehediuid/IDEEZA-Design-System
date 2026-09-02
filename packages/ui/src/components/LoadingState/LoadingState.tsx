@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cx } from "../../lib/cx";
-import { Spinner } from "../Spinner/Spinner";
+import { Spinner, type SpinnerSize } from "../Spinner/Spinner";
 
 /**
  * LoadingState — mirrors Figma `M50 Loading` (Molecules — States).
@@ -24,7 +24,11 @@ export function loadingStateVariants(
   return cx("ids-loading-state", `ids-loading-state--${props.variant ?? "page"}`, props.className);
 }
 
-const spinnerSize = { page: "xl", inline: "lg", compact: "md" } as const;
+const spinnerSize: Record<LoadingStateVariant, SpinnerSize> = {
+  page: "xl",
+  inline: "lg",
+  compact: "md",
+};
 
 export interface LoadingStateProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: LoadingStateVariant;

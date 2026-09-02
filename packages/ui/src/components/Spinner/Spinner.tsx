@@ -1,7 +1,5 @@
 import * as React from "react";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * Spinner — mirrors Figma `A20 Spinner` (Atoms — Display).
@@ -17,28 +15,21 @@ import { cn } from "../../lib/cn";
  * at every size, so the geometry is reproduced with a dashed circle instead:
  * radius (box − stroke) / 2, dash = half the circumference, round linecap.
  */
-export const spinnerVariants = cva("inline-block shrink-0 align-middle", {
-  variants: {
-    size: {
-      sm: "size-[16px]",
-      md: "size-[20px]",
-      lg: "size-[24px]",
-      xl: "size-[32px]",
-    },
-    color: {
-      brand: "text-icon-brand",
-      neutral: "text-icon-secondary",
-      inverse: "text-icon-on-brand",
-      blue: "text-icon-blue",
-      success: "text-icon-success",
-      warning: "text-icon-warning",
-      error: "text-icon-error",
-    },
-  },
-  defaultVariants: { size: "md", color: "brand" },
-});
+export type SpinnerSize = "sm" | "md" | "lg" | "xl";
+export type SpinnerColor =
+  | "brand" | "neutral" | "inverse" | "blue" | "success" | "warning" | "error";
 
-/** Box and stroke per size, measured off the `head` ellipse. */
+export function spinnerVariants(
+  props: { size?: SpinnerSize | null; color?: SpinnerColor | null; className?: string } = {}
+) {
+  return cx(
+    "ids-spinner",
+    `ids-spinner--${props.size ?? "md"}`,
+    `ids-spinner--${props.color ?? "brand"}`,
+    props.className
+  );
+}
+
 const metrics = {
   sm: { box: 16, stroke: 2, dot: 2.5 },
   md: { box: 20, stroke: 2, dot: 3 },
@@ -51,9 +42,9 @@ const DOTS = 12;
 /** Arc starts 0.87 rad (≈49.8°) clockwise from the top. */
 const START_DEG = (0.87 * 180) / Math.PI - 90;
 
-export interface SpinnerProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">,
-    VariantProps<typeof spinnerVariants> {
+export interface SpinnerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color"> {
+  size?: SpinnerSize | null;
+  color?: SpinnerColor | null;
   variant?: "arc" | "ring" | "dots";
   /** Announced to screen readers while busy. */
   label?: string;
@@ -71,17 +62,17 @@ export const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
         ref={ref}
         role="status"
         aria-label={label}
-        className={cn(spinnerVariants({ size, color }), "relative", className)}
+        className={spinnerVariants({ size, color, className })}
         {...props}
       >
         {variant === "dots" ? (
-          <span className="absolute inset-0 animate-spin" style={{ animationDuration: "1.2s" }} aria-hidden="true">
+          <span className="ids-spinner__dots" aria-hidden="true">
             {Array.from({ length: DOTS }, (_, i) => (
               // Each layer fills the box and rotates about its centre, so the
               // dot pinned to its top edge lands on the circle at i × 30°.
-              <span key={i} className="absolute inset-0" style={{ transform: `rotate(${(360 / DOTS) * i}deg)` }}>
+              <span key={i} className="ids-spinner__spoke" style={{ transform: `rotate(${(360 / DOTS) * i}deg)` }}>
                 <span
-                  className="absolute left-1/2 top-0 -translate-x-1/2 rounded-full bg-current"
+                  className="ids-spinner__dot"
                   style={{ width: dot, height: dot, opacity: 1 - i * 0.073 }}
                 />
               </span>
@@ -90,8 +81,7 @@ export const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
         ) : (
           <svg
             viewBox={`0 0 ${box} ${box}`}
-            className="size-full animate-spin"
-            style={{ animationDuration: "0.8s" }}
+            className="ids-spinner__svg"
             aria-hidden="true"
           >
             {variant === "ring" && (

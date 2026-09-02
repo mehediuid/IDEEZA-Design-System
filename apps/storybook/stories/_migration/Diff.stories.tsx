@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -255,6 +255,16 @@ const iconButtonSize: Record<string, string> = {
   "48": "size-[48px] rounded-[12px] [&_svg]:size-[24px]",
 };
 
+const spinnerBase = "inline-block shrink-0 align-middle relative";
+const spinnerSize: Record<string, string> = {
+  sm: "size-[16px]", md: "size-[20px]", lg: "size-[24px]", xl: "size-[32px]",
+};
+const spinnerColor: Record<string, string> = {
+  brand: "text-icon-brand", neutral: "text-icon-secondary", inverse: "text-icon-on-brand",
+  blue: "text-icon-blue", success: "text-icon-success", warning: "text-icon-warning",
+  error: "text-icon-error",
+};
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -435,6 +445,30 @@ const CASES: Case[] = [
         </IconButton>
       );
     },
+  },
+  {
+    name: "Spinner",
+    tag: "span",
+    old: Object.fromEntries(
+      Object.entries(spinnerSize).flatMap(([sz, szc]) =>
+        Object.entries(spinnerColor).map(([col, cc]) => [`${sz}/${col}`, `${spinnerBase} ${szc} ${cc}`])
+      )
+    ),
+    // Compared as an empty box: the arc's geometry comes from measured props
+    // rather than CSS, and both sides would need the same SVG for the size
+    // comparison to mean anything.
+    render: (key) => {
+      const [size, color] = key.split("/");
+      return <Spinner size={size as never} color={color as never} variant="arc" />;
+    },
+    expected: (_key, prop) =>
+      prop === "animation-duration" || prop === "animation-name" || prop === "animation-iteration-count" ||
+      prop === "animation-timing-function" || prop === "animation-play-state" || prop === "animation-composition" ||
+      prop === "animation-fill-mode" || prop === "animation-direction" || prop === "animation-delay" ||
+      prop === "animation-range" || prop === "animation-timeline" || prop === "animation-range-start" ||
+      prop === "animation-range-end"
+        ? "the spin moved from the wrapper to the svg inside it"
+        : false,
   },
   {
     name: "Dot",

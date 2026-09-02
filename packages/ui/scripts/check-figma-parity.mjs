@@ -368,7 +368,7 @@ chk('loading page/inline/compact geometry', has(lstc,
   'compact is the only horizontal one');
 chk('loading spinner ramp xl/lg/md',
   has(stripComments(read('LoadingState/LoadingState.tsx')),
-      'page: "xl", inline: "lg", compact: "md"'), '');
+      'page: "xl",', 'inline: "lg",', 'compact: "md",'), '');
 chk('loading label ramp H4/H6/Body SM Medium', has(lstc,
   '--page .ids-loading-state__label { font-size: var(--font-size-3xl)',
   '--inline .ids-loading-state__label { font-size: var(--font-size-lg)',
@@ -719,7 +719,10 @@ chk('tag avatar sizes 12/16/18 exported', has(tg, 'tagAvatarSize = { sm: 12, md:
 
 // A20 Spinner — the Figma arc is 0.87→4.01 rad, exactly half the circle.
 const spn = read('Spinner/Spinner.tsx');
-chk('spinner size ramp 16/20/24/32', has(spn, 'size-[16px]', 'size-[20px]', 'size-[24px]', 'size-[32px]'), '');
+const spnc = css('Spinner');
+chk('spinner size ramp 16/20/24/32', has(spnc,
+  '--sm { width: 16px; height: 16px','--md { width: 20px; height: 20px',
+  '--lg { width: 24px; height: 24px','--xl { width: 32px; height: 32px'), '');
 chk('spinner metrics box/stroke/dot',
   has(spn, 'sm: { box: 16, stroke: 2, dot: 2.5 }', 'md: { box: 20, stroke: 2, dot: 3 }',
        'lg: { box: 24, stroke: 2.5, dot: 3.5 }', 'xl: { box: 32, stroke: 3, dot: 4.5 }'), '');
@@ -727,7 +730,10 @@ chk('spinner arc is half the circle', has(spn, 'const half = Math.PI * r'), '0.8
 chk('spinner arc has ROUND caps', has(spn, 'strokeLinecap="round"'), 'a CSS border ends square — Figma strokeCap ROUND');
 chk('spinner arc start 0.87 rad', has(spn, 'const START_DEG = (0.87 * 180) / Math.PI - 90'), '');
 chk('spinner ring track border/subtle', has(spn, 'var(--color-border-subtle)'), '');
-chk('spinner colours read icon/*', has(spn, 'text-icon-brand', 'text-icon-secondary', 'text-icon-on-brand', 'text-icon-error'), 'not text/*');
+chk('spinner colours read icon/*', has(spnc,
+  '--brand { color: var(--color-icon-brand)','--neutral { color: var(--color-icon-secondary)',
+  '--inverse { color: var(--color-icon-on-brand)','--error { color: var(--color-icon-error)'),
+  'not text/*');
 chk('spinner dots = 12', has(spn, 'const DOTS = 12'), 'Figma bakes 12 nodes with a fade');
 
 // A21 Skeleton — geometry is the Figma default, overridable via className.
@@ -748,10 +754,16 @@ chk('skeleton fill bg/subtle', has(sk, 'bg-bg-subtle'), '');
 
 // A24 Divider — 1px border/subtle, 16px gap, Body/SM label.
 const dv = read('Divider/Divider.tsx');
-chk('divider line border/subtle', has(dv, 'bg-border-subtle'), '1px');
-chk('divider content gap 16', has(dv, 'gap-[16px]'), '');
-chk('divider label Body/SM + text/secondary', has(dv, 'text-body-sm text-text-secondary'), '');
-chk('divider fill pad 10/16 on bg/subtle', has(dv, 'bg-bg-subtle px-[16px] py-[10px]'), '');
+const dvc = css('Divider');
+chk('divider line border/subtle',
+  has(dvc,'.ids-divider { flex-shrink: 0; background-color: var(--color-border-subtle); height: 1px'),
+  '1px');
+chk('divider content gap 16', has(dvc,'--labelled { display: flex; align-items: center; gap: 16px'), '');
+chk('divider label Body/SM + text/secondary', has(dvc,
+  'font-size: var(--font-size-md); line-height: var(--line-height-md)',
+  'color: var(--color-text-secondary)'), '');
+chk('divider fill pad 10/16 on bg/subtle', has(dvc,
+  'background-color: var(--color-bg-subtle); padding-left: 16px; padding-right: 16px; padding-top: 10px'), '');
 chk('divider left align drops the leading line', has(dv, 'align !== "left" && <Line'), '');
 
 console.log('\n' + (bad ? `❌ ${bad} mismatch` : '✅ everything matches the Figma extraction'));

@@ -7,15 +7,27 @@
  * follows this file in the build — the two coexist until the last one moves.
  */
 
+@import "../components/Badge/Badge.css";
 @import "../components/Button/Button.css";
 @import "../components/Code/Code.css";
-@import "../components/Dot/Dot.css";
-@import "../components/Kbd/Kbd.css";
 @import "../components/DeltaChip/DeltaChip.css";
-@import "../components/InlineMessage/InlineMessage.css";
+@import "../components/Divider/Divider.css";
+@import "../components/Dot/Dot.css";
+@import "../components/IconButton/IconButton.css";
 @import "../components/InlineCta/InlineCta.css";
+@import "../components/InlineMessage/InlineMessage.css";
+@import "../components/Kbd/Kbd.css";
 @import "../components/Link/Link.css";
 @import "../components/LoadingState/LoadingState.css";
+@import "../components/Spinner/Spinner.css";
 @import "../components/StatusBlock/StatusBlock.css";
-@import "../components/Badge/Badge.css";
-@import "../components/IconButton/IconButton.css";
+
+/* Shared by Button's loading spinner and by Spinner itself. Defined here
+   rather than in either component: it lived in Button.css and Spinner.css
+   referenced it, so Spinner would have stopped turning on any page that
+   happened not to render a Button. */
+@keyframes ids-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
