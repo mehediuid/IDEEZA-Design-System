@@ -37,3 +37,11 @@ preview/
 package-lock.json
 ideeza-color-changes.pdf
 .deps-platform
+
+# npm pack output — a build artifact, and one that would carry a stale copy
+# of dist into the repo if it were ever committed.
+*.tgz
+
+# npm auth token. Never commit this; publishing uses it and it grants
+# publish rights to every package the account owns.
+.npmrc

@@ -112,6 +112,38 @@ pnpm typecheck
 pnpm test
 ```
 
+## Installing it
+
+The workspace splits into `@ideeza/tokens`, `@ideeza/ui` and `@ideeza/icons`
+because that split is useful while building. It is not useful to install, so
+one package ships to npm with all three bundled in:
+
+```bash
+npm install ideeza-design-system
+```
+
+```jsx
+import { Button } from "ideeza-design-system";
+import "ideeza-design-system/styles.css";
+```
+
+No Tailwind required — `styles.css` is prebuilt from the components' own
+output and carries every rule they use. `packages/design-system/README.md`
+has the rest.
+
+Note that `@ideeza/icons` on npm is a different, older IDEEZA icon library
+(1,456 icons, maintained separately). Ours is not published under that name
+and must not be.
+
+### Cutting a release
+
+```bash
+pnpm release     # build, test, and pack the tarball
+```
+
+Then `npm publish` the tarball yourself — publishing needs your npm
+credentials, which do not belong in this repo or in any tool that reads it.
+
 ### When a style change does not show up
 
 Tailwind generates only the classes it finds in the files named by `content`.
