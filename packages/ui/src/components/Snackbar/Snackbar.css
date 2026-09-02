@@ -1,0 +1,92 @@
+/*
+ * Snackbar — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-snackbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  background-color: var(--color-bg-inverse);
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 8px;
+  padding-right: 6px;
+  box-shadow: var(--elevation-3);
+}
+
+/* A filled 20px disc holding a 14px glyph. Only the disc changes colour per
+   severity; the glyph is always icon/on-brand, because it sits on the fill. */
+.ids-snackbar__icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+.ids-snackbar__icon > svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-icon-on-brand);
+}
+.ids-snackbar--info .ids-snackbar__icon { background-color: var(--color-icon-blue); }
+.ids-snackbar--success .ids-snackbar__icon { background-color: var(--color-icon-success); }
+.ids-snackbar--warning .ids-snackbar__icon { background-color: var(--color-icon-warning); }
+.ids-snackbar--error .ids-snackbar__icon { background-color: var(--color-icon-error); }
+
+.ids-snackbar__message {
+  min-width: 0;
+  flex: 1 1 0%;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-inverse);
+}
+
+/* The action takes the severity colour, so it reads as belonging to the
+   message rather than as a second, unrelated control. */
+.ids-snackbar__action {
+  flex-shrink: 0;
+  border-radius: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-snackbar__action:hover { text-decoration-line: underline; }
+.ids-snackbar__action:focus-visible { box-shadow: 0 0 0 3px var(--color-focus-halo); }
+.ids-snackbar--info .ids-snackbar__action { color: var(--color-icon-blue); }
+.ids-snackbar--success .ids-snackbar__action { color: var(--color-icon-success); }
+.ids-snackbar--warning .ids-snackbar__action { color: var(--color-icon-warning); }
+.ids-snackbar--error .ids-snackbar__action { color: var(--color-icon-error); }
+
+.ids-snackbar__dismiss {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: var(--color-text-inverse);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: opacity;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-snackbar__dismiss:hover { opacity: 0.7; }
+.ids-snackbar__dismiss:focus-visible { box-shadow: 0 0 0 3px var(--color-focus-halo); }
+.ids-snackbar__dismiss > svg { width: 14px; height: 14px; }

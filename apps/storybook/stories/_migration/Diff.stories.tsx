@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner, Banner, Snackbar } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -265,6 +265,18 @@ const spinnerColor: Record<string, string> = {
   error: "text-icon-error",
 };
 
+const bannerBase = "flex w-full items-center gap-[6px] rounded-[6px] border py-[8px] pl-[12px] pr-[8px]";
+const bannerSeverity: Record<string, string> = {
+  info: "bg-bg-info-subtle border-border-blue",
+  success: "bg-bg-success-subtle border-border-success",
+  warning: "bg-bg-warning-subtle border-border-warning",
+  error: "bg-bg-error-subtle border-border-error",
+  neutral: "bg-bg-subtle border-border",
+};
+
+const snackbarBase =
+  "flex items-center gap-[6px] rounded-[8px] bg-bg-inverse py-[6px] pl-[8px] pr-[6px] shadow-3";
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -469,6 +481,45 @@ const CASES: Case[] = [
       prop === "animation-range-end"
         ? "the spin moved from the wrapper to the svg inside it"
         : false,
+  },
+  {
+    name: "Banner",
+    tag: "div",
+    old: Object.fromEntries(
+      Object.entries(bannerSeverity).map(([k, c]) => [k, `${bannerBase} ${c}`])
+    ),
+    // Compared without the glyph and body: those are named parts on the new
+    // side and inline classes on the old, so including them would compare two
+    // different elements' children rather than the banner itself.
+    children: "Heads up",
+    render: (key) => (
+      <Banner severity={key as never} hideIcon>
+        Heads up
+      </Banner>
+    ),
+    // `bg-bg-info-subtle` was one of the five dead classes: the token existed
+    // and the preset never exposed it, so the info banner has had no
+    // background at all. The old side still shows that.
+    expected: (key, prop) =>
+      key === "info" && prop.startsWith("background")
+        ? "bg-bg-info-subtle was dead in 0.2.0 — new side is the fix"
+        : false,
+  },
+  {
+    name: "Snackbar",
+    tag: "div",
+    old: { info: snackbarBase, success: snackbarBase, warning: snackbarBase, error: snackbarBase },
+    // The message carries its own line-height, so the old side needs the same
+    // wrapper — a bare text node made the row 1px shorter and read as a real
+    // geometry difference.
+    children: (
+      <span className="min-w-0 flex-1 text-body-sm-medium text-text-inverse">Saved</span>
+    ),
+    render: (key) => (
+      <Snackbar severity={key as never} hideIcon>
+        Saved
+      </Snackbar>
+    ),
   },
   {
     name: "Dot",

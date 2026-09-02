@@ -297,18 +297,30 @@ chk('inline message severities incl helper', has(inm,
   '--error { color: var(--color-text-error)'), '');
 
 const bnr = stripComments(read('Banner/Banner.tsx'));
-chk('banner r6 pad 8/8/8/12 gap 6', has(bnr,'gap-[6px] rounded-[6px] border py-[8px] pl-[12px] pr-[8px]'), '');
-chk('banner icon 24, content gap 4, actions gap 6',
-  has(bnr,'size-[24px]','gap-[4px]','items-center gap-[6px]'), '');
-chk('banner has the Neutral severity', has(bnr,'neutral: "bg-bg-subtle border-border"'), 'Alert has no equivalent');
+const bnrc = css('Banner');
+chk('banner r6 pad 8/8/8/12 gap 6', has(bnrc,
+  'gap: 6px; border-radius: 6px; border-width: 1px; padding-top: 8px; padding-bottom: 8px; padding-left: 12px; padding-right: 8px'), '');
+chk('banner icon 24, content gap 4, actions gap 6', has(bnrc,
+  '__icon { display: inline-flex; width: 24px; height: 24px',
+  '__body { display: flex; min-width: 0; flex: 1 1 0%; flex-direction: column; gap: 4px',
+  '__actions { display: flex; flex-shrink: 0; align-items: center; gap: 6px'), '');
+chk('banner has the Neutral severity',
+  has(bnrc,'--neutral { background-color: var(--color-bg-subtle); border-color: var(--color-border-default)'),
+  'Alert has no equivalent');
 
-const snk = stripComments(read('Snackbar/Snackbar.tsx'));
-chk('snackbar r8 pad 6/6/6/8 gap 6', has(snk,'gap-[6px] rounded-[8px] bg-bg-inverse py-[6px] pl-[8px] pr-[6px]'), '');
+const snk = css('Snackbar');
+chk('snackbar r8 pad 6/6/6/8 gap 6', has(snk,
+  'gap: 6px; border-radius: 8px; background-color: var(--color-bg-inverse); padding-top: 6px; padding-bottom: 6px; padding-left: 8px; padding-right: 6px'), '');
 chk('snackbar surface is inverse in every severity',
-  has(snk,'bg-bg-inverse') && has(snk,'info: "", success: "", warning: "", error: ""'),
+  has(snk,'background-color: var(--color-bg-inverse)')
+    && !/--(info|success|warning|error) \{/.test(snk),
   'colour lives in the badge and the action only');
-chk('snackbar badge 20, glyph 14', has(snk,'size-[20px]','size-[14px] text-icon-on-brand'), '');
-chk('snackbar message Body/SM Medium on text/inverse', has(snk,'text-body-sm-medium text-text-inverse'), '');
+chk('snackbar badge 20, glyph 14', has(snk,
+  '__icon { display: inline-flex; width: 20px; height: 20px',
+  '__icon > svg { width: 14px; height: 14px; color: var(--color-icon-on-brand)'), '');
+chk('snackbar message Body/SM Medium on text/inverse', has(snk,
+  '__message { min-width: 0; flex: 1 1 0%; font-size: var(--font-size-md)',
+  'font-weight: var(--font-weight-medium); color: var(--color-text-inverse)'), '');
 
 // ── M02 Toast · M06 Status Block ────────────────────────────────────
 const tst = stripComments(read('Toast/Toast.tsx'));

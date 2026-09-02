@@ -8,6 +8,7 @@
  */
 
 @import "../components/Badge/Badge.css";
+@import "../components/Banner/Banner.css";
 @import "../components/Button/Button.css";
 @import "../components/Code/Code.css";
 @import "../components/DeltaChip/DeltaChip.css";
@@ -19,6 +20,7 @@
 @import "../components/Kbd/Kbd.css";
 @import "../components/Link/Link.css";
 @import "../components/LoadingState/LoadingState.css";
+@import "../components/Snackbar/Snackbar.css";
 @import "../components/Spinner/Spinner.css";
 @import "../components/StatusBlock/StatusBlock.css";
 
