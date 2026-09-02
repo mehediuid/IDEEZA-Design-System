@@ -27,7 +27,15 @@ export default function App() {
 That is the whole setup. **You do not need Tailwind.** The stylesheet ships
 prebuilt with every rule the components use.
 
-Requires React 18 or newer.
+Requires React 18 or newer, and nothing else — the package has no runtime
+dependencies. Radix's switch, tooltip and slot primitives, clsx, cva and
+tailwind-merge are all bundled in, so installing this adds one entry to your
+lockfile rather than a dozen.
+
+One consequence worth knowing: the bundled Radix carries its own React
+context, so our `Tooltip` reads the `TooltipProvider` this package exports,
+not one you might already have from your own copy of
+`@radix-ui/react-tooltip`. Wrap with ours.
 
 ## What's in it
 

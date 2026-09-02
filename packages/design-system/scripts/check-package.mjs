@@ -45,13 +45,22 @@ const leaked = [...new Set(code.match(/["'](@ideeza\/[a-z-]+(?:\/[a-z-]+)?)["']/
 chk('no workspace-only imports escaped', leaked.length === 0,
   leaked.length ? leaked.join(', ') : 'tokens, ui and icons are bundled in');
 
-// ── The declared dependencies must be the ones the bundle needs ────────
-const imported = [...new Set([...bundle.matchAll(/from\s*["']([^".'/][^"']*)["']|require\(["']([^".'/][^"']*)["']\)/g)]
-  .map((m) => (m[1] || m[2]).split('/').slice(0, (m[1] || m[2]).startsWith('@') ? 2 : 1).join('/')))];
-const declared = new Set([...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)]);
-const undeclared = imported.filter((d) => !declared.has(d));
-chk('every runtime import is declared', undeclared.length === 0,
-  undeclared.length ? undeclared.join(', ') : [...declared].length + ' declared');
+// ── Nothing but React may be imported at runtime ───────────────────────
+// The package ships with no dependencies: everything else is bundled. So the
+// only bare imports left in the bundle should be the peers.
+// A module specifier has no whitespace in it. Without that the word `from`
+// inside an object literal — tailwind-merge has one — reads as an import.
+const imported = [...new Set([...code.matchAll(/from\s*["']([^".'/\s][^"'\s]*)["']|require\(["']([^".'/\s][^"'\s]*)["']\)/g)]
+  .map((m) => m[1] || m[2])
+  .map((d) => d.split('/').slice(0, d.startsWith('@') ? 2 : 1).join('/')))];
+const peers = new Set(Object.keys(pkg.peerDependencies));
+const extra = imported.filter((d) => !peers.has(d));
+chk('nothing but the peers is imported', extra.length === 0,
+  extra.length ? extra.join(', ') : [...peers].join(', '));
+
+chk('the package declares no dependencies',
+  !pkg.dependencies || Object.keys(pkg.dependencies).length === 0,
+  'installing it pulls in nothing but React');
 
 // ── The stylesheet has to carry the rules, not just the variables ──────
 const css = fs.readFileSync(path.join(dist, 'styles.css'), 'utf8');

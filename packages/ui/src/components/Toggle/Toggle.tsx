@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "../../lib/cva";
+import type { VariantProps } from "../../lib/types";
 import { cn } from "../../lib/cn";
 import { motionSpring } from "../../lib/motion";
 

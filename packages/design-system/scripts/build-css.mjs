@@ -13,8 +13,11 @@
  * `import "ideeza-ds/styles.css"` and the components work — no
  * Tailwind, no config, no content globs.
  *
- * The scan target is `dist/index.js`, the bundle, not `src`. What matters is
- * the class strings that survived into shipped code.
+ * The scan target is the built output of our own packages, not `src` and not
+ * this package's final bundle. Source can carry classes that get dropped; the
+ * final bundle now carries Radix too, and Tailwind happily mines its strings
+ * for things that look like utilities and are not — that cost 9 kB of rules
+ * nothing renders.
  *
  * Consumers who do use Tailwind can still take the preset and write our
  * utilities in their own markup. That is additive; it is not required.
@@ -46,7 +49,10 @@ fs.writeFileSync(path.join(dist, 'tokens.css'), tokens);
 const { css } = await postcss([
   tailwindcss({
     presets: [ideezaPreset],
-    content: [path.join(dist, 'index.js'), path.join(dist, 'index.cjs')],
+    content: [
+      fileURLToPath(import.meta.resolve('@ideeza/ui')),
+      fileURLToPath(import.meta.resolve('@ideeza/icons')),
+    ],
   }),
   autoprefixer(),
 ]).process('@tailwind utilities;', { from: undefined });
