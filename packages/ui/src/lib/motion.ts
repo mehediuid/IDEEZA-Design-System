@@ -13,13 +13,11 @@
  *   between finger and pixel reads as the control being slow — and the
  *   release eases back over 120ms. Down hard, up soft; that asymmetry is
  *   most of what "responsive" means.
- * - `lift` raises a surface 1px and steps the shadow up on hover. Only for
- *   things that already sit on a shadow; a flat control that lifts looks
- *   detached.
- * - `swell` is what a flat control does instead: it grows 2% in place. No
- *   shadow, no lift, nothing to detach from — it just meets the pointer.
- *   The pair reads as one system rather than two, because both say "this
- *   responds to you" while respecting whether the surface is raised.
+ * The hover pair — lift for a raised surface, swell for a flat one — used to
+ * live here too. Button and IconButton were their only users and both now
+ * carry those rules in their own CSS, where they read as `transform:
+ * translateY(-1px)` rather than as a class name. Nothing was dropped; it
+ * moved, and `find-dead-classes` is what noticed the leftovers.
  * - `spring` is for a mark that travels — a toggle thumb, a tick, an
  *   indicator. The curve overshoots slightly and settles, which reads as
  *   weight. It is wrong for colour, which cannot overshoot meaningfully, and
@@ -43,21 +41,6 @@ export const motionState =
 export const motionPress =
   "transition-[color,background-color,border-color,box-shadow,transform] duration-interaction ease-decelerate " +
   "active:duration-instant active:scale-[0.97]";
-
-/**
- * Hover lift for raised surfaces — 1px up, one shadow step. Pair with
- * `motionPress` so the same element still presses.
- */
-export const motionLift = "hover:-translate-y-px hover:shadow-2 active:translate-y-0";
-
-/**
- * Hover for a flat control — grows in place, stays flat. Pair with
- * `motionPress`, which shrinks it back past its resting size on the press.
- *
- * 2%, not 1%: on a 40px control 1% is under half a pixel, which is below the
- * threshold of noticing and so does the job of nothing.
- */
-export const motionSwell = "hover:scale-[1.02]";
 
 /**
  * For a mark that travels. Overshoots and settles, at the slower step so the

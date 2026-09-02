@@ -514,8 +514,13 @@ chk('motion recipes go through the tokens',
 chk('press is instant down, eased up',
   has(motionLib,'active:duration-instant active:scale-[0.97]'),
   'lag between finger and pixel reads as slow');
-chk('lift is hover only, released on press',
-  has(motionLib,'hover:-translate-y-px hover:shadow-2 active:translate-y-0'), '');
+// The lift and swell recipes moved into Button.css and IconButton.css, where
+// they are checked as rules. What matters here is that motion.ts holds only
+// what is still expressed as classes.
+chk('motion.ts holds only what is still a class',
+  !has(motionLib,'motionLift','motionSwell')
+    && has(motionLib,'motionState','motionPress','motionSpring'),
+  'lift and swell live in the two stylesheets that use them');
 chk('spring is reserved for travel', has(motionLib,'motionSpring') && has(motionLib,'ease-spring'),
   'wrong for colour, which cannot overshoot');
 
@@ -565,7 +570,7 @@ for (const file of []) {
         + rows.filter((r) => !r.raised).map((r) => r.name).join('/') + ' swell');
 }
 chk('swell is smaller than the press',
-  /motionSwell = "hover:scale-\[1\.0[12]\]"/.test(motionLib) && motionLib.includes('active:scale-[0.97]'),
+  has(css('Button'),'--flat:hover { transform: scale(1.02)') && has(motionLib,'active:scale-[0.97]'),
   'hover grows a little, press shrinks more — the press must still read as a press');
 
 chk('toggle thumb travels on the spring', has(read('Toggle/Toggle.tsx'),'"transition-[left] " + motionSpring'), '');
