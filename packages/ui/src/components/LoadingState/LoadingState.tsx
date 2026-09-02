@@ -1,7 +1,5 @@
 import * as React from "react";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { Spinner } from "../Spinner/Spinner";
 
 /**
@@ -18,30 +16,19 @@ import { Spinner } from "../Spinner/Spinner";
  *   Compact  horizontal, padding 20, gap 10, MD spinner, Body/SM Medium
  * Only Page carries the description, and only Compact runs on one row.
  */
-export const loadingStateVariants = cva("flex items-center bg-bg-surface", {
-  variants: {
-    variant: {
-      page: "flex-col gap-[16px] p-[48px]",
-      inline: "flex-col gap-[16px] p-[32px]",
-      compact: "flex-row gap-[10px] p-[20px]",
-    },
-  },
-  defaultVariants: { variant: "page" },
-});
+export type LoadingStateVariant = "page" | "inline" | "compact";
+
+export function loadingStateVariants(
+  props: { variant?: LoadingStateVariant | null; className?: string } = {}
+) {
+  return cx("ids-loading-state", `ids-loading-state--${props.variant ?? "page"}`, props.className);
+}
 
 const spinnerSize = { page: "xl", inline: "lg", compact: "md" } as const;
-const labelClass = {
-  page: "text-heading-h4 text-text-primary",
-  inline: "text-heading-h6 text-text-primary",
-  compact: "text-body-sm-medium text-text-primary",
-} as const;
 
-export interface LoadingStateProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof loadingStateVariants> {
-  variant?: keyof typeof spinnerSize;
+export interface LoadingStateProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: LoadingStateVariant;
   label?: React.ReactNode;
-  /** Second line. Figma shows it on Page only; passing it elsewhere still renders. */
   description?: React.ReactNode;
 }
 
@@ -51,12 +38,12 @@ export const LoadingState = React.forwardRef<HTMLDivElement, LoadingStateProps>(
       ref={ref}
       role="status"
       aria-live="polite"
-      className={cn(loadingStateVariants({ variant }), className)}
+      className={loadingStateVariants({ variant, className })}
       {...props}
     >
       <Spinner size={spinnerSize[variant]} />
-      {label && <span className={labelClass[variant]}>{label}</span>}
-      {description && <span className="text-body-md text-text-tertiary">{description}</span>}
+      {label && <span className="ids-loading-state__label">{label}</span>}
+      {description && <span className="ids-loading-state__description">{description}</span>}
     </div>
   )
 );

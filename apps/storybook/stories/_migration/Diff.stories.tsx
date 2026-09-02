@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -155,6 +155,44 @@ const messageSeverity: Record<string, string> = {
   error: "text-text-error",
 };
 
+const linkBase =
+  "inline-flex items-center gap-[4px] font-sans cursor-pointer underline-offset-2 hover:underline" +
+  " transition-colors duration-interaction ease-decelerate" +
+  " outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]" +
+  " aria-disabled:pointer-events-none aria-disabled:text-text-disabled aria-disabled:no-underline";
+const linkSize: Record<string, string> = {
+  sm: "text-body-xs-medium [&>svg]:size-[12px]",
+  md: "text-body-sm-medium [&>svg]:size-[14px]",
+  lg: "text-body-md-medium [&>svg]:size-[16px]",
+};
+const linkColor: Record<string, string> = {
+  brand: "text-text-brand hover:text-text-brand-hover",
+  neutral: "text-text-primary",
+  inverse: "text-text-inverse",
+  error: "text-text-error hover:text-text-error-hover",
+};
+
+const ctaBase =
+  "inline-flex items-center gap-[6px] font-sans cursor-pointer" +
+  " transition-colors duration-interaction ease-decelerate" +
+  " outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]" +
+  " aria-disabled:pointer-events-none aria-disabled:text-text-disabled" +
+  " [&>svg]:transition-transform [&>svg]:duration-interaction ease-decelerate";
+const ctaSize: Record<string, string> = {
+  sm: "text-caption-md [&>svg]:size-[12px]",
+  md: "text-body-sm-medium [&>svg]:size-[14px]",
+  lg: "text-body-md-medium [&>svg]:size-[16px]",
+};
+const ctaColor: Record<string, string> = { brand: "text-text-brand", neutral: "text-text-primary" };
+const ctaArrowClass: Record<string, string> = {
+  right: "hover:[&>svg]:translate-x-[2px]",
+  down: "hover:[&>svg]:translate-y-[2px]",
+};
+const ctaArrowPath = {
+  right: "M5 12h14M13 6l6 6-6 6",
+  down: "M12 5v14M6 13l6 6 6-6",
+} as const;
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -238,6 +276,53 @@ const CASES: Case[] = [
         Helper text
       </InlineMessage>
     ),
+  },
+  {
+    name: "Link",
+    tag: "a",
+    old: Object.fromEntries(
+      Object.entries(linkSize).flatMap(([sz, szc]) =>
+        Object.entries(linkColor).map(([col, cc]) => [`${sz}/${col}`, `${linkBase} ${szc} ${cc}`])
+      )
+    ),
+    children: "Read the docs",
+    render: (key) => {
+      const [size, color] = key.split("/");
+      return <Link size={size as never} color={color as never}>Read the docs</Link>;
+    },
+  },
+  {
+    name: "InlineCta",
+    tag: "a",
+    old: Object.fromEntries(
+      Object.entries(ctaSize).flatMap(([sz, szc]) =>
+        Object.entries(ctaColor).flatMap(([col, cc]) =>
+          Object.entries(ctaArrowClass).map(([ar, ac]) => [
+            `${sz}/${col}/${ar}`,
+            `${ctaBase} ${szc} ${cc} ${ac}`,
+          ])
+        )
+      )
+    ),
+    children: (key) => {
+      const arrow = key.split("/")[2] as keyof typeof ctaArrowPath;
+      return (
+        <>
+          Get started
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d={ctaArrowPath[arrow]} />
+          </svg>
+        </>
+      );
+    },
+    render: (key) => {
+      const [size, color, arrow] = key.split("/");
+      return (
+        <InlineCta size={size as never} color={color as never} arrow={arrow as never}>
+          Get started
+        </InlineCta>
+      );
+    },
   },
   {
     name: "Dot",

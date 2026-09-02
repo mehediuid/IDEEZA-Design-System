@@ -1,0 +1,62 @@
+/*
+ * LoadingState — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-loading-state {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-surface);
+}
+
+.ids-loading-state--page {
+  flex-direction: column;
+  gap: 16px;
+  padding: 48px;
+}
+
+.ids-loading-state--inline {
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+}
+
+.ids-loading-state--compact {
+  flex-direction: row;
+  gap: 10px;
+  padding: 20px;
+}
+
+/* Figma sets the label's type per variant — Heading/H4 for the page state,
+   H6 inline, Body/SM-medium when compact. The description is the same in all
+   three. Both were classes on the elements before. */
+.ids-loading-state__label {
+  color: var(--color-text-primary);
+}
+.ids-loading-state--page .ids-loading-state__label {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-3xl);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-loading-state--inline .ids-loading-state__label {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-loading-state--compact .ids-loading-state__label {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.ids-loading-state__description {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-tertiary);
+}

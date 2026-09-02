@@ -1,0 +1,94 @@
+/*
+ * Link — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-family-body);
+  cursor: pointer;
+  text-underline-offset: 2px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: var(--motion-easing-decelerate);
+  transition-duration: var(--motion-duration-interaction);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ids-link:hover {
+  text-decoration-line: underline;
+}
+
+.ids-link:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.ids-link[aria-disabled="true"] {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+  text-decoration-line: none;
+}
+
+.ids-link--sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.ids-link--sm > svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ids-link--md {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.ids-link--md > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ids-link--lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.ids-link--lg > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ids-link--brand {
+  color: var(--color-text-brand);
+}
+
+.ids-link--brand:hover {
+  color: var(--color-text-brand-hover);
+}
+
+.ids-link--neutral {
+  color: var(--color-text-primary);
+}
+
+.ids-link--inverse {
+  color: var(--color-text-inverse);
+}
+
+.ids-link--error {
+  color: var(--color-text-error);
+}
+
+.ids-link--error:hover {
+  color: var(--color-text-error-hover);
+}

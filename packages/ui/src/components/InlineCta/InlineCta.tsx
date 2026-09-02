@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * InlineCta — mirrors Figma `A28 Inline CTA` (Atoms — Display).
@@ -20,43 +18,36 @@ import { cn } from "../../lib/cn";
  * SM is Caption/MD (regular) while MD and LG are the Medium styles; that jump
  * is Figma's, not a transcription slip.
  */
-export const inlineCtaVariants = cva(
-  [
-    "inline-flex items-center gap-[6px] font-sans cursor-pointer",
-    "transition-colors duration-interaction ease-decelerate",
-    "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]",
-    "aria-disabled:pointer-events-none aria-disabled:text-text-disabled",
-    "[&>svg]:transition-transform [&>svg]:duration-interaction ease-decelerate",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "text-caption-md [&>svg]:size-[12px]",
-        md: "text-body-sm-medium [&>svg]:size-[14px]",
-        lg: "text-body-md-medium [&>svg]:size-[16px]",
-      },
-      color: {
-        brand: "text-text-brand",
-        neutral: "text-text-primary",
-      },
-      arrow: {
-        right: "hover:[&>svg]:translate-x-[2px]",
-        down: "hover:[&>svg]:translate-y-[2px]",
-      },
-    },
-    defaultVariants: { size: "md", color: "brand", arrow: "right" },
-  }
-);
+export type InlineCtaSize = "sm" | "md" | "lg";
+export type InlineCtaColor = "brand" | "neutral";
+export type InlineCtaArrow = "right" | "down";
+
+export function inlineCtaVariants(
+  props: {
+    size?: InlineCtaSize | null;
+    color?: InlineCtaColor | null;
+    arrow?: InlineCtaArrow | null;
+    className?: string;
+  } = {}
+) {
+  return cx(
+    "ids-inline-cta",
+    `ids-inline-cta--${props.size ?? "md"}`,
+    `ids-inline-cta--${props.color ?? "brand"}`,
+    `ids-inline-cta--${props.arrow ?? "right"}`,
+    props.className
+  );
+}
 
 const arrowPath = {
   right: "M5 12h14M13 6l6 6-6 6",
   down: "M12 5v14M6 13l6 6 6-6",
 } as const;
 
-export interface InlineCtaProps
-  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "color">,
-    VariantProps<typeof inlineCtaVariants> {
-  arrow?: keyof typeof arrowPath;
+export interface InlineCtaProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "color"> {
+  size?: InlineCtaSize | null;
+  color?: InlineCtaColor | null;
+  arrow?: InlineCtaArrow;
   asChild?: boolean;
   disabled?: boolean;
 }
@@ -69,7 +60,7 @@ export const InlineCta = React.forwardRef<HTMLAnchorElement, InlineCtaProps>(
         ref={ref}
         aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : props.tabIndex}
-        className={cn(inlineCtaVariants({ size, color, arrow }), className)}
+        className={inlineCtaVariants({ size, color, arrow, className })}
         {...props}
       >
         {children}

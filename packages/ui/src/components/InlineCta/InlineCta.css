@@ -1,0 +1,88 @@
+/*
+ * InlineCta — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-inline-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-family-body);
+  cursor: pointer;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: var(--motion-easing-decelerate);
+  transition-duration: var(--motion-duration-interaction);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ids-inline-cta:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.ids-inline-cta[aria-disabled="true"] {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+}
+
+.ids-inline-cta > svg {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: var(--motion-duration-interaction);
+}
+
+.ids-inline-cta--sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+.ids-inline-cta--sm > svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ids-inline-cta--md {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.ids-inline-cta--md > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ids-inline-cta--lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.ids-inline-cta--lg > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ids-inline-cta--brand {
+  color: var(--color-text-brand);
+}
+
+.ids-inline-cta--neutral {
+  color: var(--color-text-primary);
+}
+
+/* The arrow leans the way it points on hover — 2px, the same distance in both
+   axes. Tailwind assembled this from its transform variables; written out it
+   is one declaration and cannot silently resolve to nothing. */
+.ids-inline-cta--right:hover > svg {
+  transform: translateX(2px);
+}
+.ids-inline-cta--down:hover > svg {
+  transform: translateY(2px);
+}

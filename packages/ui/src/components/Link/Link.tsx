@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * Link — mirrors Figma `A03 Link` (Atoms — Action).
@@ -20,36 +18,23 @@ import { cn } from "../../lib/cn";
  * style is Body/XS Medium at 12/18, used here — the package rule is that type
  * goes through a named style, so the fix belongs in Figma, as a style.
  */
-export const linkVariants = cva(
-  [
-    "inline-flex items-center gap-[4px] font-sans cursor-pointer",
-    "underline-offset-2 hover:underline",
-    "transition-colors duration-interaction ease-decelerate",
-    "outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]",
-    "aria-disabled:pointer-events-none aria-disabled:text-text-disabled aria-disabled:no-underline",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "text-body-xs-medium [&>svg]:size-[12px]",
-        md: "text-body-sm-medium [&>svg]:size-[14px]",
-        lg: "text-body-md-medium [&>svg]:size-[16px]",
-      },
-      color: {
-        brand: "text-text-brand hover:text-text-brand-hover",
-        neutral: "text-text-primary",
-        inverse: "text-text-inverse",
-        error: "text-text-error hover:text-text-error-hover",
-      },
-    },
-    defaultVariants: { size: "md", color: "brand" },
-  }
-);
+export type LinkSize = "sm" | "md" | "lg";
+export type LinkColor = "brand" | "neutral" | "inverse" | "error";
 
-export interface LinkProps
-  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "color">,
-    VariantProps<typeof linkVariants> {
-  /** Render as the child element — e.g. a router link. */
+export function linkVariants(
+  props: { size?: LinkSize | null; color?: LinkColor | null; className?: string } = {}
+) {
+  return cx(
+    "ids-link",
+    `ids-link--${props.size ?? "md"}`,
+    `ids-link--${props.color ?? "brand"}`,
+    props.className
+  );
+}
+
+export interface LinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "color"> {
+  size?: LinkSize | null;
+  color?: LinkColor | null;
   asChild?: boolean;
   disabled?: boolean;
 }
@@ -62,7 +47,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         ref={ref}
         aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : props.tabIndex}
-        className={cn(linkVariants({ size, color }), className)}
+        className={linkVariants({ size, color, className })}
         {...props}
       >
         {children}

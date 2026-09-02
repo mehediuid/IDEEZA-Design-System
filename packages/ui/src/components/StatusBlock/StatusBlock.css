@@ -1,0 +1,68 @@
+/*
+ * StatusBlock — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-status-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+  border-width: 1px;
+  border-color: var(--color-border-default);
+  background-color: var(--color-bg-subtle);
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* A 16px box holding a 10px dot, so the dot's optical centre lines up with the
+   first line of the label rather than with the block. */
+.ids-status-block__indicator {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+.ids-status-block__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+}
+.ids-status-block--operational .ids-status-block__dot {
+  background-color: var(--color-icon-success);
+}
+.ids-status-block--degraded .ids-status-block__dot {
+  background-color: var(--color-icon-warning);
+}
+.ids-status-block--outage .ids-status-block__dot {
+  background-color: var(--color-icon-error);
+}
+.ids-status-block--maintenance .ids-status-block__dot {
+  background-color: var(--color-icon-blue);
+}
+
+.ids-status-block__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+.ids-status-block__label {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+.ids-status-block__detail {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}

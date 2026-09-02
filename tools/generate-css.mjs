@@ -210,6 +210,23 @@ if (compoundAt !== -1) {
   }
 }
 
+/**
+ * Attach whatever followed the class in the original selector.
+ *
+ * A pseudo-class or an attribute selector binds to the element itself and gets
+ * no space; a combinator introduces another element and does. Adding a space
+ * to everything turned `aria-disabled:` into `.ids-link [aria-disabled=…]`,
+ * which styles a descendant that does not exist — the disabled treatment would
+ * simply never have appeared.
+ */
+const join = (suffix) => {
+  const t = suffix.trim();
+  if (!t) return '';
+  if (t.startsWith(':') || t.startsWith('[')) return t;
+  if (/^[>~+]/.test(t)) return ` ${t[0]} ${t.slice(1).trim()}`;
+  return ` ${t}`;
+};
+
 const out = [];
 const allUnknown = new Set();
 for (const [name, body] of groups) {
@@ -219,8 +236,7 @@ for (const [name, body] of groups) {
   const selector = name ? `.${prefix}--${name}` : `.${prefix}`;
   for (const [pseudo, decls] of byPseudo) {
     if (!decls.size) continue;
-    // `[&_svg]` and friends resolve to a descendant suffix, not a pseudo-class.
-    const sel = selector + (pseudo.startsWith(':') ? pseudo : pseudo ? ` ${pseudo.trim()}` : '');
+    const sel = selector + join(pseudo);
     out.push(`${sel} {\n${[...decls].map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`);
   }
 }
@@ -231,7 +247,7 @@ for (const [keys, cls] of compounds) {
   const selector = keys.map((k) => `.${prefix}--${k}`).join('');
   for (const [pseudo, decls] of byPseudo) {
     if (!decls.size) continue;
-    const sel = selector + (pseudo.startsWith(':') ? pseudo : pseudo ? ` ${pseudo.trim()}` : '');
+    const sel = selector + join(pseudo);
     out.push(`${sel} {\n${[...decls].map(([p, v]) => `  ${p}: ${v};`).join('\n')}\n}`);
   }
 }
@@ -243,6 +259,15 @@ const header = `/*
  */
 `;
 const text = header + '\n' + out.join('\n\n') + '\n';
+
+// A component that has already migrated has no cva() left to read, so this
+// produces nothing — and the first version wrote that nothing straight over a
+// good stylesheet. DeltaChip lost its entire CSS that way, and the only
+// symptom was the component rendering unstyled.
+if (!out.length) {
+  console.error(`${component}: kono rule pawa gelo na — cva() ache to? (kichu likhchi na)`);
+  process.exit(1);
+}
 
 if (write) {
   const dest = path.join(repo, `packages/ui/src/components/${component}/${component}.css`);

@@ -174,17 +174,21 @@ chk('gauge is half the circle', has(pring,'circumference / 2'), 'Figma track spa
 chk('ring starts at 12 o\'clock, gauge at 9', has(pring,'variant === "gauge" ? 180 : -90'), '');
 
 // ── A03 Link · A15 Button Group · A28 Inline CTA · A16b/A16c Avatar ──
-const lk = stripComments(read('Link/Link.tsx'));
-chk('link type ramp + icon 12/14/16',
-  has(lk,'text-body-xs-medium [&>svg]:size-[12px]','text-body-sm-medium [&>svg]:size-[14px]',
-        'text-body-md-medium [&>svg]:size-[16px]'), 'Figma SM is an unnamed 12/16 — nearest named style used');
-chk('link gap 4', has(lk,'gap-[4px]'), '');
-chk('link hover underlines in every colour', has(lk,'hover:underline'), '');
-chk('link brand/error also shift hue on hover',
-  has(lk,'text-text-brand hover:text-text-brand-hover','text-text-error hover:text-text-error-hover'),
+const lk = css('Link');
+chk('link type ramp + icon 12/14/16', has(lk,
+  '--sm > svg { width: 12px','--md > svg { width: 14px','--lg > svg { width: 16px',
+  '--sm { font-size: var(--font-size-sm)','--lg { font-size: var(--font-size-lg)'),
+  'Figma SM is an unnamed 12/16 — nearest named style used');
+chk('link gap 4', has(lk,'gap: 4px'), '');
+chk('link hover underlines in every colour',
+  has(lk,'.ids-link:hover { text-decoration-line: underline'), '');
+chk('link brand/error also shift hue on hover', has(lk,
+  '--brand:hover { color: var(--color-text-brand-hover)',
+  '--error:hover { color: var(--color-text-error-hover)')
+  && !/--(neutral|inverse):hover/.test(lk),
   'neutral and inverse keep theirs');
-chk('link colours brand/neutral/inverse/error',
-  has(lk,'neutral: "text-text-primary"','inverse: "text-text-inverse"'), '');
+chk('link colours brand/neutral/inverse/error', has(lk,
+  '--neutral { color: var(--color-text-primary)','--inverse { color: var(--color-text-inverse)'), '');
 
 const bgp = stripComments(read('ButtonGroup/ButtonGroup.tsx'));
 chk('segment ramp 32/36/40/44 pad 10/12/14/16',
@@ -197,14 +201,19 @@ chk('segment states surface/subtle/brand',
 chk('group radius 8 + 1px border', has(bgp,'rounded-[8px] border border-border'), '');
 chk('segment gap 6', has(bgp,'gap-[6px]'), '');
 
-const cta2 = stripComments(read('InlineCta/InlineCta.tsx'));
-chk('cta gap 6, icon 12/14/16',
-  has(cta2,'gap-[6px]','[&>svg]:size-[12px]','[&>svg]:size-[14px]','[&>svg]:size-[16px]'), '');
-chk('cta type Caption/MD then Medium',
-  has(cta2,'sm: "text-caption-md','md: "text-body-sm-medium','lg: "text-body-md-medium'),
+const cta2 = css('InlineCta');
+chk('cta gap 6, icon 12/14/16', has(cta2,
+  'gap: 6px','--sm > svg { width: 12px','--md > svg { width: 14px','--lg > svg { width: 16px'), '');
+chk('cta type Caption/MD then Medium', has(cta2,
+  '--sm { font-size: var(--font-size-sm); line-height: var(--line-height-xs)',
+  '--md { font-size: var(--font-size-md)','--lg { font-size: var(--font-size-lg)'),
   'the SM jump is Figma\'s');
-chk('cta colours brand/neutral only', has(cta2,'brand: "text-text-brand"','neutral: "text-text-primary"'), '');
-chk('cta arrow right/down', has(cta2,'right: "hover:[&>svg]:translate-x-[2px]"','down: "hover:[&>svg]:translate-y-[2px]"'), '');
+chk('cta colours brand/neutral only',
+  has(cta2,'--brand { color: var(--color-text-brand)','--neutral { color: var(--color-text-primary)')
+    && !/--(inverse|error) \{/.test(cta2), '');
+chk('cta arrow right/down', has(cta2,
+  '--right:hover > svg { transform: translateX(2px)',
+  '--down:hover > svg { transform: translateY(2px)'), '');
 
 const agp = stripComments(read('AvatarGroup/AvatarGroup.tsx'));
 chk('avatar group overlap -6/-8/-10/-12',
@@ -314,16 +323,24 @@ chk('toast image 40 r8, avatar 32 round', has(tst,'size-[40px]','rounded-[8px]')
 chk('toast no-icon keeps the 1px spacer', has(tst,'w-px shrink-0'), 'text starts in the same place');
 chk('toast progress restacks vertically', has(tst,'leading === "progress"','flex-col gap-[12px]'), '');
 
-const stb = stripComments(read('StatusBlock/StatusBlock.tsx'));
-chk('status block r6 pad 6/8 gap 6',
-  has(stb,'gap-[6px] rounded-[6px] border border-border bg-bg-subtle px-[8px] py-[6px]'), '');
+const stb = css('StatusBlock');
+chk('status block r6 pad 6/8 gap 6', has(stb,
+  'gap: 6px','border-radius: 6px','background-color: var(--color-bg-subtle)',
+  'padding-left: 8px; padding-right: 8px; padding-top: 6px; padding-bottom: 6px'), '');
 chk('status block surface stays neutral',
-  has(stb,'operational: "", degraded: "", outage: "", maintenance: ""'), 'only the dot carries the status');
-chk('status dot 10px, four colours',
-  has(stb,'size-[10px]','operational: "bg-icon-success"','maintenance: "bg-icon-blue"'),
+  !/--(operational|degraded|outage|maintenance) \{/.test(stb),
+  'only the dot carries the status');
+chk('status dot 10px, four colours', has(stb,
+  '__dot { width: 10px; height: 10px',
+  '--operational .ids-status-block__dot { background-color: var(--color-icon-success)',
+  '--maintenance .ids-status-block__dot { background-color: var(--color-icon-blue)'),
   'Maintenance is blue — planned, not a fault');
-chk('status label Body/SM Medium, detail Caption/MD at 2px',
-  has(stb,'text-body-sm-medium text-text-primary','gap-[2px]','text-caption-md text-text-secondary'), '');
+chk('status label Body/SM Medium, detail Caption/MD at 2px', has(stb,
+  '__label { font-size: var(--font-size-md); line-height: var(--line-height-md)',
+  'font-weight: var(--font-weight-medium); color: var(--color-text-primary)',
+  '__text { display: flex; min-width: 0; flex-direction: column; gap: 2px',
+  '__detail { font-size: var(--font-size-sm); line-height: var(--line-height-xs)',
+  'font-weight: var(--font-weight-regular); color: var(--color-text-secondary)'), '');
 
 // ── Molecules — States: M48-M59 · M50 · M51 ─────────────────────────
 const sv = stripComments(read('StateView/StateView.tsx'));
@@ -343,14 +360,22 @@ chk('state presets keep Figma pairings',
 chk('state presets cover all ten', ['empty','error','success','no-results','permission-denied',
   'no-connection','maintenance','not-found','coming-soon','server-error'].every(k=>sv.includes(k)), '');
 
-const lst = stripComments(read('LoadingState/LoadingState.tsx'));
-chk('loading page/inline/compact geometry',
-  has(lst,'page: "flex-col gap-[16px] p-[48px]"','inline: "flex-col gap-[16px] p-[32px]"',
-        'compact: "flex-row gap-[10px] p-[20px]"'), 'compact is the only horizontal one');
-chk('loading spinner ramp xl/lg/md', has(lst,'page: "xl", inline: "lg", compact: "md"'), '');
-chk('loading label ramp H4/H6/Body SM Medium',
-  has(lst,'text-heading-h4','text-heading-h6','text-body-sm-medium'), '');
-chk('loading description is Body/MD tertiary', has(lst,'text-body-md text-text-tertiary'), 'Figma shows it on Page only');
+const lstc = css('LoadingState');
+chk('loading page/inline/compact geometry', has(lstc,
+  '--page { flex-direction: column; gap: 16px; padding: 48px',
+  '--inline { flex-direction: column; gap: 16px; padding: 32px',
+  '--compact { flex-direction: row; gap: 10px; padding: 20px'),
+  'compact is the only horizontal one');
+chk('loading spinner ramp xl/lg/md',
+  has(stripComments(read('LoadingState/LoadingState.tsx')),
+      'page: "xl", inline: "lg", compact: "md"'), '');
+chk('loading label ramp H4/H6/Body SM Medium', has(lstc,
+  '--page .ids-loading-state__label { font-size: var(--font-size-3xl)',
+  '--inline .ids-loading-state__label { font-size: var(--font-size-lg)',
+  '--compact .ids-loading-state__label { font-size: var(--font-size-md)'), '');
+chk('loading description is Body/MD tertiary',
+  has(lstc,'__description { font-size: var(--font-size-lg)','color: var(--color-text-tertiary)'),
+  'Figma shows it on Page only');
 
 const skl = stripComments(read('SkeletonLayout/SkeletonLayout.tsx'));
 chk('skeleton layout card 360 r8 pad 20 gap 16', has(skl,'w-[360px] flex-col gap-[16px] rounded-[8px] p-[20px]'), '');

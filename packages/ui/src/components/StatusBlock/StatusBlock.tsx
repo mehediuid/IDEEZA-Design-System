@@ -1,7 +1,5 @@
 import * as React from "react";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * StatusBlock — mirrors Figma `M06 Status Block` (Molecules — Feedback).
@@ -17,37 +15,29 @@ import { cn } from "../../lib/cn";
  * Maintenance takes icon/blue rather than a warning colour: it is planned,
  * not a fault.
  */
-export const statusBlockVariants = cva(
-  "inline-flex items-center gap-[6px] rounded-[6px] border border-border bg-bg-subtle px-[8px] py-[6px]",
-  { variants: { status: { operational: "", degraded: "", outage: "", maintenance: "" } },
-    defaultVariants: { status: "operational" } }
-);
+export type StatusBlockStatus = "operational" | "degraded" | "outage" | "maintenance";
 
-const dot = {
-  operational: "bg-icon-success",
-  degraded: "bg-icon-warning",
-  outage: "bg-icon-error",
-  maintenance: "bg-icon-blue",
-} as const;
+export function statusBlockVariants(
+  props: { status?: StatusBlockStatus | null; className?: string } = {}
+) {
+  return cx("ids-status-block", `ids-status-block--${props.status ?? "operational"}`, props.className);
+}
 
-export interface StatusBlockProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof statusBlockVariants> {
-  status?: keyof typeof dot;
+export interface StatusBlockProps extends React.HTMLAttributes<HTMLDivElement> {
+  status?: StatusBlockStatus;
   label: React.ReactNode;
-  /** The line under the label — Figma shows "Updated 2 min ago". */
   detail?: React.ReactNode;
 }
 
 export const StatusBlock = React.forwardRef<HTMLDivElement, StatusBlockProps>(
   ({ className, status = "operational", label, detail, ...props }, ref) => (
-    <div ref={ref} role="status" className={cn(statusBlockVariants({ status }), className)} {...props}>
-      <span className="inline-flex size-[16px] shrink-0 items-center justify-center" aria-hidden="true">
-        <span className={cn("size-[10px] rounded-full", dot[status])} />
+    <div ref={ref} role="status" className={statusBlockVariants({ status, className })} {...props}>
+      <span className="ids-status-block__indicator" aria-hidden="true">
+        <span className="ids-status-block__dot" />
       </span>
-      <span className="flex min-w-0 flex-col gap-[2px]">
-        <span className="text-body-sm-medium text-text-primary">{label}</span>
-        {detail && <span className="text-caption-md text-text-secondary">{detail}</span>}
+      <span className="ids-status-block__text">
+        <span className="ids-status-block__label">{label}</span>
+        {detail && <span className="ids-status-block__detail">{detail}</span>}
       </span>
     </div>
   )
