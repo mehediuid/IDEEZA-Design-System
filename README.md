@@ -143,6 +143,8 @@ pnpm release     # build, test, and pack the tarball
 
 Then `npm publish` the tarball yourself — publishing needs your npm
 credentials, which do not belong in this repo or in any tool that reads it.
+`PUBLISH.md` walks through it step by step, including what to check before
+pressing publish and what the common errors mean.
 
 ### When a style change does not show up
 
