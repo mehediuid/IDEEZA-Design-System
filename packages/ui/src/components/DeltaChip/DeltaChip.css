@@ -1,0 +1,92 @@
+/*
+ * DeltaChip — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-delta-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family-body);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.ids-delta-chip--sm {
+  height: 20px;
+  gap: 3px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ids-delta-chip--sm > svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ids-delta-chip--md {
+  height: 24px;
+  gap: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ids-delta-chip--md > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ids-delta-chip--subtle.ids-delta-chip--up {
+  background-color: var(--chart-delta-up-bg);
+  color: var(--chart-delta-up-text);
+}
+
+.ids-delta-chip--subtle.ids-delta-chip--down {
+  background-color: var(--chart-delta-down-bg);
+  color: var(--chart-delta-down-text);
+}
+
+.ids-delta-chip--subtle.ids-delta-chip--flat {
+  background-color: var(--chart-delta-flat-bg);
+  color: var(--chart-delta-flat-text);
+}
+
+.ids-delta-chip--filled.ids-delta-chip--up {
+  background-color: var(--chart-delta-up-icon);
+  color: var(--color-text-inverse);
+}
+
+.ids-delta-chip--filled.ids-delta-chip--down {
+  background-color: var(--chart-delta-down-icon);
+  color: var(--color-text-inverse);
+}
+
+.ids-delta-chip--filled.ids-delta-chip--flat {
+  background-color: var(--chart-delta-flat-icon);
+  color: var(--color-text-inverse);
+}
+
+.ids-delta-chip--text.ids-delta-chip--up {
+  color: var(--chart-delta-up-text);
+}
+
+.ids-delta-chip--text.ids-delta-chip--down {
+  color: var(--chart-delta-down-text);
+}
+
+.ids-delta-chip--text.ids-delta-chip--flat {
+  color: var(--chart-delta-flat-text);
+}

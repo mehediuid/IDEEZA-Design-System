@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -41,11 +41,13 @@ interface Case {
   /** label → the new component, rendered. */
   render: (key: string) => React.ReactNode;
   /**
-   * The content both sides get. It has to be identical: intrinsic width is a
-   * computed style, so a different label on each side reports a real-looking
-   * width difference that is entirely the harness's doing.
+   * The content both sides get, as a value or per key. It has to be identical
+   * on both sides: intrinsic width is a computed style, so a different label
+   * on each side reports a real-looking width difference that is entirely the
+   * harness's doing — and content that varies with the key (DeltaChip draws a
+   * different arrow per trend) has to vary on both sides too.
    */
-  children?: React.ReactNode;
+  children?: React.ReactNode | ((key: string) => React.ReactNode);
 }
 
 const buttonBase =
@@ -119,6 +121,40 @@ const dotColor: Record<string, string> = {
   success: "bg-bg-success", warning: "bg-bg-warning", error: "bg-bg-error",
 };
 
+const deltaBase = "inline-flex items-center rounded-full font-sans whitespace-nowrap align-middle";
+const deltaSize: Record<string, string> = {
+  sm: "h-[20px] gap-[3px] px-[8px] py-[2px] text-label-sm [&>svg]:size-[12px]",
+  md: "h-[24px] gap-[4px] px-[10px] py-[4px] text-label-md [&>svg]:size-[14px]",
+};
+/** trend and variant only mean anything together, as in Figma. */
+const deltaPair: Record<string, string> = {
+  "subtle/up": "bg-chart-delta-up-bg text-chart-delta-up-text",
+  "subtle/down": "bg-chart-delta-down-bg text-chart-delta-down-text",
+  "subtle/flat": "bg-chart-delta-flat-bg text-chart-delta-flat-text",
+  "filled/up": "bg-chart-delta-up-icon text-text-inverse",
+  "filled/down": "bg-chart-delta-down-icon text-text-inverse",
+  "filled/flat": "bg-chart-delta-flat-icon text-text-inverse",
+  "text/up": "text-chart-delta-up-text",
+  "text/down": "text-chart-delta-down-text",
+  "text/flat": "text-chart-delta-flat-text",
+};
+
+/** The arrow paths DeltaChip draws, so the old side can draw the same one. */
+const deltaArrow = {
+  up: "M12 19V5M5 12l7-7 7 7",
+  down: "M12 5v14M19 12l-7 7-7-7",
+  flat: "M5 12h14",
+} as const;
+
+const messageBase = "inline-flex items-center gap-[4px] text-caption-md";
+const messageSeverity: Record<string, string> = {
+  helper: "text-text-secondary",
+  info: "text-icon-blue",
+  success: "text-text-success",
+  warning: "text-text-warning",
+  error: "text-text-error",
+};
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -156,6 +192,52 @@ const CASES: Case[] = [
     old: Object.fromEntries(Object.entries(codeSize).map(([s, c]) => [s, `${codeBase} ${c}`])),
     children: "npm i",
     render: (key) => <Code size={key as never}>npm i</Code>,
+  },
+  {
+    name: "DeltaChip",
+    tag: "span",
+    old: Object.fromEntries(
+      Object.entries(deltaSize).flatMap(([sz, szc]) =>
+        Object.entries(deltaPair).map(([pair, pc]) => [`${sz}/${pair}`, `${deltaBase} ${szc} ${pc}`])
+      )
+    ),
+    // The same arrow the component draws for that trend, so the two sides hold
+    // the same content and the width comparison means something.
+    children: (key) => {
+      const trend = key.split("/")[2] as keyof typeof deltaArrow;
+      return (
+        <>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d={deltaArrow[trend]} />
+          </svg>
+          12.4%
+        </>
+      );
+    },
+    render: (key) => {
+      const [size, variant, trend] = key.split("/");
+      return (
+        <DeltaChip size={size as never} variant={variant as never} trend={trend as never}>
+          12.4%
+        </DeltaChip>
+      );
+    },
+  },
+  {
+    name: "InlineMessage",
+    tag: "span",
+    old: Object.fromEntries(
+      Object.entries(messageSeverity).map(([k, c]) => [k, `${messageBase} ${c}`])
+    ),
+    // Compared without the glyph: the old side sized it with a class on the
+    // icon and the new side sizes it from the parent, so including it would
+    // compare two different elements' children rather than the message itself.
+    children: "Helper text",
+    render: (key) => (
+      <InlineMessage severity={key as never} hideIcon>
+        Helper text
+      </InlineMessage>
+    ),
   },
   {
     name: "Dot",
@@ -283,7 +365,7 @@ export const Diff: StoryObj = {
                   {React.createElement(
                     c.tag,
                     { "data-old": `${c.name}:${key}`, className: classes },
-                    c.children
+                    typeof c.children === "function" ? c.children(key) : c.children
                   )}
                   <span data-new-wrap={key} style={{ display: "contents" }}>
                     {React.cloneElement(

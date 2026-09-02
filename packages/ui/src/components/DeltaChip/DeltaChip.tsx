@@ -1,7 +1,5 @@
 import * as React from "react";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * DeltaChip — mirrors Figma `A30 Delta Chip` (Atoms — Display).
@@ -17,31 +15,31 @@ import { cn } from "../../lib/cn";
  *   Text    no fill                  label delta/<trend>/text
  * Trend also picks the arrow, so a red chip never carries an up arrow.
  */
-export const deltaChipVariants = cva(
-  "inline-flex items-center rounded-full font-sans whitespace-nowrap align-middle",
-  {
-    variants: {
-      size: {
-        sm: "h-[20px] gap-[3px] px-[8px] py-[2px] text-label-sm [&>svg]:size-[12px]",
-        md: "h-[24px] gap-[4px] px-[10px] py-[4px] text-label-md [&>svg]:size-[14px]",
-      },
-      trend: { up: "", down: "", flat: "" },
-      variant: { subtle: "", filled: "", text: "" },
-    },
-    compoundVariants: [
-      { variant: "subtle", trend: "up", class: "bg-chart-delta-up-bg text-chart-delta-up-text" },
-      { variant: "subtle", trend: "down", class: "bg-chart-delta-down-bg text-chart-delta-down-text" },
-      { variant: "subtle", trend: "flat", class: "bg-chart-delta-flat-bg text-chart-delta-flat-text" },
-      { variant: "filled", trend: "up", class: "bg-chart-delta-up-icon text-text-inverse" },
-      { variant: "filled", trend: "down", class: "bg-chart-delta-down-icon text-text-inverse" },
-      { variant: "filled", trend: "flat", class: "bg-chart-delta-flat-icon text-text-inverse" },
-      { variant: "text", trend: "up", class: "text-chart-delta-up-text" },
-      { variant: "text", trend: "down", class: "text-chart-delta-down-text" },
-      { variant: "text", trend: "flat", class: "text-chart-delta-flat-text" },
-    ],
-    defaultVariants: { size: "md", trend: "up", variant: "subtle" },
-  }
-);
+export type DeltaChipSize = "sm" | "md";
+export type DeltaChipTrend = "up" | "down" | "flat";
+export type DeltaChipVariant = "subtle" | "filled" | "text";
+
+/**
+ * Trend and variant only mean anything together — Figma has no "up" colour,
+ * it has a subtle-up and a filled-up. In CSS that is the two classes chained,
+ * which is what `compoundVariants` was expressing.
+ */
+export function deltaChipVariants(
+  props: {
+    size?: DeltaChipSize | null;
+    trend?: DeltaChipTrend | null;
+    variant?: DeltaChipVariant | null;
+    className?: string;
+  } = {}
+) {
+  return cx(
+    "ids-delta-chip",
+    `ids-delta-chip--${props.size ?? "md"}`,
+    `ids-delta-chip--${props.trend ?? "up"}`,
+    `ids-delta-chip--${props.variant ?? "subtle"}`,
+    props.className
+  );
+}
 
 const arrows = {
   up: "M12 19V5M5 12l7-7 7 7",
@@ -49,17 +47,16 @@ const arrows = {
   flat: "M5 12h14",
 } as const;
 
-export interface DeltaChipProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof deltaChipVariants> {
-  trend?: keyof typeof arrows;
-  /** Replaces the built-in arrow. */
+export interface DeltaChipProps extends React.HTMLAttributes<HTMLSpanElement> {
+  size?: DeltaChipSize | null;
+  variant?: DeltaChipVariant | null;
+  trend?: DeltaChipTrend;
   icon?: React.ReactNode;
 }
 
 export const DeltaChip = React.forwardRef<HTMLSpanElement, DeltaChipProps>(
   ({ className, size, trend = "up", variant, icon, children, ...props }, ref) => (
-    <span ref={ref} className={cn(deltaChipVariants({ size, trend, variant }), className)} {...props}>
+    <span ref={ref} className={deltaChipVariants({ size, trend, variant, className })} {...props}>
       {icon ?? (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d={arrows[trend]} />

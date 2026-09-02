@@ -1,0 +1,43 @@
+/*
+ * InlineMessage — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-inline-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+.ids-inline-message--helper {
+  color: var(--color-text-secondary);
+}
+
+.ids-inline-message--info {
+  color: var(--color-icon-blue);
+}
+
+.ids-inline-message--success {
+  color: var(--color-text-success);
+}
+
+.ids-inline-message--warning {
+  color: var(--color-text-warning);
+}
+
+.ids-inline-message--error {
+  color: var(--color-text-error);
+}
+
+/* The severity glyph. Written here rather than on the icon, so a caller
+   passing their own icon gets the same size without knowing to ask. */
+.ids-inline-message > svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
