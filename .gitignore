@@ -45,3 +45,6 @@ ideeza-color-changes.pdf
 # npm auth token. Never commit this; publishing uses it and it grants
 # publish rights to every package the account owns.
 .npmrc
+
+# Local, per-machine agent settings — not shared state.
+.claude/settings.local.json

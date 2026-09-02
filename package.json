@@ -18,7 +18,7 @@
     "build-storybook": "turbo run build-storybook --filter=@ideeza/storybook",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && pnpm test && pnpm --filter ideeza-design-system pack",
+    "release": "pnpm build && pnpm test && pnpm --dir packages/design-system pack",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\""
   },
   "devDependencies": {
