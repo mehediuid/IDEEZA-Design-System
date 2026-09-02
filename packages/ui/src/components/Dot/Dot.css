@@ -1,0 +1,62 @@
+/*
+ * Dot — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-dot {
+  display: inline-block;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  vertical-align: middle;
+
+  /* Figma draws a ring ellipse 4px wider than the dot, so the dot reads as
+     separate from whatever it sits on. Tailwind spelled this `ring-2
+     ring-bg-surface`, which it builds out of its own ring variables; written
+     out, it is a 2px spread in the surface colour. */
+  box-shadow: 0 0 0 2px var(--color-bg-surface);
+}
+
+.ids-dot--xs {
+  width: 6px;
+  height: 6px;
+}
+
+.ids-dot--sm {
+  width: 8px;
+  height: 8px;
+}
+
+.ids-dot--md {
+  width: 10px;
+  height: 10px;
+}
+
+.ids-dot--lg {
+  width: 12px;
+  height: 12px;
+}
+
+.ids-dot--brand {
+  background-color: var(--color-bg-brand);
+}
+
+.ids-dot--neutral {
+  background-color: var(--color-bg-inverse);
+}
+
+.ids-dot--blue {
+  background-color: var(--color-bg-blue);
+}
+
+.ids-dot--success {
+  background-color: var(--color-bg-success);
+}
+
+.ids-dot--warning {
+  background-color: var(--color-bg-warning);
+}
+
+.ids-dot--error {
+  background-color: var(--color-bg-error);
+}

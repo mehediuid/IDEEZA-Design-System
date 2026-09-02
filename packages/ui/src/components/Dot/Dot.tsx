@@ -1,7 +1,5 @@
 import * as React from "react";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * Dot — mirrors Figma `A26 Dot` (Atoms — Display).
@@ -14,31 +12,23 @@ import { cn } from "../../lib/cn";
  * bg/surface — a 2px halo that keeps the dot legible when it overlaps an
  * avatar or a busy row. Reproduced with a 2px outward ring.
  */
-export const dotVariants = cva("inline-block shrink-0 rounded-full ring-2 ring-bg-surface align-middle", {
-  variants: {
-    size: {
-      xs: "size-[6px]",
-      sm: "size-[8px]",
-      md: "size-[10px]",
-      lg: "size-[12px]",
-    },
-    color: {
-      brand: "bg-bg-brand",
-      // Figma uses bg/inverse for Neutral, so it flips with the theme.
-      neutral: "bg-bg-inverse",
-      blue: "bg-bg-blue",
-      success: "bg-bg-success",
-      warning: "bg-bg-warning",
-      error: "bg-bg-error",
-    },
-  },
-  defaultVariants: { size: "md", color: "brand" },
-});
+export type DotSize = "xs" | "sm" | "md" | "lg";
+export type DotColor = "brand" | "neutral" | "blue" | "success" | "warning" | "error";
 
-export interface DotProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color">,
-    VariantProps<typeof dotVariants> {
-  /** Describes the dot for assistive tech; omit for purely decorative use. */
+export function dotVariants(
+  props: { size?: DotSize | null; color?: DotColor | null; className?: string } = {}
+) {
+  return cx(
+    "ids-dot",
+    `ids-dot--${props.size ?? "md"}`,
+    `ids-dot--${props.color ?? "brand"}`,
+    props.className
+  );
+}
+
+export interface DotProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "color"> {
+  size?: DotSize | null;
+  color?: DotColor | null;
   label?: string;
 }
 
@@ -49,7 +39,7 @@ export const Dot = React.forwardRef<HTMLSpanElement, DotProps>(
       role={label ? "img" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
-      className={cn(dotVariants({ size, color }), className)}
+      className={dotVariants({ size, color, className })}
       {...props}
     />
   )

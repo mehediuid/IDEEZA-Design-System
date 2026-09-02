@@ -8,3 +8,6 @@
  */
 
 @import "../components/Button/Button.css";
+@import "../components/Code/Code.css";
+@import "../components/Dot/Dot.css";
+@import "../components/Kbd/Kbd.css";
