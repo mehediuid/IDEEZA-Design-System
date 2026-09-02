@@ -147,12 +147,18 @@ chk('code flat: bg/subtle, no border',
   has(cd2,'background-color: var(--color-bg-subtle)','color: var(--color-text-primary)')
     && !/border(-width|-color)?:/.test(cd2), '');
 
-const dc = stripComments(read('DeltaChip/DeltaChip.tsx'));
-chk('delta sm 20 gap 3 icon 12', has(dc,'h-[20px] gap-[3px] px-[8px] py-[2px] text-label-sm','[&>svg]:size-[12px]'), '');
-chk('delta md 24 gap 4 icon 14', has(dc,'h-[24px] gap-[4px] px-[10px] py-[4px] text-label-md','[&>svg]:size-[14px]'), '');
-chk('delta reads the chart/delta ramp',
-  has(dc,'bg-chart-delta-up-bg text-chart-delta-up-text','bg-chart-delta-down-icon text-text-inverse',
-        'text-chart-delta-flat-text'), 'subtle/filled/text x up/down/flat');
+const dc = css('DeltaChip');
+chk('delta sm 20 gap 3 icon 12', has(dc,
+  '--sm { height: 20px; gap: 3px; padding-left: 8px; padding-right: 8px; padding-top: 2px',
+  '--sm > svg { width: 12px; height: 12px'), '');
+chk('delta md 24 gap 4 icon 14', has(dc,
+  '--md { height: 24px; gap: 4px; padding-left: 10px; padding-right: 10px; padding-top: 4px',
+  '--md > svg { width: 14px; height: 14px'), '');
+chk('delta reads the chart/delta ramp', has(dc,
+  '--subtle.ids-delta-chip--up { background-color: var(--chart-delta-up-bg); color: var(--chart-delta-up-text)',
+  '--filled.ids-delta-chip--down { background-color: var(--chart-delta-down-icon); color: var(--color-text-inverse)',
+  '--text.ids-delta-chip--flat { color: var(--chart-delta-flat-text)'),
+  'subtle/filled/text x up/down/flat');
 
 const pbar = stripComments(read('ProgressBar/ProgressBar.tsx'));
 chk('progress bar track 8 r4', has(pbar,'h-[8px] w-full overflow-hidden rounded-[4px] bg-bg-subtle'), '');
@@ -271,12 +277,15 @@ chk('alert title/description stay neutral',
   has(al,'text-text-primary','text-text-secondary'), 'only surface, border, badge and action take the colour');
 chk('alert type ramp', has(al,'title: "text-body-sm-medium", body: "text-caption-md"','title: "text-body-md-medium", body: "text-body-sm"'), '');
 
-const inm = stripComments(read('InlineMessage/InlineMessage.tsx'));
-chk('inline message gap 4, Caption/MD', has(inm,'gap-[4px] text-caption-md'), '');
-chk('inline message glyph 14', has(inm,'size-[14px]'), '');
-chk('inline message severities incl helper',
-  has(inm,'helper: "text-text-secondary"','info: "text-icon-blue"','success: "text-text-success"',
-        'warning: "text-text-warning"','error: "text-text-error"'), '');
+const inm = css('InlineMessage');
+chk('inline message gap 4, Caption/MD',
+  has(inm,'gap: 4px','font-size: var(--font-size-sm); line-height: var(--line-height-xs)'), '');
+chk('inline message glyph 14',
+  has(inm,'> svg { width: 14px; height: 14px; flex-shrink: 0'), 'sized from the parent');
+chk('inline message severities incl helper', has(inm,
+  '--helper { color: var(--color-text-secondary)','--info { color: var(--color-icon-blue)',
+  '--success { color: var(--color-text-success)','--warning { color: var(--color-text-warning)',
+  '--error { color: var(--color-text-error)'), '');
 
 const bnr = stripComments(read('Banner/Banner.tsx'));
 chk('banner r6 pad 8/8/8/12 gap 6', has(bnr,'gap-[6px] rounded-[6px] border py-[8px] pl-[12px] pr-[8px]'), '');
