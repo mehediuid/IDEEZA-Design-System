@@ -124,16 +124,24 @@ function block(text, from) {
   return null;
 }
 
-/** Top-level `key: <value>` pairs of an object body. */
+/**
+ * Top-level `key: <value>` pairs of an object body.
+ *
+ * A quoted value has to be read to its closing quote, not to the end of the
+ * line. `{ subtle: "", solid: "", outline: "border bg-transparent" }` is one
+ * line, and reading to the newline gave `subtle` the whole thing — so Badge's
+ * outline border landed on every subtle badge and the outline variant got no
+ * rule at all. Every value still looked like a plausible value.
+ */
 function entries(body) {
   const out = [];
   let i = 0;
   while (i < body.length) {
-    const m = /["']?([\w-]+)["']?\s*:/g;
-    m.lastIndex = i;
-    const hit = m.exec(body);
+    const key = /["']?([\w-]+)["']?\s*:/g;
+    key.lastIndex = i;
+    const hit = key.exec(body);
     if (!hit) break;
-    let j = m.lastIndex;
+    let j = key.lastIndex;
     while (j < body.length && /\s/.test(body[j])) j++;
     const open = body[j];
     let value, end;
@@ -145,6 +153,12 @@ function entries(body) {
         else if (body[end] === close && --depth === 0) break;
       }
       value = body.slice(j + 1, end);
+    } else if (open === '"' || open === "'" || open === '`') {
+      for (end = j + 1; end < body.length; end++) {
+        if (body[end] === '\\') { end++; continue; }
+        if (body[end] === open) break;
+      }
+      value = body.slice(j, end + 1);
     } else {
       end = body.indexOf('\n', j);
       if (end === -1) end = body.length;

@@ -17,3 +17,5 @@
 @import "../components/Link/Link.css";
 @import "../components/LoadingState/LoadingState.css";
 @import "../components/StatusBlock/StatusBlock.css";
+@import "../components/Badge/Badge.css";
+@import "../components/IconButton/IconButton.css";

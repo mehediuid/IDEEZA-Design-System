@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -48,6 +48,13 @@ interface Case {
    * different arrow per trend) has to vary on both sides too.
    */
   children?: React.ReactNode | ((key: string) => React.ReactNode);
+  /**
+   * Differences that are correct — where the new CSS is right and the old
+   * build was wrong. Returns the reason, which is printed, so nothing is
+   * quietly waved through: a silenced difference has to be argued for in
+   * writing, next to the thing it silences.
+   */
+  expected?: (key: string, prop: string) => string | false;
 }
 
 const buttonBase =
@@ -193,6 +200,61 @@ const ctaArrowPath = {
   down: "M12 5v14M6 13l6 6 6-6",
 } as const;
 
+const badgeBase = "inline-flex items-center font-sans whitespace-nowrap rounded-full";
+const badgeSize: Record<string, string> = {
+  sm: "h-[20px] gap-[4px] px-[6px] text-caption-sm",
+  md: "h-[24px] gap-[4px] px-[8px] text-caption-md",
+  lg: "h-[24px] gap-[6px] px-[10px] text-label-sm",
+};
+/** variant and colour only mean anything together, as in Figma. */
+const badgePair: Record<string, string> = {
+  "subtle/brand": "bg-badge-brand-bg text-badge-brand-text",
+  "subtle/neutral": "bg-bg-subtle text-text-secondary",
+  "subtle/blue": "bg-badge-blue-bg text-badge-blue-text",
+  "subtle/success": "bg-badge-success-bg text-badge-success-text",
+  "subtle/warning": "bg-badge-warning-bg text-badge-warning-text",
+  "subtle/error": "bg-badge-error-bg text-badge-error-text",
+  "solid/brand": "bg-bg-brand text-text-on-brand",
+  "solid/neutral": "bg-bg-inverse text-text-inverse",
+  "solid/blue": "bg-bg-blue text-text-inverse",
+  "solid/success": "bg-bg-success text-text-inverse",
+  "solid/warning": "bg-bg-warning text-text-inverse",
+  "solid/error": "bg-bg-error text-text-inverse",
+  "outline/brand": "border bg-transparent border-border-brand text-text-brand",
+  "outline/neutral": "border bg-transparent border-border text-text-secondary",
+  "outline/blue": "border bg-transparent border-border-blue text-text-blue",
+  "outline/success": "border bg-transparent border-border-success text-text-success",
+  "outline/warning": "border bg-transparent border-border-warning text-text-warning",
+  "outline/error": "border bg-transparent border-border-error text-text-error",
+};
+
+const iconButtonBase =
+  "inline-flex items-center justify-center shrink-0 select-none [--bd:0px] " + PRESS +
+  " outline-none focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]" +
+  " disabled:pointer-events-none disabled:shadow-none" +
+  " disabled:bg-button-disabled-bg disabled:text-button-disabled-text disabled:border-transparent";
+const iconButtonVariantClass: Record<string, string> = {
+  primary: "bg-button-primary-bg text-button-primary-text shadow-depth-accent " + LIFT +
+    " hover:bg-button-primary-bg-hover active:bg-button-primary-bg-pressed" +
+    " focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-on-fill)]",
+  secondary: "bg-button-secondary-bg text-button-secondary-text " + SWELL +
+    " border-solid border-[1.5px] border-button-secondary-border [--bd:1.5px]" +
+    " hover:bg-button-secondary-bg-hover hover:border-button-secondary-border-hover" +
+    " active:bg-button-secondary-bg-pressed",
+  ghost: "bg-transparent text-icon " + SWELL +
+    " hover:bg-button-ghost-bg-hover hover:text-text-primary active:bg-bg-surface-raised",
+  danger: "bg-button-danger-bg text-button-danger-text shadow-depth-accent " + LIFT +
+    " hover:bg-button-danger-bg-hover active:bg-button-danger-bg-pressed" +
+    " focus-visible:shadow-[var(--shadow-depth-accent),0_0_0_3px_var(--color-focus-halo-danger)]",
+};
+const iconButtonSize: Record<string, string> = {
+  "32": "size-[32px] rounded-[6px] [&_svg]:size-[16px]",
+  "36": "size-[36px] rounded-[8px] [&_svg]:size-[18px]",
+  "40": "size-[40px] rounded-[8px] [&_svg]:size-[20px]",
+  "44": "size-[44px] rounded-[12px] [&_svg]:size-[22px]",
+  "48": "size-[48px] rounded-[12px] [&_svg]:size-[24px]",
+};
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -325,6 +387,56 @@ const CASES: Case[] = [
     },
   },
   {
+    name: "Badge",
+    tag: "span",
+    old: Object.fromEntries(
+      Object.entries(badgeSize).flatMap(([sz, szc]) =>
+        Object.entries(badgePair).map(([pair, pc]) => [`${sz}/${pair}`, `${badgeBase} ${szc} ${pc}`])
+      )
+    ),
+    // `text-text-blue` was one of the five dead classes: the token existed and
+    // the preset never exposed it under `text`, so the outline-blue badge has
+    // been rendering with the inherited colour. The old side still shows that;
+    // the new side is the fix.
+    expected: (key, prop) =>
+      key.includes("outline/blue") && /color$/.test(prop) && !prop.startsWith("border")
+        ? "text-text-blue was dead in 0.2.0 — new side is the fix"
+        : false,
+    children: "Active",
+    render: (key) => {
+      const [size, variant, color] = key.split("/");
+      return (
+        <Badge size={size as never} variant={variant as never} color={color as never}>
+          Active
+        </Badge>
+      );
+    },
+  },
+  {
+    name: "IconButton",
+    tag: "button",
+    old: Object.fromEntries(
+      Object.entries(iconButtonVariantClass).flatMap(([v, vc]) =>
+        Object.entries(iconButtonSize).map(([s2, sc]) => [`${v}/${s2}`, `${iconButtonBase} ${vc} ${sc}`])
+      )
+    ),
+    children: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    ),
+    render: (key) => {
+      const [variant, size] = key.split("/");
+      return (
+        <IconButton variant={variant as never} size={Number(size) as never} aria-label="Add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </IconButton>
+      );
+    },
+  },
+  {
     name: "Dot",
     tag: "span",
     old: Object.fromEntries(
@@ -387,6 +499,7 @@ export const Diff: StoryObj = {
         const lines: string[] = [];
         for (const c of CASES) {
           const problems: string[] = [];
+          const allowed = new Set<string>();
           const keys = Object.keys(c.old);
           for (const key of keys) {
             const a = document.querySelector<HTMLElement>(`[data-old="${c.name}:${key}"]`);
@@ -400,14 +513,18 @@ export const Diff: StoryObj = {
               const norm = prop === "box-shadow" ? shadow : (v: string) => v;
               const av = norm(sa.getPropertyValue(prop));
               const bv = norm(sb.getPropertyValue(prop));
-              if (av !== bv) problems.push(`${key}  ${prop}\n     purono: ${av}\n     notun : ${bv}`);
+              if (av === bv) continue;
+              const why = c.expected?.(key, prop);
+              if (why) { allowed.add(why); continue; }
+              problems.push(`${key}  ${prop}\n     purono: ${av}\n     notun : ${bv}`);
             }
           }
+          const note = allowed.size ? ` (${[...allowed].join("; ")})` : "";
           lines.push(
             problems.length
-              ? `❌ ${c.name} — ${problems.length} ta parthokko (${keys.length} combination)\n` +
+              ? `❌ ${c.name} — ${problems.length} ta parthokko (${keys.length} combination)${note}\n` +
                 problems.map((p) => "   " + p).join("\n")
-              : `✅ ${c.name} — ${keys.length} ta combination, sob mile geche`
+              : `✅ ${c.name} — ${keys.length} ta combination, sob mile geche${note}`
           );
         }
 

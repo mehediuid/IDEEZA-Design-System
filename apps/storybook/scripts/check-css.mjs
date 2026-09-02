@@ -16,6 +16,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+import postcssImport from 'postcss-import';
 import tailwindcss from 'tailwindcss';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -26,7 +27,8 @@ const { default: config } = await import(path.join(app, 'tailwind.config.ts'));
 
 // Tailwind resolves `content` globs relative to cwd, not to the config file.
 process.chdir(app);
-const { css } = await postcss([tailwindcss(config)]).process(input, { from: undefined });
+const entry = path.join(app, '.storybook/tailwind.css');
+const { css } = await postcss([postcssImport(), tailwindcss(config)]).process(input, { from: entry });
 
 /**
  * Tailwind escapes a comma in an arbitrary value as the CSS escape `\2c `.
@@ -45,7 +47,6 @@ const REQUIRED = {
   'press scale': 'active:scale-[0.97]',
   'instant press': 'active:duration-instant',
   'hover lift': 'hover:-translate-y-px',
-  'hover swell': 'hover:scale-[1.02]',
   'lift shadow': 'hover:shadow-2',
   'lift release': 'active:translate-y-0',
   'the 120ms step': 'duration-interaction',
@@ -65,7 +66,7 @@ for (const [label, name] of Object.entries(REQUIRED)) {
 // check is that the class appears somewhere in a rule that has it.
 const transformRules = flat.match(/[^{}]*\{[^{}]*transform:translate\(var\(--tw-translate-x\)[^{}]*\}/g) || [];
 const moves = (name) => transformRules.some((r) => r.split('{')[0].includes(cls(name)));
-for (const name of ['active:scale-[0.97]', 'hover:scale-[1.02]', 'hover:-translate-y-px', 'active:translate-y-0']) {
+for (const name of ['active:scale-[0.97]', 'hover:-translate-y-px', 'active:translate-y-0']) {
   const ok = moves(name);
   if (!ok) bad++;
   console.log(`${ok ? '✅' : '❌'} ${'…and actually transforms'.padEnd(30)} ${name}`);
@@ -78,6 +79,20 @@ const ordered = at('duration-interaction') > at('transition-[color,background-co
 if (!ordered) bad++;
 console.log(`${ordered ? '✅' : '❌'} ${'duration overrides the default'.padEnd(30)} duration-interaction comes after transition-property`);
 
+
+// Components that have moved off Tailwind carry their motion as ordinary
+// rules. `hover:scale-[1.02]` stopped appearing at all once Button and
+// IconButton migrated — the swell did not go away, it stopped being a class,
+// and a check that only knew the class name would have called that a pass.
+for (const [label, rule] of Object.entries({
+  'the button swell': '.ids-button--flat:hover{transform:scale(1.02);',
+  'the button lift': '.ids-button--raised:hover{transform:translateY(-1px)',
+  'the icon button swell': '.ids-icon-button--flat:hover{transform:scale(1.02);',
+})) {
+  const ok = flat.includes(squash(rule));
+  if (!ok) bad++;
+  console.log(`${ok ? '✅' : '❌'} ${label.padEnd(30)} ${rule}`);
+}
 
 // ── Every --tw-* var a utility reads must have a default ────────────────
 // Tailwind builds transform/box-shadow/filter out of custom properties and

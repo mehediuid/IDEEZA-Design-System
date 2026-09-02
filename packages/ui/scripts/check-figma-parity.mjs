@@ -519,8 +519,9 @@ chk('lift is hover only, released on press',
 chk('spring is reserved for travel', has(motionLib,'motionSpring') && has(motionLib,'ease-spring'),
   'wrong for colour, which cannot overshoot');
 
-// Button has moved to its own CSS; the rest still carry the recipe as classes.
-const pressables = ['IconButton/IconButton.tsx','Tabs/Tabs.tsx','NavItem/NavItem.tsx',
+// Button and IconButton have moved to their own CSS; the rest still carry the
+// recipe as classes.
+const pressables = ['Tabs/Tabs.tsx','NavItem/NavItem.tsx',
   'Pagination/Pagination.tsx','ButtonGroup/ButtonGroup.tsx','Tag/Tag.tsx'];
 const notPressing = pressables.filter((f) => !/motionPress|active:scale-\[0\.97\]/.test(read(f)));
 chk('everything clickable presses', notPressing.length === 0,
@@ -543,7 +544,16 @@ chk('button raised set = the three with depth',
     && has(read('Button/Button.tsx'), 'RAISED: readonly ButtonVariant[] = ["primary", "danger", "ai"]'),
   'the CSS split and the component list have to agree');
 
-for (const file of ['IconButton/IconButton.tsx']) {
+const ib = css('IconButton');
+chk('icon button presses, raised lifts, flat swells', has(ib,
+  ':active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)',
+  '--raised:hover { transform: translateY(-1px); box-shadow: var(--elevation-2)',
+  '--flat:hover { transform: scale(1.02)'), '');
+chk('icon button raised = primary and danger',
+  has(read('IconButton/IconButton.tsx'), 'RAISED: readonly IconButtonVariant[] = ["primary", "danger"]')
+    && has(ib,'--primary { background','--danger { background'), 'the two that carry depth');
+
+for (const file of []) {
   const src = stripComments(read(file));
   const rows = [...src.matchAll(/^\s{8}(\w+): \[\n([\s\S]*?)^\s{8}\],/gm)]
     .map(([, name, body]) => ({ name, raised: body.includes('shadow-depth-accent'),
@@ -579,23 +589,37 @@ chk('checkbox wrapper is control-sized', has(cb, 'relative inline-flex shrink-0"
 
 // ── A17 Badge ───────────────────────────────────────────────────────
 const bg2 = stripComments(read('Badge/Badge.tsx'));
-chk('badge sizes 20/24/24 pad 6/8/10', has(bg2,
-  'h-[20px] gap-[4px] px-[6px]', 'h-[24px] gap-[4px] px-[8px]', 'h-[24px] gap-[6px] px-[10px]'), '');
-chk('badge type Caption/SM · Caption/MD · Label/SM',
-  has(bg2, 'text-caption-sm', 'text-caption-md', 'text-label-sm'),
+const bgc = css('Badge');
+chk('badge sizes 20/24/24 pad 6/8/10', has(bgc,
+  '--sm { height: 20px; gap: 4px; padding-left: 6px; padding-right: 6px',
+  '--md { height: 24px; gap: 4px; padding-left: 8px; padding-right: 8px',
+  '--lg { height: 24px; gap: 6px; padding-left: 10px; padding-right: 10px'), '');
+chk('badge type Caption/SM · Caption/MD · Label/SM', has(bgc,
+  '--sm { height: 20px; gap: 4px; padding-left: 6px; padding-right: 6px; font-size: var(--font-size-xs)')
+  && /--md \{[^}]*font-weight: var\(--font-weight-regular\)/.test(bgc)
+  && /--lg \{[^}]*font-weight: var\(--font-weight-semibold\)/.test(bgc),
   'Caption is regular — a Label ramp renders every badge semibold');
-chk('badge leading icon 12 at every size', has(bg2, '[&>svg]:size-[12px] [&>svg]:shrink-0'), '');
-chk('badge close 12 at SM, 16 at MD/LG',
-  has(bg2, 'sm: "[&>svg]:size-[12px]"', 'md: "[&>svg]:size-[16px]"'), '');
-chk('badge dot 6/6/8 and follows the label', has(bg2, 'bg-current', 'lg: "size-[8px]"'), 'Figma fills it with badge/*-text');
-chk('badge subtle reads badge/* tokens',
-  has(bg2, 'bg-badge-brand-bg text-badge-brand-text', 'bg-badge-error-bg text-badge-error-text'),
+chk('badge leading icon 12 at every size',
+  has(bgc, '__icon > svg { width: 12px; height: 12px; flex-shrink: 0'), '');
+chk('badge close 12 at SM, 16 at MD/LG', has(bgc,
+  '__dismiss > svg { width: 16px; height: 16px',
+  '--sm .ids-badge__dismiss > svg { width: 12px; height: 12px'), '');
+chk('badge dot 6/6/8 and follows the label', has(bgc,
+  '__dot { flex-shrink: 0; border-radius: var(--radius-full); background-color: currentColor; width: 6px',
+  '--lg .ids-badge__dot { width: 8px; height: 8px'), 'Figma fills it with badge/*-text');
+chk('badge subtle reads badge/* tokens', has(bgc,
+  '--subtle.ids-badge--brand { background-color: var(--color-badge-brand-bg); color: var(--color-badge-brand-text)',
+  '--subtle.ids-badge--error { background-color: var(--color-badge-error-bg); color: var(--color-badge-error-text)'),
   'not bg/*-subtle + text/*');
-chk('badge solid non-brand label is text/inverse',
-  has(bg2, 'bg-bg-blue text-text-inverse', 'bg-bg-success text-text-inverse'), 'not text/on-brand');
-chk('badge outline borders are semantic',
-  has(bg2, 'border-border-blue', 'border-border-success', 'border-border-warning')
-    && !bg2.includes('border-[var(--color-'), 'no raw primitive borders');
+chk('badge solid non-brand label is text/inverse', has(bgc,
+  '--solid.ids-badge--blue { background-color: var(--color-bg-blue); color: var(--color-text-inverse)',
+  '--solid.ids-badge--success { background-color: var(--color-bg-success); color: var(--color-text-inverse)'),
+  'not text/on-brand');
+chk('badge outline borders are semantic', has(bgc,
+  '--outline.ids-badge--blue { border-color: var(--color-border-blue)',
+  '--outline.ids-badge--success { border-color: var(--color-border-success)',
+  '--outline.ids-badge--warning { border-color: var(--color-border-warning)')
+  && !/border-color: var\(--(?!color-)/.test(bgc), 'no raw primitive borders');
 
 // ── _Radio base state colours ───────────────────────────────────────
 chk('radio dot follows the ring on hover', has(rd, 'peer-checked:peer-hover:bg-bg-brand-hover'), '');

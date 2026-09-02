@@ -69,12 +69,25 @@ const flat = squash(css);
 const cls = (n) => squash('.' + n.replace(/([:[\]().%#])/g, '\\$1').replace(/,/g, '\\2c '));
 for (const [label, name] of Object.entries({
   'press scale': 'active:scale-[0.97]',
-  'hover swell': 'hover:scale-[1.02]',
   'hover lift': 'hover:-translate-y-px',
   'the 120ms step': 'duration-interaction',
   'the spring easing': 'ease-spring',
 })) {
   chk(`styles.css defines ${label}`, flat.includes(cls(name)), name);
+}
+
+// Components that have moved off Tailwind carry their motion as ordinary
+// rules. `hover:scale-[1.02]` stopped appearing at all once Button and
+// IconButton migrated — the swell did not go away, it stopped being a class,
+// and a check that only knew the class name would have called that a pass.
+for (const [label, rule] of Object.entries({
+  'the button swell': '.ids-button--flat:hover{transform:scale(1.02);',
+  'the button lift': '.ids-button--raised:hover{transform:translateY(-1px)',
+  'the icon button swell': '.ids-icon-button--flat:hover{transform:scale(1.02);',
+})) {
+  const ok = flat.includes(squash(rule));
+  if (!ok) bad++;
+  console.log(`${ok ? '✅' : '❌'} ${label.padEnd(30)} ${rule}`);
 }
 
 // The reset has to come before the utilities, and the --tw-* defaults with
