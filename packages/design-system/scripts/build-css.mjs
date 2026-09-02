@@ -26,6 +26,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+import postcssImport from 'postcss-import';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { ideezaPreset } from '@ideeza/tokens/tailwind-preset';
@@ -46,6 +47,15 @@ const tokens = read(path.join(tokensCss, 'tokens.css'));
 fs.writeFileSync(path.join(dist, 'reset.css'), reset);
 fs.writeFileSync(path.join(dist, 'tokens.css'), tokens);
 
+// Components that have moved off Tailwind bring their own stylesheet. Those
+// rules go in before the utility layer, so a consumer overriding either one
+// gets the order they would expect: ours first, Tailwind's leftovers after.
+const uiSrc = path.dirname(path.dirname(fileURLToPath(import.meta.resolve('@ideeza/ui'))));
+const ownIndex = path.join(uiSrc, 'src/styles/index.css');
+const own = fs.existsSync(ownIndex)
+  ? (await postcss([postcssImport()]).process(read(ownIndex), { from: ownIndex })).css
+  : '';
+
 const { css } = await postcss([
   tailwindcss({
     presets: [ideezaPreset],
@@ -64,8 +74,9 @@ const header = `/*! IDEEZA Design System — ${JSON.parse(read(path.join(pkg, 'p
  * defaults, without which every transform in here computes to none.
  */\n`;
 
-const out = [header, reset, tokens, css].join('\n');
+const out = [header, reset, tokens, own, css].join('\n');
 fs.writeFileSync(path.join(dist, 'styles.css'), out);
 
 const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1) + ' kB';
-console.log(`  styles.css  ${kb(out)}  (reset ${kb(reset)} + tokens ${kb(tokens)} + utilities ${kb(css)})`);
+console.log(`  styles.css  ${kb(out)}  (reset ${kb(reset)} + tokens ${kb(tokens)}` +
+  (own ? ` + components ${kb(own)}` : '') + ` + utilities ${kb(css)})`);

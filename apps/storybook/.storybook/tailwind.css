@@ -1,1 +1,6 @@
+/* Components that have moved off Tailwind ship their own CSS. Same order as
+   the published stylesheet: ours first, then the utility layer the
+   not-yet-migrated components still rely on. */
+@import "../../../packages/ui/src/styles/index.css";
+
 @tailwind utilities;

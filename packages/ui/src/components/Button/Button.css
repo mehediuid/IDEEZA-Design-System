@@ -1,0 +1,296 @@
+/*
+ * Button — Figma `A01 Button` (Atoms — Action), 480 variants.
+ *
+ * Every value here was lifted mechanically out of the previous Tailwind build
+ * with `tools/resolve-classes.mjs`, not retyped. The numbers came from the
+ * Figma file originally and have been checked against it 268 ways; typing
+ * them a second time is how "pixel perfect" quietly stops being true.
+ *
+ * Geometry, from the Figma variants:
+ *   SM  32px · radius 8  · px 12 · gap 6 · Label/MD
+ *   MD  36px · radius 8  · px 14 · gap 6 · Label/LG
+ *   LG  40px · radius 12 · px 16 · gap 6 · Label/LG
+ *   XL  44px · radius 12 · px 20 · gap 8 · Label/XL
+ *   2XL 48px · radius 16 · px 24 · gap 8 · Label/XL
+ *
+ * Figma measures padding from the frame edge with the stroke inside it, so a
+ * bordered button puts its label at the same offset as an unbordered one. CSS
+ * border-box adds the border on top, so bordered variants set `--ideeza-bd`
+ * and the padding subtracts it back out.
+ *
+ * Depth: Primary, Danger and AI carry `Depth/Top-line accent`. Every other
+ * hierarchy is flat — Inverse was deliberately flattened. That same split
+ * decides the hover motion: raised lifts, flat swells.
+ */
+
+.ideeza-button {
+  --ideeza-bd: 0px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--font-family-body);
+
+  /* Figma's prototype reactions: 120ms, ease-out. Transform is ours. */
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+
+  /* The halo is drawn as a shadow, so the UA outline has to go. Kept as a
+     transparent outline rather than `none` so Windows high-contrast mode,
+     which ignores box-shadow, still has something to render. */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Down hard, up soft: the press has no duration, the release eases back. */
+.ideeza-button:active {
+  transition-duration: var(--motion-duration-instant);
+  transform: scale(0.97);
+}
+
+.ideeza-button:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Figma: every hierarchy collapses to the same disabled treatment — no
+   border, no depth, and Ghost and Outline are NOT transparent. */
+.ideeza-button:disabled {
+  pointer-events: none;
+  background-color: var(--color-button-disabled-bg);
+  background-image: none;
+  color: var(--color-button-disabled-text);
+  border-color: transparent;
+  box-shadow: var(--elevation-0);
+}
+
+/* ── Hierarchies ─────────────────────────────────────────────────────── */
+
+.ideeza-button--primary {
+  background-color: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+  box-shadow: var(--shadow-depth-accent);
+}
+.ideeza-button--primary:hover {
+  background-color: var(--color-button-primary-bg-hover);
+}
+.ideeza-button--primary:active {
+  background-color: var(--color-button-primary-bg-pressed);
+}
+.ideeza-button--primary:focus-visible {
+  box-shadow: var(--shadow-depth-accent), 0 0 0 3px var(--color-focus-halo-on-fill);
+}
+
+.ideeza-button--secondary {
+  --ideeza-bd: 1.5px;
+  background-color: var(--color-button-secondary-bg);
+  color: var(--color-button-secondary-text);
+  border: 1.5px solid var(--color-button-secondary-border);
+}
+.ideeza-button--secondary:hover {
+  background-color: var(--color-button-secondary-bg-hover);
+  border-color: var(--color-button-secondary-border-hover);
+}
+.ideeza-button--secondary:active {
+  background-color: var(--color-button-secondary-bg-pressed);
+  border-color: var(--color-button-secondary-border-hover);
+}
+.ideeza-button--secondary:focus-visible {
+  border-color: var(--color-border-focus);
+}
+
+/* Figma: the Ghost label uses button/secondary-text, not a ghost-specific one. */
+.ideeza-button--ghost {
+  background-color: transparent;
+  color: var(--color-button-secondary-text);
+}
+.ideeza-button--ghost:hover {
+  background-color: var(--color-button-ghost-bg-hover);
+}
+.ideeza-button--ghost:active {
+  background-color: var(--color-bg-surface-raised);
+}
+
+/* Figma: the Danger label is button/primary-text — the same white as Primary. */
+.ideeza-button--danger {
+  background-color: var(--color-button-danger-bg);
+  color: var(--color-button-primary-text);
+  box-shadow: var(--shadow-depth-accent);
+}
+.ideeza-button--danger:hover {
+  background-color: var(--color-button-danger-bg-hover);
+}
+.ideeza-button--danger:active {
+  background-color: var(--color-button-danger-bg-pressed);
+}
+.ideeza-button--danger:focus-visible {
+  box-shadow: var(--shadow-depth-accent), 0 0 0 3px var(--color-focus-halo-danger);
+}
+
+.ideeza-button--tonal {
+  background-color: var(--color-button-tonal-bg);
+  color: var(--color-button-tonal-text);
+}
+.ideeza-button--tonal:hover {
+  background-color: var(--color-button-tonal-bg-hover);
+}
+.ideeza-button--tonal:active {
+  background-color: var(--color-button-tonal-bg-pressed);
+}
+.ideeza-button--tonal:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo-on-fill);
+}
+
+/* The border stays brand in every state — only the fill changes. */
+.ideeza-button--outline {
+  --ideeza-bd: 1.5px;
+  background-color: transparent;
+  color: var(--color-text-brand);
+  border: 1.5px solid var(--color-border-brand);
+}
+.ideeza-button--outline:hover {
+  background-color: var(--color-button-outline-bg-hover);
+}
+.ideeza-button--outline:active {
+  background-color: var(--color-button-outline-bg-pressed);
+}
+
+.ideeza-button--inverse {
+  background-color: var(--color-button-inverse-bg);
+  color: var(--color-button-inverse-text);
+}
+.ideeza-button--inverse:hover {
+  background-color: var(--color-button-inverse-bg-hover);
+}
+.ideeza-button--inverse:active {
+  background-color: var(--color-button-inverse-bg-pressed);
+}
+.ideeza-button--inverse:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo-inverse);
+}
+
+/* Figma paint style `Brand/AI gradient` — violet/600 → blue/600. */
+.ideeza-button--ai {
+  background-image: var(--gradient-ai);
+  color: var(--color-text-on-brand);
+  box-shadow: var(--shadow-depth-accent);
+}
+.ideeza-button--ai:hover {
+  background-image: var(--gradient-ai-hover);
+}
+.ideeza-button--ai:active {
+  background-image: var(--gradient-ai-pressed);
+}
+.ideeza-button--ai:focus-visible {
+  box-shadow: var(--shadow-depth-accent), 0 0 0 3px var(--color-focus-halo-on-fill);
+}
+
+/* ── Hover motion ────────────────────────────────────────────────────── */
+/* Raised surfaces lift; flat ones swell in place. A flat control that lifts
+   looks detached, and one that does nothing looks dead. */
+
+.ideeza-button--raised:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--elevation-2);
+}
+.ideeza-button--raised:active {
+  transform: translateY(0) scale(0.97);
+}
+.ideeza-button--flat:hover {
+  transform: scale(1.02);
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────── */
+
+.ideeza-button--sm {
+  height: 32px;
+  border-radius: 8px;
+  padding-inline: calc(12px - var(--ideeza-bd));
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ideeza-button--sm svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ideeza-button--md {
+  height: 36px;
+  border-radius: 8px;
+  padding-inline: calc(14px - var(--ideeza-bd));
+  gap: 6px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ideeza-button--md svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ideeza-button--lg {
+  height: 40px;
+  border-radius: 12px;
+  padding-inline: calc(16px - var(--ideeza-bd));
+  gap: 6px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ideeza-button--lg svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ideeza-button--xl {
+  height: 44px;
+  border-radius: 12px;
+  padding-inline: calc(20px - var(--ideeza-bd));
+  gap: 8px;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ideeza-button--xl svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ideeza-button--2xl {
+  height: 48px;
+  border-radius: 16px;
+  padding-inline: calc(24px - var(--ideeza-bd));
+  gap: 8px;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ideeza-button--2xl svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Loading keeps the hierarchy's own colours — it is not a disabled state. */
+.ideeza-button--loading {
+  pointer-events: none;
+}
+
+.ideeza-button__spinner {
+  animation: ideeza-spin 1s linear infinite;
+}
+
+@keyframes ideeza-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

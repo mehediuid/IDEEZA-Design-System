@@ -1,0 +1,10 @@
+/*
+ * Every component stylesheet, in one place.
+ *
+ * Both the published `styles.css` and Storybook read this file, so a migrated
+ * component is wired into both by adding one line here. Components still on
+ * Tailwind classes are absent and get their rules from the utility layer that
+ * follows this file in the build — the two coexist until the last one moves.
+ */
+
+@import "../components/Button/Button.css";
