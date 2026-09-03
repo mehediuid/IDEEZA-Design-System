@@ -112,6 +112,13 @@ pnpm typecheck
 pnpm test
 ```
 
+## Moving off Tailwind
+
+Half-done, and deliberately paused in the middle rather than rushed: 19 of 46
+components carry their own CSS, the rest still use Tailwind classes, and both
+run side by side. `MIGRATION.md` has the state, the procedure and every trap
+found so far — most of which produced output that looked entirely reasonable.
+
 ## Installing it
 
 The workspace splits into `@ideeza/tokens`, `@ideeza/ui` and `@ideeza/icons`
