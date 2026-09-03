@@ -4,8 +4,8 @@ import { cx } from "../../lib/cx";
 /**
  * Field — the shell every input shares.
  *
- * Figma has no `A-something Field`: it is the part that repeats across A11
- * Text Input, A12 Select, A13 Textarea, A14 Multi-select and the rest. Pulling
+ * Figma has no `A-something Field`: it is the part that repeats across A04
+ * Text Input, A05 Textarea, A06 Select, A14 Multi-select and the rest. Pulling
  * it out is what keeps their label, control chrome and helper row identical,
  * and it is why fixing the padding once fixes it in six places.
  *
