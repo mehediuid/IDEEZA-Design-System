@@ -114,10 +114,17 @@ pnpm test
 
 ## Moving off Tailwind
 
-Half-done, and deliberately paused in the middle rather than rushed: 19 of 46
+Half-done, and deliberately paused in the middle rather than rushed: 20 of 46
 components carry their own CSS, the rest still use Tailwind classes, and both
 run side by side. `MIGRATION.md` has the state, the procedure and every trap
 found so far — most of which produced output that looked entirely reasonable.
+
+## The Figma side
+
+The file is the source and this repo is the copy, so some of what turns up here
+is a defect over there. `FIGMA.md` is that list: what was proved from the repo,
+what still needs opening the file, and the handful of things the code added
+because Figma is silent on them.
 
 ## Installing it
 
