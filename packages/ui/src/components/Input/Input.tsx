@@ -1,11 +1,10 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { ChevronDown } from "../../lib/icons";
 import {
   FieldShell,
   controlChrome,
   controlClass,
-  iconClass,
   valueClass,
   type FieldSize,
 } from "../Field/Field";
@@ -22,38 +21,13 @@ import {
  * Geometry per size (height · radius · padding-x):
  *   32 · 8  · 10   36 · 8  · 10   40 · 12 · 12   44 · 12 · 12   48 · 16 · 14
  *
- * Prefix and suffix addons are inset by the 1.5px border and given the inner
- * corner radius, so the field border stays visible behind them — the same fix
+ * The chrome and size ramp come from Field; Input's own parts — the `<input>`,
+ * the addons, the select addon — are measured in `Input.css`. Prefix and
+ * suffix addons are inset by the 1.5px border and given the inner corner
+ * radius, so the field border stays visible behind them — the same fix
  * applied to the Figma component.
  */
 export type InputSize = FieldSize;
-
-/** Inner radius for an addon sitting against the border: field radius − 1.5px. */
-const addonRadius: Record<InputSize, string> = {
-  32: "rounded-l-[6.5px]",
-  36: "rounded-l-[6.5px]",
-  40: "rounded-l-[10.5px]",
-  44: "rounded-l-[10.5px]",
-  48: "rounded-l-[14.5px]",
-};
-const addonRadiusRight: Record<InputSize, string> = {
-  32: "rounded-r-[6.5px]",
-  36: "rounded-r-[6.5px]",
-  40: "rounded-r-[10.5px]",
-  44: "rounded-r-[10.5px]",
-  48: "rounded-r-[14.5px]",
-};
-/**
- * The addon replaces the field's edge padding, so it carries the full Figma
- * value minus the border it sits behind — matching the field's own inset.
- */
-const addonPad: Record<InputSize, string> = {
-  32: "px-[8.5px]",
-  36: "px-[8.5px]",
-  40: "px-[10.5px]",
-  44: "px-[10.5px]",
-  48: "px-[12.5px]",
-};
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
@@ -116,12 +90,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const invalid = Boolean(error);
 
     const addonShell = (side: "l" | "r", extra?: string) =>
-      cn(
-        "flex shrink-0 self-stretch items-center bg-bg-subtle text-input-placeholder",
-        "font-sans",
+      cx(
+        "ids-input__addon",
+        `ids-input__addon--${size}`,
+        side === "l" ? "ids-input__addon--l" : "ids-input__addon--r",
         valueClass[size],
-        addonPad[size],
-        side === "l" ? addonRadius[size] : addonRadiusRight[size],
         extra
       );
 
@@ -135,20 +108,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       side: "l" | "r",
       selectProps?: React.SelectHTMLAttributes<HTMLSelectElement>
     ) => (
-      <span className={addonShell(side, "gap-[4px] text-input-text")}>
+      <span className={addonShell(side, "ids-input__addon--select")}>
         <select
           disabled={disabled}
           {...selectProps}
-          className={cn(
-            "cursor-pointer appearance-none bg-transparent font-sans outline-none",
-            "text-input-text disabled:cursor-not-allowed disabled:text-text-disabled",
-            valueClass[size],
-            selectProps?.className
-          )}
+          className={cx("ids-input__select", valueClass[size], selectProps?.className)}
         >
           {options}
         </select>
-        <ChevronDown className="shrink-0 text-icon" />
+        <ChevronDown />
       </span>
     );
 
@@ -166,14 +134,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div
           data-invalid={invalid}
           data-disabled={Boolean(disabled)}
-          className={cn(
+          className={cx(
             controlChrome,
             controlClass[size],
-            iconClass[size],
+            "ids-input",
             // The addon supplies the edge padding, so drop it from the shell.
-            (prefix || prefixSelect) && "pl-[1.5px]",
-            (suffix || suffixSelect) && "pr-[1.5px]",
-            "[&_svg]:shrink-0 [&_svg]:text-icon"
+            prefix || prefixSelect ? "ids-input--prefixed" : null,
+            suffix || suffixSelect ? "ids-input--suffixed" : null
           )}
         >
           {prefixSelect ? selectAddon(prefixSelect, "l", prefixSelectProps) : null}
@@ -185,13 +152,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             aria-invalid={invalid || undefined}
             aria-describedby={helperText || error ? `${inputId}-description` : undefined}
-            className={cn(
-              "min-w-0 flex-1 bg-transparent font-sans text-input-text outline-none",
-              "placeholder:text-input-placeholder",
-              "disabled:cursor-not-allowed disabled:text-text-disabled disabled:placeholder:text-text-disabled",
-              valueClass[size],
-              className
-            )}
+            className={cx("ids-input__input", valueClass[size], className)}
             {...props}
           />
           {rightIcon}

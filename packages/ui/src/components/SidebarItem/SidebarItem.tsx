@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { ChevronDown } from "../../lib/icons";
 import { NavItem, type NavItemProps } from "../NavItem/NavItem";
 
@@ -49,7 +49,7 @@ export const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
     };
 
     return (
-      <div ref={ref} className={cn("flex w-full flex-col gap-[2px]", className)}>
+      <div ref={ref} className={cx("ids-sidebar-item", className)}>
         <NavItem
           {...props}
           disabled={disabled}
@@ -63,7 +63,7 @@ export const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
               {trailing}
               {hasChildren && (
                 <ChevronDown
-                  className={cn("size-[16px] text-icon transition-transform duration-interaction ease-decelerate", open && "rotate-180")}
+                  className={cx("ids-sidebar-item__chevron", open ? "ids-sidebar-item__chevron--open" : null)}
                   aria-hidden="true"
                 />
               )}
@@ -72,7 +72,7 @@ export const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
         />
 
         {hasChildren && open && (
-          <div className="flex flex-col gap-[2px]">
+          <div className="ids-sidebar-item__list">
             {items!.map((sub, i) => {
               const Comp = (sub.href ? "a" : "button") as React.ElementType;
               return (
@@ -83,20 +83,16 @@ export const SidebarItem = React.forwardRef<HTMLDivElement, SidebarItemProps>(
                   onClick={sub.onClick}
                   aria-current={sub.selected ? "page" : undefined}
                   aria-disabled={sub.disabled || undefined}
-                  className={cn(
-                    // 40px of left padding is the indent that lines the label
-                    // up under the parent's, past its 20px icon.
-                    "flex h-[36px] w-full items-center rounded-[6px] pl-[40px] pr-[12px] text-left",
-                    "text-body-sm-medium outline-none transition-colors duration-interaction ease-decelerate",
-                    "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
+                  className={cx(
+                    "ids-sidebar-item__sub",
                     sub.disabled
-                      ? "pointer-events-none text-text-disabled"
+                      ? "ids-sidebar-item__sub--disabled"
                       : sub.selected
-                        ? "bg-bg-brand-subtle text-text-brand"
-                        : "text-text-primary hover:bg-bg-subtle"
+                        ? "ids-sidebar-item__sub--selected"
+                        : "ids-sidebar-item__sub--rest"
                   )}
                 >
-                  <span className="truncate">{sub.label}</span>
+                  <span className="ids-sidebar-item__sub-label">{sub.label}</span>
                 </Comp>
               );
             })}

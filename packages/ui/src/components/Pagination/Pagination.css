@@ -1,0 +1,85 @@
+/*
+ * Pagination — mirrors Figma `M20 Pagination` (Molecules — Navigation).
+ *
+ * Square cells at radius 8 — 32 with a 4px gap, 40 with 6. The current page
+ * sits on bg/brand-subtle with a text/brand label; every other cell is
+ * transparent with text/primary. Cells press — the motionPress recipe written
+ * out.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-pagination {
+  display: flex;
+  align-items: center;
+}
+.ids-pagination--sm {
+  gap: 4px;
+}
+.ids-pagination--md {
+  gap: 6px;
+}
+
+.ids-pagination__cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-body);
+  color: var(--color-text-primary);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-pagination__cell:active {
+  transition-duration: var(--motion-duration-instant);
+  transform: scale(0.97);
+}
+.ids-pagination__cell:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-pagination__cell:disabled {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+}
+.ids-pagination__cell--sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-pagination__cell--md {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-pagination__cell--rest:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-pagination__cell--current {
+  background-color: var(--color-bg-brand-subtle);
+  color: var(--color-text-brand);
+}
+.ids-pagination__cell--gap {
+  color: var(--color-text-tertiary);
+}
+
+.ids-pagination__chevron {
+  width: 16px;
+  height: 16px;
+}
+.ids-pagination__chevron--prev {
+  transform: rotate(90deg);
+}
+.ids-pagination__chevron--next {
+  transform: rotate(-90deg);
+}

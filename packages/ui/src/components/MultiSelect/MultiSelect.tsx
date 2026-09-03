@@ -1,12 +1,11 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { ChevronDown } from "../../lib/icons";
 import { Tag } from "../Tag/Tag";
 import {
   FieldShell,
   controlChrome,
   controlClass,
-  iconClass,
   valueClass,
   type FieldSize,
 } from "../Field/Field";
@@ -27,6 +26,9 @@ import {
  * The menu is a listbox rather than a native select, because a native one
  * cannot show chips. Keyboard: arrows move, Enter and Space toggle, Escape
  * closes, Backspace on an empty query removes the last chip.
+ *
+ * Error and disabled ride the field chrome's `data-invalid` / `data-disabled`
+ * treatment, the same as every other control.
  */
 export type MultiSelectSize = FieldSize;
 
@@ -63,6 +65,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
   ) => {
     const autoId = React.useId();
     const fieldId = id ?? autoId;
+    const invalid = Boolean(error);
     const [inner, setInner] = React.useState<string[]>(defaultValue);
     const selected = value ?? inner;
     const [open, setOpen] = React.useState(false);
@@ -122,7 +125,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
         htmlFor={fieldId}
         className={containerClassName}
       >
-        <div ref={rootRef} className="relative">
+        <div ref={rootRef} className="ids-multi-select__root">
           <div
             ref={ref}
             id={fieldId}
@@ -133,16 +136,11 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
             tabIndex={disabled ? -1 : 0}
             onClick={() => !disabled && setOpen((o) => !o)}
             onKeyDown={onKeyDown}
-            className={cn(
-              controlChrome,
-              controlClass[size],
-              "!py-[2.5px] cursor-pointer",
-              error && "border-input-border-error focus-within:shadow-[0_0_0_3px_var(--color-focus-halo-danger)]",
-              disabled && "pointer-events-none bg-input-bg-disabled border-input-border-disabled",
-              className
-            )}
+            data-invalid={invalid}
+            data-disabled={Boolean(disabled)}
+            className={cx(controlChrome, controlClass[size], "ids-multi-select", className)}
           >
-            <span className="flex min-w-0 flex-1 flex-wrap items-center gap-[4px]">
+            <span className="ids-multi-select__tags">
               {chips.map((v) => (
                 <Tag
                   key={v}
@@ -155,24 +153,17 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
               ))}
               {hidden > 0 && <Tag size="sm">+{hidden}</Tag>}
               {selected.length === 0 && (
-                <span className={cn("text-input-placeholder", valueClass[size])}>{placeholder}</span>
+                <span className={cx("ids-multi-select__placeholder", valueClass[size])}>{placeholder}</span>
               )}
             </span>
             <ChevronDown
-              className={cn(iconClass[size], "shrink-0 text-icon transition-transform duration-interaction ease-decelerate", open && "rotate-180")}
+              className={cx("ids-multi-select__chevron", open ? "ids-multi-select__chevron--open" : null)}
               aria-hidden="true"
             />
           </div>
 
           {open && (
-            <ul
-              role="listbox"
-              aria-multiselectable="true"
-              className={cn(
-                "absolute left-0 right-0 top-[calc(100%+4px)] z-dropdown max-h-[240px] overflow-auto",
-                "rounded-[12px] border border-border bg-bg-surface py-[4px] shadow-3"
-              )}
-            >
+            <ul role="listbox" aria-multiselectable="true" className="ids-multi-select__menu">
               {options.map((o, i) => {
                 const on = selected.includes(o.value);
                 return (
@@ -186,12 +177,12 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
                       if (!o.disabled) toggle(o.value);
                     }}
                     onPointerEnter={() => setActive(i)}
-                    className={cn(
-                      "flex cursor-pointer items-center justify-between px-[12px] py-[8px]",
+                    className={cx(
+                      "ids-multi-select__option",
                       valueClass[size],
-                      o.disabled ? "cursor-not-allowed text-text-disabled" : "text-input-text",
-                      i === active && !o.disabled && "bg-bg-subtle",
-                      on && "text-text-brand"
+                      o.disabled ? "ids-multi-select__option--disabled" : null,
+                      i === active && !o.disabled ? "ids-multi-select__option--active" : null,
+                      on ? "ids-multi-select__option--selected" : null
                     )}
                   >
                     {o.label}

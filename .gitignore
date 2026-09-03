@@ -53,3 +53,10 @@ ideeza-color-changes.pdf
 # the repo root by accident, and leaving it invites the two package managers
 # to disagree about what is installed.
 package-lock.json
+
+# Claude-er move-kora junk — delete korar jonno rakha
+_to_delete/
+
+# Local-only helper scripts — git-e jay na (owner-er siddhanto)
+RUN-KORO.command
+PUSH-KORO.command

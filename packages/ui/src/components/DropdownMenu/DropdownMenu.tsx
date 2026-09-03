@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { NavItem, type NavItemProps } from "../NavItem/NavItem";
 
 /**
@@ -28,10 +28,7 @@ export const DropdownMenu = React.forwardRef<HTMLDivElement, DropdownMenuProps>(
     <div
       ref={ref}
       role="menu"
-      className={cn(
-        "flex w-[280px] flex-col gap-[2px] rounded-[12px] border border-border bg-bg-surface p-[4px] shadow-3",
-        className
-      )}
+      className={cx("ids-dropdown-menu", className)}
       {...props}
     >
       {children}
@@ -49,10 +46,10 @@ DropdownMenuItem.displayName = "DropdownMenuItem";
 
 /** A hairline between groups of items. */
 export const DropdownMenuSeparator = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div role="separator" className={cn("my-[4px] h-px bg-border-subtle", className)} {...props} />
+  <div role="separator" className={cx("ids-dropdown-menu__separator", className)} {...props} />
 );
 
 /** Overline label above a group — the pattern menus in the file use. */
 export const DropdownMenuLabel = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("px-[12px] py-[6px] text-overline-md text-text-tertiary", className)} {...props} />
+  <div className={cx("ids-dropdown-menu__label", className)} {...props} />
 );

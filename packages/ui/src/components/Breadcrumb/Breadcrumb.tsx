@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * Breadcrumb — mirrors Figma `M19 Breadcrumb` (Molecules — Navigation).
@@ -26,30 +26,30 @@ export interface BreadcrumbProps extends Omit<React.HTMLAttributes<HTMLElement>,
 
 export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
   ({ className, items, separator = "/", ...props }, ref) => (
-    <nav ref={ref} aria-label="Breadcrumb" className={cn("flex items-center gap-[8px]", className)} {...props}>
+    <nav ref={ref} aria-label="Breadcrumb" className={cx("ids-breadcrumb", className)} {...props}>
       {items.map((item, i) => {
         const last = i === items.length - 1;
         const content = last ? (
-          <span aria-current="page" className="text-body-sm-medium text-text-primary">
+          <span aria-current="page" className="ids-breadcrumb__current">
             {item.label}
           </span>
         ) : item.href || item.onClick ? (
           <a
             href={item.href}
             onClick={item.onClick}
-            className="rounded-[2px] text-body-sm text-text-tertiary outline-none transition-colors duration-interaction ease-decelerate hover:text-text-primary hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
+            className="ids-breadcrumb__link"
           >
             {item.label}
           </a>
         ) : (
-          <span className="text-body-sm text-text-tertiary">{item.label}</span>
+          <span className="ids-breadcrumb__crumb">{item.label}</span>
         );
 
         return (
           <React.Fragment key={i}>
             {content}
             {!last && (
-              <span aria-hidden="true" className="text-body-sm text-text-tertiary">
+              <span aria-hidden="true" className="ids-breadcrumb__crumb">
                 {separator}
               </span>
             )}

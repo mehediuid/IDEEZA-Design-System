@@ -1,0 +1,46 @@
+/*
+ * Select — mirrors Figma `A06 Select` (Atoms — Input).
+ *
+ * The chrome, size ramp and value type all come from Field — a Select and an
+ * Input of the same height are identical apart from the chevron. Select adds
+ * only the native `<select>`'s own resets and its placeholder treatment.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-select {
+  position: relative;
+}
+
+.ids-select svg {
+  flex-shrink: 0;
+  /* The old build asked for this with `[&_svg]:text-icon-default` —
+     `text-icon-default` is one of the five dead classes MIGRATION.md already
+     names, and the arbitrary-variant shape slips past find-dead-classes on
+     top of that. The chevron inherited the value colour instead. This is the
+     fix — icon/default, as drawn in Figma — same as Input's. */
+  color: var(--color-icon-default);
+}
+
+.ids-select__select {
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  font-family: var(--font-family-body);
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+/* The placeholder option keeps the muted colour until something is chosen. */
+.ids-select__select:invalid,
+.ids-select__select:has(option[value='']:checked) {
+  color: var(--color-input-placeholder);
+}
+.ids-select__select:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}

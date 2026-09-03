@@ -1,6 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
-import { motionPress } from "../../lib/motion";
+import { cx } from "../../lib/cx";
 import { ChevronDown } from "../../lib/icons";
 
 /**
@@ -20,13 +19,6 @@ import { ChevronDown } from "../../lib/icons";
  * ends rather than hidden, so the row does not reflow as you page.
  */
 export type PaginationSize = "sm" | "md";
-
-const cell = {
-  sm: "size-[32px] rounded-[8px] text-body-sm-medium",
-  md: "size-[40px] rounded-[8px] text-body-md-medium",
-} as const;
-
-const gap = { sm: "gap-[4px]", md: "gap-[6px]" } as const;
 
 /** 1 … 4 5 6 … 10 — first, last, and `window` pages either side of current. */
 export function paginationRange(current: number, total: number, window = 1): Array<number | "gap"> {
@@ -57,24 +49,18 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     const items = paginationRange(page, pageCount, siblingCount);
     const step = (to: number) => onPageChange?.(Math.min(pageCount, Math.max(1, to)));
 
-    const base = cn(
-      "inline-flex items-center justify-center font-sans outline-none",
-      motionPress,
-      "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
-      "disabled:pointer-events-none disabled:text-text-disabled",
-      cell[size]
-    );
+    const base = cx("ids-pagination__cell", `ids-pagination__cell--${size}`);
 
     return (
-      <nav ref={ref} aria-label="Pagination" className={cn("flex items-center", gap[size], className)} {...props}>
+      <nav ref={ref} aria-label="Pagination" className={cx("ids-pagination", `ids-pagination--${size}`, className)} {...props}>
         <button type="button" aria-label="Previous page" disabled={page <= 1} onClick={() => step(page - 1)}
-          className={cn(base, "text-text-primary hover:bg-bg-subtle")}>
-          <ChevronDown className="size-[16px] rotate-90" aria-hidden="true" />
+          className={cx(base, "ids-pagination__cell--rest")}>
+          <ChevronDown className="ids-pagination__chevron ids-pagination__chevron--prev" aria-hidden="true" />
         </button>
 
         {items.map((it, i) =>
           it === "gap" ? (
-            <span key={`gap-${i}`} aria-hidden="true" className={cn(base, "text-text-tertiary")}>
+            <span key={`gap-${i}`} aria-hidden="true" className={cx(base, "ids-pagination__cell--gap")}>
               …
             </span>
           ) : (
@@ -83,11 +69,9 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
               type="button"
               aria-current={it === page ? "page" : undefined}
               onClick={() => step(it)}
-              className={cn(
+              className={cx(
                 base,
-                it === page
-                  ? "bg-bg-brand-subtle text-text-brand"
-                  : "text-text-primary hover:bg-bg-subtle"
+                it === page ? "ids-pagination__cell--current" : "ids-pagination__cell--rest"
               )}
             >
               {it}
@@ -96,8 +80,8 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         )}
 
         <button type="button" aria-label="Next page" disabled={page >= pageCount} onClick={() => step(page + 1)}
-          className={cn(base, "text-text-primary hover:bg-bg-subtle")}>
-          <ChevronDown className="size-[16px] -rotate-90" aria-hidden="true" />
+          className={cx(base, "ids-pagination__cell--rest")}>
+          <ChevronDown className="ids-pagination__chevron ids-pagination__chevron--next" aria-hidden="true" />
         </button>
       </nav>
     );

@@ -2,31 +2,56 @@
  * Every component stylesheet, in one place.
  *
  * Both the published `styles.css` and Storybook read this file, so a migrated
- * component is wired into both by adding one line here. Components still on
- * Tailwind classes are absent and get their rules from the utility layer that
- * follows this file in the build — the two coexist until the last one moves.
+ * component is wired into both by adding one line here. All 46 components
+ * have moved — the utility layer that used to follow this file is gone.
  */
 
 @import "../components/Alert/Alert.css";
+@import "../components/Avatar/Avatar.css";
+@import "../components/AvatarGroup/AvatarGroup.css";
 @import "../components/Badge/Badge.css";
 @import "../components/Banner/Banner.css";
+@import "../components/Breadcrumb/Breadcrumb.css";
 @import "../components/Button/Button.css";
 @import "../components/ButtonGroup/ButtonGroup.css";
+@import "../components/Checkbox/Checkbox.css";
 @import "../components/Code/Code.css";
+@import "../components/ColorPicker/ColorPicker.css";
 @import "../components/DeltaChip/DeltaChip.css";
 @import "../components/Divider/Divider.css";
 @import "../components/Dot/Dot.css";
+@import "../components/DropdownMenu/DropdownMenu.css";
 @import "../components/Field/Field.css";
 @import "../components/IconButton/IconButton.css";
 @import "../components/InlineCta/InlineCta.css";
 @import "../components/InlineMessage/InlineMessage.css";
+@import "../components/Input/Input.css";
 @import "../components/Kbd/Kbd.css";
 @import "../components/Link/Link.css";
 @import "../components/LoadingState/LoadingState.css";
+@import "../components/MultiSelect/MultiSelect.css";
+@import "../components/NavItem/NavItem.css";
+@import "../components/NumberInput/NumberInput.css";
+@import "../components/Pagination/Pagination.css";
+@import "../components/ProgressBar/ProgressBar.css";
+@import "../components/ProgressRing/ProgressRing.css";
+@import "../components/Radio/Radio.css";
+@import "../components/Search/Search.css";
+@import "../components/Select/Select.css";
+@import "../components/SidebarItem/SidebarItem.css";
+@import "../components/Skeleton/Skeleton.css";
+@import "../components/SkeletonLayout/SkeletonLayout.css";
+@import "../components/Slider/Slider.css";
 @import "../components/Snackbar/Snackbar.css";
 @import "../components/Spinner/Spinner.css";
+@import "../components/StateView/StateView.css";
 @import "../components/StatusBlock/StatusBlock.css";
+@import "../components/Tabs/Tabs.css";
 @import "../components/Tag/Tag.css";
+@import "../components/Textarea/Textarea.css";
+@import "../components/Toast/Toast.css";
+@import "../components/Toggle/Toggle.css";
+@import "../components/Tooltip/Tooltip.css";
 
 /* Shared by Button's loading spinner and by Spinner itself. Defined here
    rather than in either component: it lived in Button.css and Spinner.css

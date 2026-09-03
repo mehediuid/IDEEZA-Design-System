@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
-import { FieldShell, controlChrome, type FieldSize } from "../Field/Field";
+import { cx } from "../../lib/cx";
+import { FieldShell, controlChrome, valueClass, type FieldSize } from "../Field/Field";
 
 /**
  * Textarea — mirrors Figma `Textarea` (A05, Atoms — Input), 18 variants.
@@ -13,26 +13,11 @@ import { FieldShell, controlChrome, type FieldSize } from "../Field/Field";
  * Padding is asymmetric — bottom stays 8 at every size, leaving room for the
  * resize handle. Helper text and the character counter share one footer row —
  * helper left, count right — exactly as in the Figma `Footer` frame.
+ *
+ * Geometry lives in `Textarea.css`; the value ramp is Field's — the mapped
+ * field size lands on Body/SM for SM/MD and Body/MD for LG, matching Figma.
  */
 export type TextareaRows = "sm" | "md" | "lg";
-
-/**
- * Figma padding is asymmetric — bottom is 8 at every size, leaving room for the
- * resize handle. Values here are the Figma numbers minus the 1.5px border, so
- * the rendered inset matches (see the note in Field).
- */
-const rowsClass: Record<TextareaRows, string> = {
-  sm: "min-h-[80px] rounded-[8px] pt-[8.5px] pr-[10.5px] pb-[6.5px] pl-[10.5px]",
-  md: "min-h-[104px] rounded-[12px] pt-[10.5px] pr-[12.5px] pb-[6.5px] pl-[12.5px]",
-  lg: "min-h-[128px] rounded-[16px] pt-[12.5px] pr-[14.5px] pb-[6.5px] pl-[14.5px]",
-};
-
-/** Value type ramp — LG steps up, matching Figma. */
-const rowsValueClass: Record<TextareaRows, string> = {
-  sm: "text-body-sm",
-  md: "text-body-sm",
-  lg: "text-body-md",
-};
 
 const rowsToFieldSize: Record<TextareaRows, FieldSize> = { sm: 36, md: 40, lg: 48 };
 
@@ -97,7 +82,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         <div
           data-invalid={invalid}
           data-disabled={Boolean(disabled)}
-          className={cn(controlChrome, rowsClass[rows], "items-stretch")}
+          className={cx(controlChrome, "ids-textarea", `ids-textarea--${rows}`)}
         >
           <textarea
             ref={ref}
@@ -109,14 +94,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             onChange={handleChange}
             aria-invalid={invalid || undefined}
             aria-describedby={helperText || error ? `${areaId}-description` : undefined}
-            className={cn(
-              // Figma draws a resize handle bottom-right, so the field is vertically resizable.
-              "min-h-full w-full resize-y bg-transparent font-sans",
-              rowsValueClass[rows],
-              "text-input-text outline-none placeholder:text-input-placeholder",
-              "disabled:cursor-not-allowed disabled:text-text-disabled disabled:placeholder:text-text-disabled",
-              className
-            )}
+            className={cx("ids-textarea__area", valueClass[size], className)}
             {...props}
           />
         </div>

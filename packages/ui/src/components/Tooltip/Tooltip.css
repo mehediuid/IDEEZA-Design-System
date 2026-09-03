@@ -1,0 +1,40 @@
+/*
+ * Tooltip — mirrors Figma `A19 Tooltip` (Atoms — Display).
+ *
+ * Bubble: radius 8, padding 8/12, bg/inverse, Body/XS Medium in text/inverse,
+ * with the file's drop shadow. Arrow is 10 wide by 6 tall (an SVG sized by
+ * Radix; this sheet only fills it).
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-tooltip {
+  z-index: var(--z-popover);
+  max-width: 280px;
+  border-radius: 8px;
+  background-color: var(--color-bg-inverse);
+  padding: 8px 12px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-inverse);
+  box-shadow: var(--elevation-3);
+  /* Plain data-state transitions rather than tailwindcss-animate — the
+     package is not a dependency and one tooltip does not justify it. */
+  transition-property: opacity;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-tooltip[data-state="delayed-open"],
+.ids-tooltip[data-state="instant-open"] {
+  opacity: 1;
+}
+.ids-tooltip[data-state="closed"] {
+  opacity: 0;
+}
+
+.ids-tooltip__arrow {
+  fill: var(--color-bg-inverse);
+}

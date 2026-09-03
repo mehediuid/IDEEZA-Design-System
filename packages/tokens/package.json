@@ -13,12 +13,7 @@
       "require": "./dist/index.cjs"
     },
     "./css": "./css/tokens.css",
-    "./reset": "./css/reset.css",
-    "./tailwind-preset": {
-      "types": "./dist/tailwind-preset.d.ts",
-      "import": "./dist/tailwind-preset.js",
-      "require": "./dist/tailwind-preset.cjs"
-    }
+    "./reset": "./css/reset.css"
   },
   "files": [
     "dist",
@@ -32,7 +27,6 @@
     "test": "node scripts/check-alias-structure.mjs"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.13",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2"
   },

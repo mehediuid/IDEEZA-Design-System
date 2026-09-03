@@ -1,0 +1,163 @@
+/*
+ * Checkbox — mirrors Figma `A08 Selection Control` (Type=Checkbox) and its
+ * `_Checkbox base` (Atoms — Input).
+ *
+ *   box      sm 20×20 radius 6 · md 24×24 radius 8 · 2px border
+ *   check    sm 10×8 · md 12×10 — a 16px / 20px icon/tick-02 instance
+ *   row gap  16px between control and text · text gap 4px
+ *   label    sm Body/SM · md Body/MD · color input/label
+ *   support  sm Caption/SM · md Caption/MD · color input/helper
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ids-checkbox__box {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.ids-checkbox__box--sm {
+  width: 20px;
+  height: 20px;
+}
+.ids-checkbox__box--md {
+  width: 24px;
+  height: 24px;
+}
+
+.ids-checkbox__input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-style: solid;
+  border-width: 2px;
+  background-color: var(--color-input-bg);
+  border-color: var(--color-input-border);
+  /* The old class was `transition-[colors,box-shadow]` — `colors` is not a
+     property. Written out, as in Field. */
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-checkbox__input--sm {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+}
+.ids-checkbox__input--md {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+}
+.ids-checkbox__input:hover {
+  border-color: var(--color-input-border-hover);
+}
+.ids-checkbox__input:checked,
+.ids-checkbox__input:indeterminate {
+  border-color: transparent;
+  background-color: var(--color-bg-brand);
+}
+.ids-checkbox__input:checked:hover,
+.ids-checkbox__input:indeterminate:hover {
+  background-color: var(--color-bg-brand-hover);
+}
+.ids-checkbox__input:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-checkbox__input:disabled {
+  pointer-events: none;
+  border-color: var(--color-input-border-disabled);
+}
+.ids-checkbox__input:disabled:checked,
+.ids-checkbox__input:disabled:indeterminate {
+  background-color: var(--color-input-bg-disabled);
+}
+
+/* Library glyphs — icon/tick-02 and icon/remove-01, exported verbatim. */
+.ids-checkbox__glyph {
+  pointer-events: none;
+  position: absolute;
+  inset: var(--spacing-0);
+  margin: auto;
+  color: var(--color-icon-on-brand);
+  opacity: 0;
+}
+.ids-checkbox__glyph--sm {
+  width: 16px;
+  height: 16px;
+}
+.ids-checkbox__glyph--md {
+  width: 20px;
+  height: 20px;
+}
+.ids-checkbox__input:checked ~ .ids-checkbox__glyph--check {
+  opacity: 1;
+}
+.ids-checkbox__input:indeterminate ~ .ids-checkbox__glyph--check {
+  opacity: 0;
+}
+.ids-checkbox__input:indeterminate ~ .ids-checkbox__glyph--minus {
+  opacity: 1;
+}
+.ids-checkbox__input:disabled ~ .ids-checkbox__glyph {
+  color: var(--color-icon-disabled);
+}
+
+/* ── Text column ─────────────────────────────────────────────────────── */
+
+.ids-checkbox__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ids-checkbox__label {
+  cursor: pointer;
+  font-family: var(--font-family-body);
+  color: var(--color-input-label);
+}
+.ids-checkbox__label--sm {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-checkbox__label--md {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-checkbox__label--disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+
+.ids-checkbox__support {
+  font-family: var(--font-family-body);
+  color: var(--color-input-helper);
+}
+.ids-checkbox__support--sm {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-checkbox__support--md {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-checkbox__support--disabled {
+  color: var(--color-text-disabled);
+}

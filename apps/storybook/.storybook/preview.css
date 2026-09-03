@@ -1,0 +1,5 @@
+/* Every component ships its own CSS; scaffold.css holds the frozen layout
+   helpers the stories use for their own wrappers. No build step behind
+   either — plain CSS. */
+@import "../../../packages/ui/src/styles/index.css";
+@import "./scaffold.css";

@@ -1,0 +1,95 @@
+/*
+ * ProgressRing — mirrors Figma `A23 Progress Ring` (Atoms — Display).
+ *
+ * Stroke 4 / 6 / 8 / 10 / 14 at 40 / 56 / 80 / 120 / 160, track
+ * border/subtle, head icon/brand — those travel as SVG attributes in the
+ * component; this sheet carries the layout and type.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-progress-ring {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.ids-progress-ring__svg {
+  position: absolute;
+  inset: var(--spacing-0);
+  width: 100%;
+  height: 100%;
+}
+
+.ids-progress-ring__head {
+  transition-property: stroke-dasharray;
+  transition-duration: var(--motion-duration-normal);
+  transition-timing-function: var(--motion-easing-standard);
+}
+
+.ids-progress-ring__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+/* The gauge's arc only covers the top, so its text sits low in the box. */
+.ids-progress-ring__content--gauge {
+  transform: translateY(15%);
+}
+
+.ids-progress-ring__title {
+  color: var(--color-text-tertiary);
+}
+.ids-progress-ring__title--caption-sm {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-progress-ring__title--caption-md {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+.ids-progress-ring__value {
+  color: var(--color-text-primary);
+}
+.ids-progress-ring__value--xs {
+  font-size: var(--font-size-2xs);
+  line-height: var(--line-height-2xs);
+  letter-spacing: var(--letter-spacing-caps);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-progress-ring__value--sm {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-progress-ring__value--md {
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-2xl);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-progress-ring__value--lg {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-4xl);
+  letter-spacing: var(--letter-spacing-slight);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-progress-ring__value--xl {
+  font-size: var(--font-size-5xl);
+  line-height: var(--line-height-6xl);
+  letter-spacing: var(--letter-spacing-close);
+  font-weight: var(--font-weight-semibold);
+}

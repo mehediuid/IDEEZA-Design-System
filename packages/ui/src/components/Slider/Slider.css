@@ -1,0 +1,142 @@
+/*
+ * Slider — mirrors Figma `A11 Slider` (Atoms — Input).
+ *
+ * Track 4 / 6 / 8 at radius 2 / 4 / 4 in bg/subtle, fill bg/brand, thumb
+ * 12 / 16 / 20 in bg/surface with a 2px bg/brand ring. Hover grows the thumb
+ * proportionally (the `--thumb` / `--thumb-hover` custom properties are set
+ * inline per size by the component). Disabled turns both the fill and the
+ * thumb ring to border/default while the track stays.
+ *
+ * The value bubble is Figma's `value-label`: a pill in bg/inverse with
+ * text/inverse type, shown on hover and while dragging.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped. The thumb's width/height
+ * transition keeps the stock 150ms cubic-bezier(0.4, 0, 0.2, 1) it always
+ * had — the old classes never overrode it.
+ */
+
+.ids-slider {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+/* Track and fill are painted here; the input itself is transparent and sits
+   on top, so the native control keeps keyboard and drag. */
+.ids-slider__track {
+  position: absolute;
+  left: var(--spacing-0);
+  right: var(--spacing-0);
+  width: 100%;
+  background-color: var(--color-bg-subtle);
+}
+.ids-slider__track--sm {
+  height: 4px;
+  border-radius: 2px;
+}
+.ids-slider__track--md {
+  height: 6px;
+  border-radius: 4px;
+}
+.ids-slider__track--lg {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.ids-slider__fill {
+  height: 100%;
+  background-color: var(--color-bg-brand);
+}
+.ids-slider__fill--sm {
+  border-radius: 2px;
+}
+.ids-slider__fill--md,
+.ids-slider__fill--lg {
+  border-radius: 4px;
+}
+.ids-slider__fill--disabled {
+  background-color: var(--color-border-default);
+}
+
+.ids-slider__bubble {
+  pointer-events: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-inverse);
+  padding: 3px 8px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-inverse);
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-slider:hover .ids-slider__bubble,
+.ids-slider:focus-within .ids-slider__bubble {
+  opacity: 1;
+}
+
+.ids-slider__input {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-slider__input:disabled {
+  pointer-events: none;
+}
+
+/* WebKit and Firefox need the thumb styled separately; both take the Figma
+   geometry — surface fill, 2px brand ring. */
+.ids-slider__input::-webkit-slider-thumb {
+  width: var(--thumb);
+  height: var(--thumb);
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-surface);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-bg-brand);
+  -webkit-transition-property: width, height;
+  transition-property: width, height;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.ids-slider__input:hover::-webkit-slider-thumb {
+  width: var(--thumb-hover);
+  height: var(--thumb-hover);
+}
+.ids-slider__input:disabled::-webkit-slider-thumb {
+  border-color: var(--color-border-default);
+}
+.ids-slider__input::-webkit-slider-thumb:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-slider__input::-moz-range-thumb {
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-surface);
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color-bg-brand);
+}
+.ids-slider__input:disabled::-moz-range-thumb {
+  border-color: var(--color-border-default);
+}
+.ids-slider__input::-moz-range-thumb:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}

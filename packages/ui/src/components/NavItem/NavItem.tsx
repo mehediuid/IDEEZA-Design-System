@@ -1,6 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
-import { motionPress } from "../../lib/motion";
+import { cx } from "../../lib/cx";
 
 /**
  * NavItem — the row shared by Figma's `M18 Dropdown Menu` and the
@@ -39,22 +38,16 @@ export interface NavItemProps extends Omit<React.HTMLAttributes<HTMLElement>, "c
   as?: "button" | "a" | "div";
 }
 
+/** The row's class list — exported for callers styling their own row. */
 export const navItemSurface = (selected?: boolean, disabled?: boolean) =>
-  cn(
-    "flex h-[40px] w-full items-center gap-[10px] rounded-[6px] px-[12px] text-left",
-    "outline-none " + motionPress,
-    "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
-    disabled
-      ? "pointer-events-none"
-      : selected
-        ? "bg-bg-brand-subtle"
-        : "hover:bg-bg-subtle"
+  cx(
+    "ids-nav-item",
+    disabled ? "ids-nav-item--disabled" : selected ? "ids-nav-item--selected" : "ids-nav-item--rest"
   );
 
 export const NavItem = React.forwardRef<HTMLElement, NavItemProps>(
   ({ className, selected, disabled, dot, leading, label, description, trailing, href, as, ...props }, ref) => {
     const Comp = (as ?? (href ? "a" : "button")) as React.ElementType;
-    const tone = disabled ? "text-text-disabled" : selected ? "text-text-brand" : undefined;
 
     return (
       <Comp
@@ -63,20 +56,18 @@ export const NavItem = React.forwardRef<HTMLElement, NavItemProps>(
         type={Comp === "button" ? "button" : undefined}
         aria-current={selected ? "page" : undefined}
         aria-disabled={disabled || undefined}
-        className={cn(navItemSurface(selected, disabled), className)}
+        className={cx(navItemSurface(selected, disabled), className)}
         {...props}
       >
-        {dot && <span className="flex size-[8px] shrink-0 items-center justify-center">{dot}</span>}
-        {leading && <span className="inline-flex size-[20px] shrink-0 items-center justify-center [&>svg]:size-[20px]">{leading}</span>}
+        {dot && <span className="ids-nav-item__dot">{dot}</span>}
+        {leading && <span className="ids-nav-item__leading">{leading}</span>}
 
-        <span className="flex min-w-0 flex-1 flex-col gap-[2px]">
-          <span className={cn("truncate text-body-sm-medium", tone ?? "text-text-primary")}>{label}</span>
-          {description && (
-            <span className={cn("truncate text-caption-md", tone ?? "text-text-secondary")}>{description}</span>
-          )}
+        <span className="ids-nav-item__content">
+          <span className="ids-nav-item__label">{label}</span>
+          {description && <span className="ids-nav-item__description">{description}</span>}
         </span>
 
-        {trailing && <span className="flex shrink-0 items-center gap-[8px]">{trailing}</span>}
+        {trailing && <span className="ids-nav-item__trailing">{trailing}</span>}
       </Comp>
     );
   }

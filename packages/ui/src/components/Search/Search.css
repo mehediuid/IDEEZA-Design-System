@@ -1,0 +1,56 @@
+/*
+ * Search — mirrors Figma `A07 Search` (Atoms — Input).
+ *
+ * The chrome, size ramp and value type come from Field. Search adds the fixed
+ * leading glyph, the trailing clear button, and the suppression of Chrome's
+ * own clear affordance on `type=search`.
+ *
+ * The old markup passed `iconClass[size]` to the glyph and the clear button.
+ * Since Field's migration that export names the control's own classes, so
+ * both icons were carrying the control's height, edge padding and radius —
+ * geometry that was never theirs. It is dropped here: the control sizes the
+ * svgs (16/20 via Field.css), which is the Figma glyph size, and the clear
+ * button shrink-wraps its icon.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-search svg {
+  flex-shrink: 0;
+  color: var(--color-icon-default);
+}
+
+.ids-search__input {
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  background-color: transparent;
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-search__input::placeholder {
+  color: var(--color-input-placeholder);
+}
+/* Chrome draws its own clear affordance on type=search. */
+.ids-search__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ids-search__clear {
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  color: var(--color-icon-default);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-search__clear:hover {
+  color: var(--color-text-primary);
+}
+.ids-search__clear:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}

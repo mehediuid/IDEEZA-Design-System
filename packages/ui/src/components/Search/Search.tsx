@@ -1,11 +1,10 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { Search as SearchIcon, Close } from "../../lib/icons";
 import {
   FieldShell,
   controlChrome,
   controlClass,
-  iconClass,
   valueClass,
   type FieldSize,
 } from "../Field/Field";
@@ -21,6 +20,10 @@ import {
  * gap 8, padding 12, 1.5px input/border. What A07 adds is the fixed leading
  * search glyph and a trailing clear that only appears once there is a value,
  * so the two icon slots are not free for callers to use.
+ *
+ * Error and disabled ride the field chrome's `data-invalid` / `data-disabled`
+ * treatment, the same as every other control; Search used to re-declare them
+ * as its own classes and missed the invalid-outranks-hover rule.
  */
 export type SearchSize = FieldSize;
 
@@ -43,6 +46,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
   ) => {
     const autoId = React.useId();
     const inputId = id ?? autoId;
+    const invalid = Boolean(error);
     const [inner, setInner] = React.useState(defaultValue ?? "");
     const current = value !== undefined ? value : inner;
     const hasValue = String(current ?? "").length > 0;
@@ -59,15 +63,11 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
         className={containerClassName}
       >
         <div
-          className={cn(
-            controlChrome,
-            controlClass[size],
-            error && "border-input-border-error focus-within:shadow-[0_0_0_3px_var(--color-focus-halo-danger)]",
-            disabled && "pointer-events-none bg-input-bg-disabled border-input-border-disabled",
-            className
-          )}
+          data-invalid={invalid}
+          data-disabled={Boolean(disabled)}
+          className={cx(controlChrome, controlClass[size], "ids-search", className)}
         >
-          <SearchIcon className={cn(iconClass[size], "shrink-0 text-icon")} aria-hidden="true" />
+          <SearchIcon aria-hidden="true" />
           <input
             ref={ref}
             id={inputId}
@@ -80,13 +80,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
               if (value === undefined) setInner(e.target.value);
               props.onChange?.(e);
             }}
-            className={cn(
-              "min-w-0 flex-1 bg-transparent outline-none",
-              "text-input-text placeholder:text-input-placeholder",
-              // Chrome draws its own clear affordance on type=search.
-              "[&::-webkit-search-cancel-button]:appearance-none",
-              valueClass[size]
-            )}
+            className={cx("ids-search__input", valueClass[size])}
             {...props}
           />
           {hasValue && onClear && (
@@ -94,9 +88,9 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
               type="button"
               onClick={onClear}
               aria-label="Clear search"
-              className={cn("shrink-0 rounded-full text-icon outline-none transition-colors duration-interaction ease-decelerate hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]", iconClass[size])}
+              className="ids-search__clear"
             >
-              <Close className="size-full" aria-hidden="true" />
+              <Close aria-hidden="true" />
             </button>
           )}
         </div>

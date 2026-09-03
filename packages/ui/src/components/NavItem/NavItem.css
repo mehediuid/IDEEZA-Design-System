@@ -1,0 +1,115 @@
+/*
+ * NavItem — the row shared by Figma's `M18 Dropdown Menu` and the
+ * `parent-row` of `M16 Sidebar Item` (Molecules — Navigation).
+ *
+ * 40px tall, radius 6, horizontal at gap 10, padding 0/12. Slots in order are
+ * dot, leading, content (label over description at gap 2) and a trailing row
+ * at gap 8. States: hover bg/subtle, selected bg/brand-subtle with BOTH the
+ * label and description in text/brand, disabled text/disabled with no fill.
+ *
+ * The row presses — the motionPress recipe written out: instant down at
+ * scale 0.97, eased release.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-nav-item {
+  display: flex;
+  height: 40px;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  border-radius: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: left;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-nav-item:active {
+  transition-duration: var(--motion-duration-instant);
+  transform: scale(0.97);
+}
+.ids-nav-item:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-nav-item--rest:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-nav-item--selected {
+  background-color: var(--color-bg-brand-subtle);
+}
+.ids-nav-item--disabled {
+  pointer-events: none;
+}
+
+.ids-nav-item__dot {
+  display: flex;
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.ids-nav-item__leading {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+.ids-nav-item__leading > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ids-nav-item__content {
+  display: flex;
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ids-nav-item__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+.ids-nav-item__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+/* Selected recolours the description too — easy to miss in the file. */
+.ids-nav-item--selected .ids-nav-item__label,
+.ids-nav-item--selected .ids-nav-item__description {
+  color: var(--color-text-brand);
+}
+.ids-nav-item--disabled .ids-nav-item__label,
+.ids-nav-item--disabled .ids-nav-item__description {
+  color: var(--color-text-disabled);
+}
+
+.ids-nav-item__trailing {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}

@@ -1,0 +1,64 @@
+/*
+ * Textarea — mirrors Figma `Textarea` (A05, Atoms — Input).
+ *
+ * The chrome comes from Field; Textarea supplies its own geometry — Figma
+ * sizes it by `Rows`, not by the control height ramp:
+ *
+ *   SM · 80px  · radius 8  · pad 10/12/8/12
+ *   MD · 104px · radius 12 · pad 12/14/8/14
+ *   LG · 128px · radius 16 · pad 14/16/8/16
+ *
+ * Padding is asymmetric — bottom stays 8 at every size, leaving room for the
+ * resize handle. Values below are the Figma numbers minus the 1.5px border
+ * (see the note in Field). The value type ramp is Field's — SM/MD take
+ * `ids-field__value--36`/`--40` (Body/SM) and LG takes `--48` (Body/MD).
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+/* The control stretches its child rather than centring it, so the textarea
+   fills the box. This outranks Field's `align-items: center` by sheet order —
+   Textarea.css imports after Field.css. */
+.ids-textarea {
+  align-items: stretch;
+}
+
+.ids-textarea--sm {
+  min-height: 80px;
+  border-radius: 8px;
+  padding: 8.5px 10.5px 6.5px 10.5px;
+}
+.ids-textarea--md {
+  min-height: 104px;
+  border-radius: 12px;
+  padding: 10.5px 12.5px 6.5px 12.5px;
+}
+.ids-textarea--lg {
+  min-height: 128px;
+  border-radius: 16px;
+  padding: 12.5px 14.5px 6.5px 14.5px;
+}
+
+/* Figma draws a resize handle bottom-right, so the field is vertically
+   resizable. */
+.ids-textarea__area {
+  min-height: 100%;
+  width: 100%;
+  resize: vertical;
+  background-color: transparent;
+  font-family: var(--font-family-body);
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-textarea__area::placeholder {
+  color: var(--color-input-placeholder);
+}
+.ids-textarea__area:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+.ids-textarea__area:disabled::placeholder {
+  color: var(--color-text-disabled);
+}

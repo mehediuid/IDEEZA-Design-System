@@ -1,37 +1,42 @@
 # Moving off Tailwind
 
-The design system is being rewritten to carry its own CSS. This file is the
-state of that work, written down so it survives a restart — the components
-that have moved, the ones that have not, how a move is done, and every trap
-found so far.
+The design system has been rewritten to carry its own CSS. This file was the
+running state of that work, written down so it survived a restart; the
+migration is complete, and it stays as the record — how a move was done, and
+every trap found on the way.
 
 ## Where it stands
 
-20 of 46 components carry their own stylesheet. The other 26 still use
-Tailwind classes, and both run side by side: `packages/ui/src/styles/index.css`
-collects the component sheets and is loaded ahead of the utility layer in the
-published `styles.css`. Nothing is broken in between.
+**Done. All 46 components carry their own stylesheet, and Tailwind is gone
+from the published package.**
 
-**Moved** — Alert, Badge, Banner, Button, ButtonGroup, Code, DeltaChip,
-Divider, Dot, IconButton, InlineCta, InlineMessage, Kbd, Link, LoadingState,
-Field, Snackbar, Spinner, StatusBlock, Tag
+`packages/ui/src/styles/index.css` collects the 46 component sheets, and the
+published `styles.css` is now the reset, the token variables and those rules —
+plain CSS, importable as-is. The utility layer, `cn()`, tailwind-merge, cva
+and `lib/motion.ts` retired with the last components; the motion recipes live
+in the stylesheets as ordinary declarations, checked by name in
+`check-figma-parity.mjs` and `check-css.mjs`. The system is fully
+self-contained: the tailwind-preset was removed too (the Figma type map now
+lives only in `textStyle`, in the tokens source, where the parity checks read
+it), and Storybook's story scaffolding runs on `scaffold.css` — the utilities
+the stories used, generated once and frozen as plain CSS on the day Tailwind
+left the repo. `tailwindcss` appears nowhere in the workspace.
 
-**Not yet** — Avatar, AvatarGroup, Breadcrumb, Checkbox, ColorPicker,
-DropdownMenu, Input, MultiSelect, NavItem, NumberInput, Pagination,
-ProgressBar, ProgressRing, Radio, Search, Select, SidebarItem, Skeleton,
-SkeletonLayout, Slider, StateView, Tabs, Textarea, Toast, Toggle, Tooltip
+Every migrated component was verified in the Diff harness before it was
+retired: 75 cases, every computed CSS property of every combination identical
+to the old build (or a difference argued for in writing). The harness and the
+vendored 0.2.0 stylesheet were deleted with the migration, as planned; this
+file stays as the record.
 
-Field has moved, and it is the shell the rest of the form family sits on. Its
-exports — `controlChrome`, `controlClass`, `valueClass` — are class names now
-rather than Tailwind strings, so the components that consume them already
-render against the new CSS for their chrome. Each still has its own parts to
-move.
+Field is the shell the whole form family sits on. Its exports —
+`controlChrome`, `controlClass`, `valueClass` — are class names, and every
+consumer renders against them. The other exported variant helpers
+(`buttonVariants`, `avatarVariants`, `skeletonVariants`, `navItemSurface`)
+kept their signatures and return `ids-*` class lists now. `tailwindcss` was
+never a dependency of the published package; with the last component moved it
+left the workspace entirely — no package or app depends on it.
 
-Tailwind goes when the last one moves. Until then `tailwindcss` stays a
-dev-dependency of tokens, design-system and storybook. It has never been a
-dependency of the published package.
-
-## How a component moves
+## How a component moved
 
 1. `node tools/generate-css.mjs <Name>` — prints a draft stylesheet, resolved
    from the built CSS rather than retyped, plus a list of what it could not
@@ -55,10 +60,11 @@ being true, and it fails invisibly.
 
 ## The diff harness
 
-`_Migration/Diff` renders the old class strings — taken from the commit before
-each migration, styled by the vendored 0.2.0 stylesheet — beside the new
-component, and compares every computed CSS property. `old/styles.css` and the
-whole `_migration` directory are deleted when the migration is.
+`_Migration/Diff` rendered the old class strings — taken from the commit
+before each migration, styled by the vendored 0.2.0 stylesheet — beside the
+new component, and compared every computed CSS property. `old/styles.css` and
+the whole `_migration` directory were deleted when the migration completed,
+after the final run came back green: 75 cases, all matching.
 
 Both sides must be identical in everything but the styling. Every false
 positive so far came from breaking that:
@@ -105,6 +111,36 @@ Each one produced output that looked entirely reasonable.
 - **`transition-[colors,box-shadow]` on the field control.** `colors` is not a
   CSS property, so the border and background snapped while only the focus halo
   animated. Every input in the system, since the shell was written.
+- **More dead classes, invisible to the checker.** `[&_svg]:text-icon` on
+  Input's control and `[&_svg]:text-icon-default` on Select's produced no rule
+  in any build — find-dead-classes' prefix match stops at the arbitrary
+  variant, so it never reported either. Icons inherited the value colour
+  instead of icon/default. Fixed in Input.css and Select.css, argued for there
+  in writing; the Diff harness never measures a child svg, so the harness
+  cannot vouch for it either way.
+- **`iconClass` after Field moved.** Field's `iconClass` export became an
+  alias of `controlClass` — fine inside a control, where it is redundant, but
+  Search passed it to its glyph and its clear button, handing both the
+  control's own height, edge padding and radius. Dropped in Search's
+  migration: the control sizes its icons (16/20, Field.css), and the clear
+  button shrink-wraps its icon. MultiSelect's chevron carried the same leak.
+- **Field's svg ramp reaching further than intended.** NumberInput's stepper
+  glyphs said `size-[16px]`, but `.ids-field__control--44/--48 svg { 20px }`
+  outranks a bare utility on specificity — the buttons quietly grew 20px
+  glyphs at the two largest sizes the day Field moved. NumberInput.css wins it
+  back by sheet order, with the same specificity.
+- **A one-sided border is two utilities.** `border-b-[2px] border-transparent`
+  puts the width on one edge and the colour on all four. Writing it back as
+  `border-bottom: 2px solid transparent` left the other three edges on the
+  reset's default colour — invisible at zero width, but a real computed
+  difference the harness caught on every Line tab. The faithful form is
+  `border-color` plus `border-bottom-width`.
+- **tailwind-merge was part of the old truth.** The harness's old sides carry
+  what cn() emitted, not what the source said: for a disabled option the
+  source held both `cursor-pointer` and `cursor-not-allowed`, and
+  tailwind-merge dropped the first. Carrying both classes on the old side let
+  the sheet's own order pick the wrong one and reported a difference that
+  never reached a user.
 - **Checks going stale in the other direction.** `hover:scale-[1.02]` stopped
   appearing anywhere once its last user migrated, and a check that only knew
   the class name called that a pass.

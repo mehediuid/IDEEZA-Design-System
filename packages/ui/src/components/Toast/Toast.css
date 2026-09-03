@@ -1,0 +1,154 @@
+/*
+ * Toast — mirrors Figma `M02 Toast` (Molecules — Feedback).
+ *
+ * 570 wide at radius 12, padding 14/14/14/16, gap 12, on bg/surface-raised
+ * with a 1px border/subtle and the file's shadow. Title is Body/MD Medium,
+ * supporting Body/SM, content gap 4. The five icon variants differ only in
+ * the 20px badge fill; Image is a 40px square at radius 8, Avatar a 32px
+ * circle; Progress restacks the whole thing vertically.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-toast {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-surface-raised);
+  padding: 14px;
+  padding-left: 16px;
+  box-shadow: var(--elevation-3);
+}
+.ids-toast--row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ids-toast--stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ids-toast__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ids-toast__body {
+  display: flex;
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  flex-direction: column;
+  gap: 4px;
+}
+.ids-toast__title {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+.ids-toast__description {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+.ids-toast__actions {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ids-toast__dismiss {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: var(--color-icon-default);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-toast__dismiss:hover {
+  color: var(--color-text-primary);
+}
+.ids-toast__dismiss:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-toast__dismiss svg {
+  width: 14px;
+  height: 14px;
+}
+
+.ids-toast__badge {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+.ids-toast__badge--primary {
+  background-color: var(--color-bg-brand);
+}
+.ids-toast__badge--gray {
+  background-color: var(--color-icon-secondary);
+}
+.ids-toast__badge--success {
+  background-color: var(--color-icon-success);
+}
+.ids-toast__badge--warning {
+  background-color: var(--color-icon-warning);
+}
+.ids-toast__badge--error {
+  background-color: var(--color-icon-error);
+}
+.ids-toast__badge svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-icon-on-brand);
+}
+
+.ids-toast__image {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--color-bg-subtle);
+}
+.ids-toast__avatar {
+  flex-shrink: 0;
+}
+/* Figma keeps a 1px spacer so the text starts in the same place. */
+.ids-toast__spacer {
+  width: 1px;
+  flex-shrink: 0;
+}
+
+.ids-toast__track {
+  height: 6px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--color-bg-subtle);
+}
+.ids-toast__fill {
+  height: 100%;
+  border-radius: 4px;
+  background-color: var(--color-bg-brand);
+  transition-property: width;
+  transition-duration: var(--motion-duration-normal);
+  transition-timing-function: var(--motion-easing-standard);
+}

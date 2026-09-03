@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * Tooltip — mirrors Figma `A19 Tooltip` and `A19b Tooltip Trigger`
@@ -61,18 +61,10 @@ export const Tooltip = ({
         side={side}
         align={align}
         sideOffset={sideOffset}
-        className={cn(
-          "z-popover max-w-[280px] rounded-[8px] bg-bg-inverse px-[12px] py-[8px]",
-          "text-body-xs-medium text-text-inverse shadow-3",
-          // Plain data-state transitions rather than tailwindcss-animate — the
-          // package is not a dependency and one tooltip does not justify it.
-          "transition-opacity duration-interaction ease-decelerate",
-          "data-[state=delayed-open]:opacity-100 data-[state=instant-open]:opacity-100 data-[state=closed]:opacity-0",
-          className
-        )}
+        className={cx("ids-tooltip", className)}
       >
         {content}
-        {arrow && <TooltipPrimitive.Arrow width={10} height={6} className="fill-bg-inverse" />}
+        {arrow && <TooltipPrimitive.Arrow width={10} height={6} className="ids-tooltip__arrow" />}
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   </TooltipPrimitive.Root>

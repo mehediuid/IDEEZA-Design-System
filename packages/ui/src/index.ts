@@ -56,4 +56,3 @@ export * from "./components/NavItem/index.js";
 export * from "./components/SidebarItem/index.js";
 export * from "./components/DropdownMenu/index.js";
 
-export { cn } from "./lib/cn.js";

@@ -1,0 +1,193 @@
+/*
+ * AvatarGroup — mirrors Figma `A16c Avatar Group`, and AvatarLabelGroup —
+ * `A16b Avatar Label Group` (Atoms — Display).
+ *
+ * Overlap is a quarter of the avatar — Figma sets item spacing to -6 / -8 /
+ * -10 / -12 at 24 / 32 / 40 / 48, so each face sits 75% along from the last.
+ * The contrast ring each Avatar already carries is what separates them.
+ *
+ * Label group sizes carry their own avatar, gap and type ramp:
+ *   SM  32 · gap 8  · Body/SM Medium + Caption/MD
+ *   MD  40 · gap 12 · Body/MD Medium + Body/SM
+ *   LG  48 · gap 14 · Label/LG       + Body/MD
+ *   XL  64 · gap 16 · Label/XL       + Body/LG
+ * Name and subtitle sit 2px apart, centred against the avatar.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-avatar-group {
+  display: flex;
+  align-items: center;
+}
+.ids-avatar-group--xs > :not([hidden]) ~ :not([hidden]) {
+  margin-left: -6px;
+}
+.ids-avatar-group--sm > :not([hidden]) ~ :not([hidden]) {
+  margin-left: -8px;
+}
+.ids-avatar-group--md > :not([hidden]) ~ :not([hidden]) {
+  margin-left: -10px;
+}
+.ids-avatar-group--lg > :not([hidden]) ~ :not([hidden]) {
+  margin-left: -12px;
+}
+
+/* The chip and the add button reuse the avatar box, so they line up with the
+   faces. */
+.ids-avatar-group__chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family-body);
+  background-color: var(--color-bg-surface-raised);
+  color: var(--color-text-secondary);
+  box-shadow: inset 0 0 0 2px var(--color-bg-surface);
+}
+
+.ids-avatar-group__add {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px dashed var(--color-border-strong);
+  background-color: var(--color-bg-surface);
+  color: var(--color-icon-default);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-avatar-group__add:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-avatar-group__add:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-avatar-group__add-glyph {
+  width: 45%;
+  height: 45%;
+}
+
+.ids-avatar-group__chip--xs,
+.ids-avatar-group__add--xs {
+  width: 24px;
+  height: 24px;
+  font-size: var(--font-size-2xs);
+  line-height: var(--line-height-2xs);
+  letter-spacing: var(--letter-spacing-caps);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar-group__chip--sm,
+.ids-avatar-group__add--sm {
+  width: 32px;
+  height: 32px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar-group__chip--md,
+.ids-avatar-group__add--md {
+  width: 40px;
+  height: 40px;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar-group__chip--lg,
+.ids-avatar-group__add--lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── AvatarLabelGroup ────────────────────────────────────────────────── */
+
+.ids-avatar-label {
+  display: inline-flex;
+  align-items: center;
+}
+.ids-avatar-label--sm {
+  gap: 8px;
+}
+.ids-avatar-label--md {
+  gap: 12px;
+}
+.ids-avatar-label--lg {
+  gap: 14px;
+}
+.ids-avatar-label--xl {
+  gap: 16px;
+}
+
+.ids-avatar-label__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ids-avatar-label__name {
+  color: var(--color-text-primary);
+}
+.ids-avatar-label__name--sm {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-avatar-label__name--md {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-avatar-label__name--lg {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar-label__name--xl {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ids-avatar-label__sub {
+  color: var(--color-text-secondary);
+}
+.ids-avatar-label__sub--sm {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-avatar-label__sub--md {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-avatar-label__sub--lg {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-avatar-label__sub--xl {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-2xl);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * ProgressBar — mirrors Figma `A22 Progress Bar` (Atoms — Display).
@@ -24,18 +24,13 @@ export interface ProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivEleme
 }
 
 const Track = ({ pct }: { pct: number }) => (
-  <div className="h-[8px] w-full overflow-hidden rounded-[4px] bg-bg-subtle">
-    <div
-      className="h-full rounded-[4px] bg-bg-brand transition-[width] duration-normal ease-standard"
-      style={{ width: `${pct}%` }}
-    />
+  <div className="ids-progress-bar__track">
+    <div className="ids-progress-bar__fill" style={{ width: `${pct}%` }} />
   </div>
 );
 
 const Pill = ({ text }: { text: string }) => (
-  <span className="inline-flex h-[22px] items-center rounded-[6px] border border-border-subtle bg-bg-surface-raised px-[8px] text-label-sm text-text-primary">
-    {text}
-  </span>
+  <span className="ids-progress-bar__pill">{text}</span>
 );
 
 export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
@@ -50,11 +45,11 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         aria-valuenow={Math.round(pct)}
         aria-valuemin={0}
         aria-valuemax={100}
-        className={cn("w-full", className)}
+        className={cx("ids-progress-bar", className)}
         {...props}
       >
         {label === "top-floating" && (
-          <div className="mb-[6px] flex">
+          <div className="ids-progress-bar__float ids-progress-bar__float--top">
             {/* Figma pads with a spacer frame; the margin does the same job and
                 keeps the pill on the fill's leading edge at any width. */}
             <span style={{ marginLeft: `calc(${pct}% - 20px)` }}>
@@ -64,19 +59,19 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         )}
 
         {label === "right" ? (
-          <div className="flex items-center gap-[12px]">
+          <div className="ids-progress-bar__row">
             <Track pct={pct} />
-            <span className="shrink-0 text-caption-md text-text-primary">{text}</span>
+            <span className="ids-progress-bar__value">{text}</span>
           </div>
         ) : (
           <Track pct={pct} />
         )}
 
         {label === "bottom" && (
-          <div className="mt-[6px] text-caption-md text-text-primary">{text}</div>
+          <div className="ids-progress-bar__below">{text}</div>
         )}
         {label === "bottom-floating" && (
-          <div className="mt-[6px] flex">
+          <div className="ids-progress-bar__float ids-progress-bar__float--bottom">
             <span style={{ marginLeft: `calc(${pct}% - 20px)` }}>
               <Pill text={text} />
             </span>

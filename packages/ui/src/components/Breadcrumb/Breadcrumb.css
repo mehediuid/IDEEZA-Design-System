@@ -1,0 +1,53 @@
+/*
+ * Breadcrumb — mirrors Figma `M19 Breadcrumb` (Molecules — Navigation).
+ *
+ * One row at gap 8. Every crumb is Body/SM in text/tertiary except the last,
+ * which is Body/SM Medium in text/primary. The separator is a literal "/" in
+ * the same tertiary colour, not an icon.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ids-breadcrumb__crumb {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-tertiary);
+}
+
+.ids-breadcrumb__link {
+  border-radius: 2px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-tertiary);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-breadcrumb__link:hover {
+  color: var(--color-text-primary);
+  text-decoration-line: underline;
+}
+.ids-breadcrumb__link:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+.ids-breadcrumb__current {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}

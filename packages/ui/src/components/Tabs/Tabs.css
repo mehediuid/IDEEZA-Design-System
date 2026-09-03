@@ -1,0 +1,231 @@
+/*
+ * Tabs — mirrors Figma `M14 Tabs` with `_TabFill`, `_TabLine` and
+ * `_TabToggle` (Molecules — Navigation).
+ *
+ * Three item ramps rather than one, because the styles do not share one —
+ * Fill is 36/38/44, Line is 36/40/48 and Toggle is 32/36/44, each with its
+ * own padding. Only the 6px gap and the counter pill are common.
+ *
+ * The active treatment is painted by one absolutely positioned indicator
+ * that slides between tabs on the spring; each tab carries only what does
+ * not move. Line items reserve the underline's 2px with a transparent border
+ * so selecting a tab never changes its height.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-tabs {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ids-tabs--fill {
+  height: 38px;
+  gap: var(--spacing-0);
+}
+.ids-tabs--line {
+  height: 40px;
+  gap: var(--spacing-0);
+}
+.ids-tabs--line-full {
+  height: 40px;
+  gap: var(--spacing-0);
+  /* `border-b border-border-subtle`, faithfully: width on the bottom edge,
+     colour on all four. */
+  border-color: var(--color-border-subtle);
+  border-bottom-width: 1px;
+}
+.ids-tabs--toggle {
+  height: 44px;
+  gap: 4px;
+  border-radius: 12px;
+  background-color: var(--color-bg-subtle);
+  padding: 4px;
+}
+.ids-tabs--stretch {
+  width: 100%;
+}
+
+/* ── The sliding indicator ───────────────────────────────────────────── */
+
+.ids-tabs__indicator {
+  pointer-events: none;
+  position: absolute;
+}
+.ids-tabs__indicator--travel {
+  transition-property: left, top, width, height;
+  transition-duration: var(--motion-duration-normal);
+  transition-timing-function: var(--motion-easing-spring);
+}
+.ids-tabs__indicator--fill {
+  background-color: var(--color-bg-brand);
+}
+.ids-tabs__indicator--line {
+  background-color: var(--color-border-brand);
+}
+.ids-tabs__indicator--toggle {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+}
+.ids-tabs__indicator--r6 {
+  border-radius: 6px;
+}
+.ids-tabs__indicator--r8 {
+  border-radius: 8px;
+}
+
+/* ── Items ───────────────────────────────────────────────────────────── */
+
+.ids-tab {
+  /* `relative` puts the label above the absolutely positioned indicator. */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-family: var(--font-family-body);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-tab:active {
+  transition-duration: var(--motion-duration-instant);
+  transform: scale(0.97);
+}
+.ids-tab:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-tab:disabled {
+  pointer-events: none;
+}
+.ids-tab--stretch {
+  flex: 1 1 0%;
+}
+
+.ids-tab--fill-sm {
+  height: 36px;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.ids-tab--fill-md {
+  height: 38px;
+  border-radius: 8px;
+  padding: 9px 14px;
+}
+.ids-tab--fill-lg {
+  height: 44px;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+.ids-tab--line-sm {
+  height: 36px;
+  padding: 8px 4px;
+}
+.ids-tab--line-md {
+  height: 40px;
+  padding: 10px 4px;
+}
+.ids-tab--line-lg {
+  height: 48px;
+  padding: 12px 4px;
+}
+.ids-tab--toggle-sm {
+  height: 32px;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+.ids-tab--toggle-md {
+  height: 36px;
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+.ids-tab--toggle-lg {
+  height: 44px;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+/* Type: Body/SM Medium everywhere except the LG items, which step up. */
+.ids-tab--type-sm {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-tab--type-md {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ── States, per style ───────────────────────────────────────────────── */
+
+.ids-tab--fill-idle,
+.ids-tab--toggle-idle {
+  color: var(--color-text-tertiary);
+}
+.ids-tab--fill-idle:hover,
+.ids-tab--toggle-idle:hover {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+}
+.ids-tab--fill-active {
+  color: var(--color-text-inverse);
+}
+.ids-tab--fill-disabled {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-disabled);
+}
+
+/* `border-b-[2px] border-transparent`, faithfully: the width lands on the
+   bottom edge and the colour on all four, exactly as the two utilities did —
+   the reset supplies the solid style and the zero widths elsewhere. */
+.ids-tab--line-idle,
+.ids-tab--line-active,
+.ids-tab--line-disabled {
+  border-color: transparent;
+  border-bottom-width: 2px;
+}
+.ids-tab--line-idle {
+  color: var(--color-text-tertiary);
+}
+.ids-tab--line-idle:hover {
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+.ids-tab--line-active {
+  color: var(--color-text-brand);
+}
+.ids-tab--line-disabled {
+  color: var(--color-text-disabled);
+}
+
+.ids-tab--toggle-active {
+  color: var(--color-text-primary);
+}
+.ids-tab--toggle-disabled {
+  color: var(--color-text-disabled);
+}
+
+/* The pill after the label — 20px tall, radius full, bg/subtle. */
+.ids-tab__counter {
+  display: inline-flex;
+  height: 20px;
+  min-width: 19px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-subtle);
+  padding-left: 6px;
+  padding-right: 6px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}

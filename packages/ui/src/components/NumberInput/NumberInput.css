@@ -1,0 +1,144 @@
+/*
+ * NumberInput — mirrors Figma `A12 Number Input` (Atoms — Input).
+ *
+ * Same field ramp as Text Input, with one change Figma makes for the buttons:
+ * right padding drops to 2.5 (Figma's 4 minus the 1.5px border) so the
+ * stepper sits flush inside the border, while the left keeps the usual inset.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+/* Figma pads 0/4/0/12 so the buttons meet the border. Outranks Field's
+   padding-inline by sheet order — NumberInput.css imports after Field.css. */
+.ids-number-input--32 {
+  padding-left: 8.5px;
+  padding-right: 2.5px;
+}
+.ids-number-input--36,
+.ids-number-input--40 {
+  padding-left: 10.5px;
+  padding-right: 2.5px;
+}
+.ids-number-input--44,
+.ids-number-input--48 {
+  padding-left: 12.5px;
+  padding-right: 2.5px;
+}
+
+.ids-number-input__unit {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.ids-number-input__input {
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  background-color: transparent;
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  /* The native spinners are replaced by the Figma stepper. */
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.ids-number-input__input::placeholder {
+  color: var(--color-input-placeholder);
+}
+.ids-number-input__input::-webkit-inner-spin-button,
+.ids-number-input__input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── Steppers ────────────────────────────────────────────────────────── */
+
+.ids-number-input__steps {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+}
+
+.ids-number-input__step {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--color-icon-default);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-number-input__step:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-number-input__step:active {
+  background-color: var(--color-bg-surface-raised);
+}
+.ids-number-input__step:disabled {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+}
+.ids-number-input__step:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Arrows — a single 32px column holding both chevrons. */
+.ids-number-input__arrows {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.ids-number-input__arrow {
+  display: flex;
+  height: 16px;
+  width: 32px;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-icon-default);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-number-input__arrow--up {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.ids-number-input__arrow--down {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.ids-number-input__arrow:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-number-input__arrow:disabled {
+  color: var(--color-text-disabled);
+}
+.ids-number-input__arrow:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Stepper glyphs are 16px at every size, as drawn in Figma. The old markup
+   said `size-[16px]`, which Field's `--44/--48 svg { 20px }` rule outranked
+   once Field moved — the buttons quietly grew 20px glyphs at the two largest
+   sizes. Same specificity here, but this sheet imports after Field.css, so
+   the 16px wins again. */
+.ids-number-input__step svg,
+.ids-number-input__arrow svg {
+  width: 16px;
+  height: 16px;
+}

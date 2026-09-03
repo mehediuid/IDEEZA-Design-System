@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * ProgressRing — mirrors Figma `A23 Progress Ring` (Atoms — Display).
@@ -18,12 +18,13 @@ import { cn } from "../../lib/cn";
  */
 export type ProgressRingSize = "xs" | "sm" | "md" | "lg" | "xl";
 
-const metrics: Record<ProgressRingSize, { box: number; stroke: number; value: string; title: string }> = {
-  xs: { box: 40, stroke: 4, value: "text-overline-sm", title: "text-caption-sm" },
-  sm: { box: 56, stroke: 6, value: "text-label-lg", title: "text-caption-sm" },
-  md: { box: 80, stroke: 8, value: "text-heading-h4", title: "text-caption-md" },
-  lg: { box: 120, stroke: 10, value: "text-heading-h3", title: "text-caption-md" },
-  xl: { box: 160, stroke: 14, value: "text-heading-h1", title: "text-caption-md" },
+/** Type per size lives in ProgressRing.css; the title steps up at MD. */
+const metrics: Record<ProgressRingSize, { box: number; stroke: number; title: "caption-sm" | "caption-md" }> = {
+  xs: { box: 40, stroke: 4, title: "caption-sm" },
+  sm: { box: 56, stroke: 6, title: "caption-sm" },
+  md: { box: 80, stroke: 8, title: "caption-md" },
+  lg: { box: 120, stroke: 10, title: "caption-md" },
+  xl: { box: 160, stroke: 14, title: "caption-md" },
 };
 
 // `title` is widened from the DOM attribute (a string tooltip) to a node, so
@@ -40,7 +41,7 @@ export interface ProgressRingProps extends Omit<React.HTMLAttributes<HTMLDivElem
 
 export const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
   ({ className, value = 0, size = "md", variant = "ring", title, formatValue, ...props }, ref) => {
-    const { box, stroke, value: valueClass, title: titleClass } = metrics[size];
+    const { box, stroke, title: titleClass } = metrics[size];
     const pct = Math.min(100, Math.max(0, value));
     const text = formatValue ? formatValue(pct) : `${Math.round(pct)}%`;
 
@@ -58,11 +59,11 @@ export const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
         aria-valuenow={Math.round(pct)}
         aria-valuemin={0}
         aria-valuemax={100}
-        className={cn("relative inline-flex shrink-0 items-center justify-center align-middle", className)}
+        className={cx("ids-progress-ring", className)}
         style={{ width: box, height: box }}
         {...props}
       >
-        <svg viewBox={`0 0 ${box} ${box}`} className="absolute inset-0 size-full" aria-hidden="true">
+        <svg viewBox={`0 0 ${box} ${box}`} className="ids-progress-ring__svg" aria-hidden="true">
           <g transform={`rotate(${rotation} ${box / 2} ${box / 2})`}>
             <circle
               cx={box / 2}
@@ -81,19 +82,22 @@ export const ProgressRing = React.forwardRef<HTMLDivElement, ProgressRingProps>(
               stroke="var(--color-icon-brand)"
               strokeWidth={stroke}
               strokeDasharray={`${(arc * pct) / 100} ${circumference}`}
-              className="transition-[stroke-dasharray] duration-normal ease-standard"
+              className="ids-progress-ring__head"
             />
           </g>
         </svg>
         <div
-          className={cn(
-            "relative flex flex-col items-center justify-center text-center",
-            // The gauge's arc only covers the top, so its text sits low in the box.
-            variant === "gauge" && "translate-y-[15%]"
+          className={cx(
+            "ids-progress-ring__content",
+            variant === "gauge" ? "ids-progress-ring__content--gauge" : null
           )}
         >
-          {title && <span className={cn(titleClass, "text-text-tertiary")}>{title}</span>}
-          <span className={cn(valueClass, "text-text-primary")}>{text}</span>
+          {title && (
+            <span className={cx("ids-progress-ring__title", `ids-progress-ring__title--${titleClass}`)}>
+              {title}
+            </span>
+          )}
+          <span className={cx("ids-progress-ring__value", `ids-progress-ring__value--${size}`)}>{text}</span>
         </div>
       </div>
     );

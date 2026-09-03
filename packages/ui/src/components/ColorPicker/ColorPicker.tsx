@@ -1,11 +1,10 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { ColorPicker as EyedropperIcon } from "@ideeza/icons";
 import {
   FieldShell,
   controlChrome,
   controlClass,
-  iconClass,
   type FieldSize,
 } from "../Field/Field";
 
@@ -23,15 +22,6 @@ import {
  * picker opens on click without a second control.
  */
 export type ColorPickerSize = FieldSize;
-
-/** Swatch is 28 at size 40; it tracks the control height minus the padding. */
-const swatchClass: Record<FieldSize, string> = {
-  32: "size-[22px]",
-  36: "size-[26px]",
-  40: "size-[28px]",
-  44: "size-[32px]",
-  48: "size-[36px]",
-};
 
 const HEX = /^#?[0-9a-fA-F]{0,6}$/;
 
@@ -79,27 +69,23 @@ export const ColorPicker = React.forwardRef<HTMLInputElement, ColorPickerProps>(
         className={containerClassName}
       >
         <div
-          className={cn(
-            controlChrome,
-            controlClass[size],
-            error && "border-input-border-error focus-within:shadow-[0_0_0_3px_var(--color-focus-halo-danger)]",
-            disabled && "pointer-events-none bg-input-bg-disabled border-input-border-disabled",
-            className
-          )}
+          data-invalid={Boolean(error)}
+          data-disabled={Boolean(disabled)}
+          className={cx(controlChrome, controlClass[size], "ids-color-picker", className)}
         >
-          <span className={cn("relative shrink-0 overflow-hidden rounded-[4px] border border-border", swatchClass[size])}>
-            <span className="absolute inset-0" style={{ background: complete ? normalised : "transparent" }} aria-hidden="true" />
+          <span className={cx("ids-color-picker__swatch", `ids-color-picker__swatch--${size}`)}>
+            <span className="ids-color-picker__swatch-fill" style={{ background: complete ? normalised : "transparent" }} aria-hidden="true" />
             <input
               type="color"
               value={complete ? normalised : "#000000"}
               onChange={(e) => set(e.target.value.toUpperCase())}
               disabled={disabled}
               aria-label="Pick a colour"
-              className="absolute inset-0 size-full cursor-pointer opacity-0 outline-none"
+              className="ids-color-picker__native"
             />
           </span>
 
-          <span className="shrink-0 text-code-md text-text-tertiary" aria-hidden="true">#</span>
+          <span className="ids-color-picker__hash" aria-hidden="true">#</span>
           <input
             ref={ref}
             id={inputId}
@@ -113,10 +99,10 @@ export const ColorPicker = React.forwardRef<HTMLInputElement, ColorPickerProps>(
               const next = e.target.value.toUpperCase();
               if (HEX.test(next)) set(`#${next}`);
             }}
-            className="min-w-0 flex-1 bg-transparent text-code-md text-input-text outline-none placeholder:text-input-placeholder"
+            className="ids-color-picker__hex"
             {...props}
           />
-          <EyedropperIcon className={cn(iconClass[size], "shrink-0 text-icon")} aria-hidden="true" />
+          <EyedropperIcon aria-hidden="true" />
         </div>
       </FieldShell>
     );

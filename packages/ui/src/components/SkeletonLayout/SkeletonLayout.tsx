@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { Skeleton } from "../Skeleton/Skeleton";
 
 /**
@@ -10,7 +10,8 @@ import { Skeleton } from "../Skeleton/Skeleton";
  *
  * Named apart from the A21 `Skeleton` atom on purpose: that one is a single
  * placeholder shape, this is a page-shaped arrangement of them. The atom does
- * the drawing here; only the frame geometry is new.
+ * the drawing here; only the frame geometry is new, and it lives in
+ * `SkeletonLayout.css`.
  *
  *   Card       360 wide, radius 8, padding 20, gap 16, a 320x160 image
  *   List Item  480 x 56, radius 6, padding 12/16, gap 12, 32 avatar + 24 tail
@@ -26,47 +27,51 @@ export interface SkeletonLayoutProps extends React.HTMLAttributes<HTMLDivElement
   animate?: boolean;
 }
 
-const shell = "bg-bg-surface";
-const bordered = "border border-border-subtle";
-
 export const SkeletonLayout = React.forwardRef<HTMLDivElement, SkeletonLayoutProps>(
   ({ className, layout = "card", animate = true, ...props }, ref) => {
-    const line = (w: string, h: string) => (
-      <Skeleton shape="line" animate={animate} className={cn(w, h)} />
+    const line = (part: string) => (
+      <Skeleton shape="line" animate={animate} className={part} />
     );
+    const frame = (bordered: boolean) =>
+      cx(
+        "ids-skeleton-layout",
+        `ids-skeleton-layout--${layout}`,
+        bordered ? "ids-skeleton-layout--bordered" : null,
+        className
+      );
 
     if (layout === "list-item") {
       return (
-        <div ref={ref} aria-hidden="true" className={cn(shell, bordered, "flex w-[480px] items-center gap-[12px] rounded-[6px] px-[16px] py-[12px]", className)} {...props}>
-          <Skeleton shape="circle" animate={animate} className="size-[32px] shrink-0" />
-          <div className="flex flex-1 flex-col gap-[8px]">
-            {line("w-full", "h-[10px]")}
-            {line("w-[60%]", "h-[8px]")}
+        <div ref={ref} aria-hidden="true" className={frame(true)} {...props}>
+          <Skeleton shape="circle" animate={animate} className="ids-skeleton-layout__avatar-32" />
+          <div className="ids-skeleton-layout__col ids-skeleton-layout__col--fill ids-skeleton-layout__col--gap-8">
+            {line("ids-skeleton-layout__line-full-10")}
+            {line("ids-skeleton-layout__line-60p-8")}
           </div>
-          <Skeleton shape="rectangle" animate={animate} className="size-[24px] shrink-0 rounded-[6px]" />
+          <Skeleton shape="rectangle" animate={animate} className="ids-skeleton-layout__tail-24" />
         </div>
       );
     }
 
     if (layout === "article") {
       return (
-        <div ref={ref} aria-hidden="true" className={cn(shell, bordered, "flex w-[640px] flex-col gap-[20px] rounded-[8px] p-[24px]", className)} {...props}>
-          <div className="flex items-center gap-[10px]">
-            <Skeleton shape="circle" animate={animate} className="size-[32px]" />
-            {line("w-[120px]", "h-[10px]")}
+        <div ref={ref} aria-hidden="true" className={frame(true)} {...props}>
+          <div className="ids-skeleton-layout__row ids-skeleton-layout__row--gap-10">
+            <Skeleton shape="circle" animate={animate} className="ids-skeleton-layout__avatar-32" />
+            {line("ids-skeleton-layout__line-120-10")}
           </div>
-          <div className="flex flex-col gap-[12px]">
-            {line("w-full", "h-[16px]")}
-            {line("w-[70%]", "h-[16px]")}
+          <div className="ids-skeleton-layout__col ids-skeleton-layout__col--gap-12">
+            {line("ids-skeleton-layout__line-full-16")}
+            {line("ids-skeleton-layout__line-70-16")}
           </div>
-          <div className="flex flex-col gap-[10px]">
-            {line("w-full", "h-[10px]")}
-            {line("w-full", "h-[10px]")}
-            {line("w-[85%]", "h-[10px]")}
+          <div className="ids-skeleton-layout__col ids-skeleton-layout__col--gap-10">
+            {line("ids-skeleton-layout__line-full-10")}
+            {line("ids-skeleton-layout__line-full-10")}
+            {line("ids-skeleton-layout__line-85-10")}
           </div>
-          <div className="flex items-center gap-[8px]">
-            {line("w-[80px]", "h-[8px]")}
-            {line("w-[80px]", "h-[8px]")}
+          <div className="ids-skeleton-layout__row ids-skeleton-layout__row--gap-8">
+            {line("ids-skeleton-layout__line-80-8")}
+            {line("ids-skeleton-layout__line-80-8")}
           </div>
         </div>
       );
@@ -77,20 +82,20 @@ export const SkeletonLayout = React.forwardRef<HTMLDivElement, SkeletonLayoutPro
       // different shape on every render.
       const bars = [70, 45, 90, 60, 80, 35];
       return (
-        <div ref={ref} aria-hidden="true" className={cn(shell, "flex w-[336px] flex-col gap-[16px] rounded-[8px] p-[20px]", className)} {...props}>
-          <div className="flex items-center gap-[12px]">
-            {line("w-[48px]", "h-[8px]")}
-            {line("w-[48px]", "h-[8px]")}
-            {line("w-[48px]", "h-[8px]")}
+        <div ref={ref} aria-hidden="true" className={frame(false)} {...props}>
+          <div className="ids-skeleton-layout__row ids-skeleton-layout__row--gap-12">
+            {line("ids-skeleton-layout__line-48-8")}
+            {line("ids-skeleton-layout__line-48-8")}
+            {line("ids-skeleton-layout__line-48-8")}
           </div>
-          <div className="flex h-[152px] items-end gap-[12px]">
+          <div className="ids-skeleton-layout__bars">
             {bars.map((h, i) => (
-              <Skeleton key={i} shape="rectangle" animate={animate} className="w-full rounded-[4px]" style={{ height: `${h}%` }} />
+              <Skeleton key={i} shape="rectangle" animate={animate} className="ids-skeleton-layout__bar" style={{ height: `${h}%` }} />
             ))}
           </div>
-          <div className="flex items-center gap-[12px]">
+          <div className="ids-skeleton-layout__row ids-skeleton-layout__row--gap-12">
             {bars.map((_, i) => (
-              <Skeleton key={i} shape="line" animate={animate} className="h-[8px] w-full" />
+              <Skeleton key={i} shape="line" animate={animate} className="ids-skeleton-layout__bar-label" />
             ))}
           </div>
         </div>
@@ -98,19 +103,19 @@ export const SkeletonLayout = React.forwardRef<HTMLDivElement, SkeletonLayoutPro
     }
 
     return (
-      <div ref={ref} aria-hidden="true" className={cn(shell, bordered, "flex w-[360px] flex-col gap-[16px] rounded-[8px] p-[20px]", className)} {...props}>
-        <Skeleton shape="rectangle" animate={animate} className="h-[160px] w-full rounded-[8px]" />
-        <div className="flex flex-col gap-[10px]">
-          {line("w-full", "h-[14px]")}
-          {line("w-[60%]", "h-[14px]")}
+      <div ref={ref} aria-hidden="true" className={frame(true)} {...props}>
+        <Skeleton shape="rectangle" animate={animate} className="ids-skeleton-layout__img-160" />
+        <div className="ids-skeleton-layout__col ids-skeleton-layout__col--gap-10">
+          {line("ids-skeleton-layout__line-full-14")}
+          {line("ids-skeleton-layout__line-60p-14")}
         </div>
-        <div className="flex flex-col gap-[8px]">
-          {line("w-full", "h-[8px]")}
-          {line("w-[80%]", "h-[8px]")}
+        <div className="ids-skeleton-layout__col ids-skeleton-layout__col--gap-8">
+          {line("ids-skeleton-layout__line-full-8")}
+          {line("ids-skeleton-layout__line-80p-8")}
         </div>
-        <div className="flex items-center gap-[12px]">
-          {line("w-[72px]", "h-[24px]")}
-          {line("w-[72px]", "h-[24px]")}
+        <div className="ids-skeleton-layout__row ids-skeleton-layout__row--gap-12">
+          {line("ids-skeleton-layout__line-72-24")}
+          {line("ids-skeleton-layout__line-72-24")}
         </div>
       </div>
     );

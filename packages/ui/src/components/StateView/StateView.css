@@ -1,0 +1,97 @@
+/*
+ * StateView — mirrors ten components on Figma's Molecules — States page
+ * (M48–M59). Every one is a vertical stack at gap 10 and padding 12, centred,
+ * on bg/surface, holding an 80px round badge with a 40px glyph, a text block
+ * at gap 4 with Heading/H3 over Body/SM, and an actions row at gap 6.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-state-view {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-bg-surface);
+  padding: 12px;
+  text-align: center;
+}
+
+.ids-state-view__badge {
+  display: inline-flex;
+  width: 80px;
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+.ids-state-view__badge--neutral {
+  background-color: var(--color-bg-subtle);
+}
+.ids-state-view__badge--error {
+  background-color: var(--color-bg-error-subtle);
+}
+.ids-state-view__badge--success {
+  background-color: var(--color-bg-success-subtle);
+}
+.ids-state-view__badge--warning {
+  background-color: var(--color-bg-warning-subtle);
+}
+.ids-state-view__badge--info {
+  background-color: var(--color-bg-info-subtle);
+}
+.ids-state-view__badge--brand {
+  background-color: var(--color-bg-brand-subtle);
+}
+
+.ids-state-view__glyph {
+  width: 40px;
+  height: 40px;
+}
+.ids-state-view__glyph--inherit {
+  color: var(--color-icon-default);
+}
+.ids-state-view__glyph--error {
+  color: var(--color-icon-error);
+}
+.ids-state-view__glyph--success {
+  color: var(--color-icon-success);
+}
+.ids-state-view__glyph--warning {
+  color: var(--color-icon-warning);
+}
+.ids-state-view__glyph--blue {
+  color: var(--color-icon-blue);
+}
+.ids-state-view__glyph--secondary {
+  color: var(--color-icon-secondary);
+}
+
+.ids-state-view__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.ids-state-view__title {
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-4xl);
+  letter-spacing: var(--letter-spacing-slight);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+.ids-state-view__description {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+
+.ids-state-view__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

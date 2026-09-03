@@ -1,0 +1,79 @@
+/*
+ * SidebarItem — mirrors Figma `M16 Sidebar Item` with `_Nav Sub-item`
+ * (Molecules — Navigation).
+ *
+ * The parent row is NavItem; what M16 adds is the sub-item list: a vertical
+ * stack at gap 2, each sub-item 36px at radius 6 with 40px of left padding —
+ * the indent that lines a child up under the parent's label, past the icon.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-sidebar-item {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ids-sidebar-item__chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--color-icon-default);
+  transition-property: transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-sidebar-item__chevron--open {
+  transform: rotate(180deg);
+}
+
+.ids-sidebar-item__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ids-sidebar-item__sub {
+  display: flex;
+  height: 36px;
+  width: 100%;
+  align-items: center;
+  border-radius: 6px;
+  /* 40px of left padding is the indent that lines the label up under the
+     parent's, past its 20px icon. */
+  padding-left: 40px;
+  padding-right: 12px;
+  text-align: left;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-sidebar-item__sub:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-sidebar-item__sub--rest:hover {
+  background-color: var(--color-bg-subtle);
+}
+.ids-sidebar-item__sub--selected {
+  background-color: var(--color-bg-brand-subtle);
+  color: var(--color-text-brand);
+}
+.ids-sidebar-item__sub--disabled {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+}
+
+.ids-sidebar-item__sub-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

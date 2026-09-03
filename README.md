@@ -66,20 +66,9 @@ import "@ideeza/tokens/css";   // CSS variables (light + dark, responsive)
 import "@ideeza/tokens/reset"; // optional reset
 ```
 
-For Tailwind users, in `tailwind.config.ts`:
-
-```ts
-import { ideezaPreset } from "@ideeza/tokens/tailwind-preset";
-
-export default {
-  presets: [ideezaPreset],
-  content: [
-    "./src/**/*.{ts,tsx}",
-    // Required so Tailwind generates the classes used inside @ideeza/ui:
-    "./node_modules/@ideeza/ui/dist/**/*.{js,cjs}",
-  ],
-};
-```
+The system is self-contained — no CSS framework, no build-step requirement.
+Custom styling in a consuming app is written against the same CSS variables
+the components read (`var(--color-bg-brand)`, `var(--spacing-4)`, …).
 
 Theme switching:
 
@@ -241,7 +230,7 @@ Reference: see `packages/ui/src/components/Button/Button.tsx` for the full patte
 
 **Why CSS variables?** Light/dark switching is a single attribute toggle on `<html>`, and responsive token values use one media query. No JS theme provider, no FOUC, works with any framework, and Tailwind utilities map directly via the preset.
 
-**Why CVA?** Variant matrices in Figma map cleanly to CVA configs. It produces ergonomic typed APIs (`<Button variant="primary" size="md" />`) and integrates well with `tailwind-merge` for prop-driven overrides.
+**Why plain component CSS?** Every component ships its own stylesheet of `ids-*` classes, generated from the same Figma-measured values the old Tailwind classes carried (MIGRATION.md tells that story). Variant props still give the ergonomic typed APIs (`<Button variant="primary" size="md" />`) — they now resolve to class names instead of utility strings, and component classes do not collide, so nothing needs merging.
 
 **Why Radix?** ~80% of the molecules in Figma (Dialog, Dropdown, Tooltip, Toast, Popover, Toggle, Tabs, Accordion) need accessibility primitives. Radix gives us those for free; we own the styling.
 

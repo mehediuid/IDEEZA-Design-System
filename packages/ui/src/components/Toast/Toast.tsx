@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { AlertCircle, CheckCircle, Close, InformationCircle } from "../../lib/icons";
 import { Spinner } from "../Spinner/Spinner";
 
@@ -36,14 +36,6 @@ export type ToastLeading =
   | "progress"
   | "none";
 
-const badge = {
-  primary: "bg-bg-brand",
-  gray: "bg-icon-secondary",
-  success: "bg-icon-success",
-  warning: "bg-icon-warning",
-  error: "bg-icon-error",
-} as const;
-
 const glyph = {
   primary: InformationCircle,
   gray: InformationCircle,
@@ -67,15 +59,15 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "
 
 export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
   ({ className, leading = "primary", title, description, actions, media, progress = 0, onDismiss, children, ...props }, ref) => {
-    const isIcon = leading in badge;
+    const isIcon = leading in glyph;
     const Glyph = isIcon ? glyph[leading as keyof typeof glyph] : null;
 
     const body = (
-      <div className="flex min-w-0 flex-1 flex-col gap-[4px]">
-        {title && <span className="text-body-md-medium text-text-primary">{title}</span>}
-        {description && <span className="text-body-sm text-text-secondary">{description}</span>}
+      <div className="ids-toast__body">
+        {title && <span className="ids-toast__title">{title}</span>}
+        {description && <span className="ids-toast__description">{description}</span>}
         {children}
-        {actions && <div className="mt-[4px] flex items-center gap-[8px]">{actions}</div>}
+        {actions && <div className="ids-toast__actions">{actions}</div>}
       </div>
     );
 
@@ -84,29 +76,26 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         type="button"
         onClick={onDismiss}
         aria-label="Dismiss"
-        className="inline-flex size-[20px] shrink-0 items-center justify-center rounded-[4px] text-icon outline-none hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]"
+        className="ids-toast__dismiss"
       >
-        <Close className="size-[14px]" aria-hidden="true" />
+        <Close aria-hidden="true" />
       </button>
     );
 
-    const shell = cn(
-      "w-full rounded-[12px] border border-border-subtle bg-bg-surface-raised p-[14px] pl-[16px] shadow-3",
-      className
-    );
+    const shell = cx("ids-toast", className);
 
     // Figma stacks the progress variant vertically — the bar spans the width
     // under the row rather than sitting beside the text.
     if (leading === "progress") {
       return (
-        <div ref={ref} role="status" aria-live="polite" className={cn(shell, "flex flex-col gap-[12px]")} {...props}>
-          <div className="flex items-start gap-[12px]">
+        <div ref={ref} role="status" aria-live="polite" className={cx(shell, "ids-toast--stack")} {...props}>
+          <div className="ids-toast__head">
             {body}
             {dismiss}
           </div>
-          <div className="h-[6px] w-full overflow-hidden rounded-[4px] bg-bg-subtle">
+          <div className="ids-toast__track">
             <div
-              className="h-full rounded-[4px] bg-bg-brand transition-[width] duration-normal ease-standard"
+              className="ids-toast__fill"
               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
             />
           </div>
@@ -115,20 +104,20 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
     }
 
     return (
-      <div ref={ref} role="status" aria-live="polite" className={cn(shell, "flex items-center gap-[12px]")} {...props}>
+      <div ref={ref} role="status" aria-live="polite" className={cx(shell, "ids-toast--row")} {...props}>
         {isIcon && Glyph && (
-          <span className={cn("inline-flex size-[20px] shrink-0 items-center justify-center rounded-full", badge[leading as keyof typeof badge])}>
-            <Glyph className="size-[14px] text-icon-on-brand" aria-hidden="true" />
+          <span className={cx("ids-toast__badge", `ids-toast__badge--${leading}`)}>
+            <Glyph aria-hidden="true" />
           </span>
         )}
         {leading === "image" && (
-          <span className="inline-flex size-[40px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-bg-subtle">
+          <span className="ids-toast__image">
             {media}
           </span>
         )}
-        {leading === "avatar" && <span className="shrink-0">{media}</span>}
+        {leading === "avatar" && <span className="ids-toast__avatar">{media}</span>}
         {/* Figma keeps a 1px spacer so the text starts in the same place. */}
-        {leading === "none" && <span className="w-px shrink-0" aria-hidden="true" />}
+        {leading === "none" && <span className="ids-toast__spacer" aria-hidden="true" />}
 
         {body}
         {dismiss}

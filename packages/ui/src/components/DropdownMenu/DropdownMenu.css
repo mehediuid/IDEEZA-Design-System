@@ -1,0 +1,40 @@
+/*
+ * DropdownMenu — mirrors Figma `M18 Dropdown Menu` (Molecules — Navigation).
+ *
+ * M18 is the row (NavItem); this is the surface the rows sit on — the same
+ * chrome the other overlays use: bg/surface, 1px border, radius 12, 4px of
+ * padding and shadow-3, matching MultiSelect's list.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-dropdown-menu {
+  display: flex;
+  width: 280px;
+  flex-direction: column;
+  gap: 2px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-default);
+  background-color: var(--color-bg-surface);
+  padding: 4px;
+  box-shadow: var(--elevation-3);
+}
+
+/* A hairline between groups of items. */
+.ids-dropdown-menu__separator {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  height: 1px;
+  background-color: var(--color-border-subtle);
+}
+
+/* Overline label above a group. */
+.ids-dropdown-menu__label {
+  padding: 6px 12px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-widest);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-tertiary);
+}

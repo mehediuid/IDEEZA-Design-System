@@ -1,0 +1,160 @@
+/*
+ * Radio — mirrors Figma `A08 Selection Control` (Type=Radio) and its
+ * `_Radio base` (Atoms — Input).
+ *
+ *   circle   sm 20×20 · md 24×24 · always round · 2px border
+ *   dot      sm 8×8 · md 10×10
+ *   row gap  16px · text gap 4px
+ *   label    sm Body/SM · md Body/MD · color input/label
+ *   support  sm Caption/SM · md Caption/MD · color input/helper
+ *
+ * Unlike the checkbox, a selected radio keeps the white fill and shows a
+ * brand ring with a brand dot — it never fills solid.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ids-radio__box {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.ids-radio__box--sm {
+  width: 20px;
+  height: 20px;
+}
+.ids-radio__box--md {
+  width: 24px;
+  height: 24px;
+}
+
+.ids-radio__input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: var(--radius-full);
+  border-style: solid;
+  border-width: 2px;
+  background-color: var(--color-input-bg);
+  border-color: var(--color-input-border);
+  /* `transition-[colors,box-shadow]` written out — `colors` is no property. */
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-radio__input--sm {
+  width: 20px;
+  height: 20px;
+}
+.ids-radio__input--md {
+  width: 24px;
+  height: 24px;
+}
+.ids-radio__input:hover {
+  border-color: var(--color-input-border-hover);
+}
+.ids-radio__input:checked {
+  border-color: var(--color-bg-brand);
+}
+.ids-radio__input:checked:hover {
+  border-color: var(--color-bg-brand-hover);
+}
+.ids-radio__input:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+.ids-radio__input:disabled {
+  pointer-events: none;
+  border-color: var(--color-input-border-disabled);
+}
+
+.ids-radio__dot {
+  pointer-events: none;
+  position: absolute;
+  inset: var(--spacing-0);
+  margin: auto;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-brand);
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+  opacity: 0;
+}
+.ids-radio__dot--sm {
+  width: 8px;
+  height: 8px;
+}
+.ids-radio__dot--md {
+  width: 10px;
+  height: 10px;
+}
+.ids-radio__input:checked ~ .ids-radio__dot {
+  opacity: 1;
+}
+/* Figma tracks the ring: Selected=On, State=Hover puts the dot on
+   bg/brand-hover too, and Disabled drops it to input/bg-disabled — not
+   text/disabled, which is a step darker. */
+.ids-radio__input:checked:hover ~ .ids-radio__dot {
+  background-color: var(--color-bg-brand-hover);
+}
+.ids-radio__input:disabled ~ .ids-radio__dot {
+  background-color: var(--color-input-bg-disabled);
+}
+
+/* ── Text column ─────────────────────────────────────────────────────── */
+
+.ids-radio__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ids-radio__label {
+  cursor: pointer;
+  font-family: var(--font-family-body);
+  color: var(--color-input-label);
+}
+.ids-radio__label--sm {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-radio__label--md {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-radio__label--disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+
+.ids-radio__support {
+  font-family: var(--font-family-body);
+  color: var(--color-input-helper);
+}
+.ids-radio__support--sm {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-radio__support--md {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-radio__support--disabled {
+  color: var(--color-text-disabled);
+}

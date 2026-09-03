@@ -1,11 +1,12 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 
 /**
  * Radio — mirrors Figma `A08 Selection Control` (Type=Radio) and its
  * `_Radio base` (Atoms — Input).
  *
- * Extracted from Figma, not approximated:
+ * Extracted from Figma, not approximated — the measurements live in
+ * `Radio.css`:
  *   circle   sm 20×20 · md 24×24 · always round · 2px border
  *   dot      sm 8×8 · md 10×10
  *   row gap  16px between control and text
@@ -17,23 +18,6 @@ import { cn } from "../../lib/cn";
  * brand ring with a brand dot — it never fills solid.
  */
 export type RadioSize = "sm" | "md";
-
-const boxClass: Record<RadioSize, string> = {
-  sm: "size-[20px]",
-  md: "size-[24px]",
-};
-const dotClass: Record<RadioSize, string> = {
-  sm: "size-[8px]",
-  md: "size-[10px]",
-};
-const labelClass: Record<RadioSize, string> = {
-  sm: "text-body-sm",
-  md: "text-body-md",
-};
-const supportClass: Record<RadioSize, string> = {
-  sm: "text-caption-sm",
-  md: "text-caption-md",
-};
 
 export interface RadioProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
@@ -50,50 +34,28 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     const radioId = id ?? autoId;
 
     return (
-      <div className={cn("flex items-start gap-[16px]", containerClassName)}>
-        <span className={cn("relative inline-flex shrink-0", boxClass[size])}>
+      <div className={cx("ids-radio", containerClassName)}>
+        <span className={cx("ids-radio__box", `ids-radio__box--${size}`)}>
           <input
             ref={ref}
             id={radioId}
             type="radio"
             disabled={disabled}
-            className={cn(
-              "peer appearance-none rounded-full border-solid border-[2px] bg-input-bg border-input-border",
-              "transition-[colors,box-shadow] duration-interaction ease-decelerate outline-none",
-              "hover:border-input-border-hover",
-              "checked:border-bg-brand checked:hover:border-bg-brand-hover",
-              "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
-              "disabled:pointer-events-none disabled:border-input-border-disabled",
-              boxClass[size],
-              className
-            )}
+            className={cx("ids-radio__input", `ids-radio__input--${size}`, className)}
             {...props}
           />
-          <span
-            aria-hidden="true"
-            className={cn(
-              "pointer-events-none absolute inset-0 m-auto rounded-full bg-bg-brand",
-              "transition-colors duration-interaction ease-decelerate",
-              "opacity-0 peer-checked:opacity-100",
-              // Figma tracks the ring: Selected=On, State=Hover puts the dot on
-              // bg/brand-hover too, and Disabled drops it to input/bg-disabled
-              // — not text/disabled, which is a step darker.
-              "peer-checked:peer-hover:bg-bg-brand-hover",
-              "peer-disabled:bg-input-bg-disabled",
-              dotClass[size]
-            )}
-          />
+          <span aria-hidden="true" className={cx("ids-radio__dot", `ids-radio__dot--${size}`)} />
         </span>
 
         {(label || description) && (
-          <span className="flex flex-col gap-[4px]">
+          <span className="ids-radio__text">
             {label && (
               <label
                 htmlFor={radioId}
-                className={cn(
-                  "cursor-pointer font-sans",
-                  labelClass[size],
-                  disabled ? "cursor-not-allowed text-text-disabled" : "text-input-label"
+                className={cx(
+                  "ids-radio__label",
+                  `ids-radio__label--${size}`,
+                  disabled ? "ids-radio__label--disabled" : null
                 )}
               >
                 {label}
@@ -101,10 +63,10 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             )}
             {description && (
               <span
-                className={cn(
-                  "font-sans",
-                  supportClass[size],
-                  disabled ? "text-text-disabled" : "text-input-helper"
+                className={cx(
+                  "ids-radio__support",
+                  `ids-radio__support--${size}`,
+                  disabled ? "ids-radio__support--disabled" : null
                 )}
               >
                 {description}

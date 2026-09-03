@@ -1,12 +1,13 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { Check, Minus } from "../../lib/icons";
 
 /**
  * Checkbox — mirrors Figma `A08 Selection Control` (Type=Checkbox) and its
  * `_Checkbox base` (Atoms — Input).
  *
- * Extracted from Figma, not approximated:
+ * Extracted from Figma, not approximated — the measurements live in
+ * `Checkbox.css`:
  *   box      sm 20×20 radius 6 · md 24×24 radius 8 · 2px border
  *   check    sm 10×8 · md 12×10 — a 16px / 20px icon/tick-02 instance
  *   row gap  16px between control and text (not 8)
@@ -22,27 +23,6 @@ import { Check, Minus } from "../../lib/icons";
  *              checked   → fill input/bg-disabled
  */
 export type CheckboxSize = "sm" | "md";
-
-const boxClass: Record<CheckboxSize, string> = {
-  sm: "size-[20px] rounded-[6px]",
-  md: "size-[24px] rounded-[8px]",
-};
-/**
- * Glyph box. Figma puts a 16px _Check icon inside the 20px box and a 20px one
- * inside the 24px box, which is what produces the 10×8 / 12×10 tick bounds.
- */
-const glyphSize: Record<CheckboxSize, string> = {
-  sm: "size-[16px]",
-  md: "size-[20px]",
-};
-const labelClass: Record<CheckboxSize, string> = {
-  sm: "text-body-sm",
-  md: "text-body-md",
-};
-const supportClass: Record<CheckboxSize, string> = {
-  sm: "text-caption-sm",
-  md: "text-caption-md",
-};
 
 export interface CheckboxProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
@@ -68,55 +48,34 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     }, [indeterminate]);
 
     return (
-      <div className={cn("flex items-start gap-[16px]", containerClassName)}>
-        <span className={cn("relative inline-flex shrink-0", boxClass[size])}>
+      <div className={cx("ids-checkbox", containerClassName)}>
+        <span className={cx("ids-checkbox__box", `ids-checkbox__box--${size}`)}>
           <input
             ref={inner}
             id={boxId}
             type="checkbox"
             disabled={disabled}
-            className={cn(
-              "peer appearance-none border-solid border-[2px] bg-input-bg border-input-border",
-              "transition-[colors,box-shadow] duration-interaction ease-decelerate outline-none",
-              "hover:border-input-border-hover",
-              "checked:border-transparent checked:bg-bg-brand checked:hover:bg-bg-brand-hover",
-              "indeterminate:border-transparent indeterminate:bg-bg-brand indeterminate:hover:bg-bg-brand-hover",
-              "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
-              "disabled:pointer-events-none disabled:border-input-border-disabled",
-              "disabled:checked:bg-input-bg-disabled disabled:indeterminate:bg-input-bg-disabled",
-              boxClass[size],
-              className
-            )}
+            className={cx("ids-checkbox__input", `ids-checkbox__input--${size}`, className)}
             {...props}
           />
           {/* Library glyphs — icon/tick-02 and icon/remove-01, exported verbatim. */}
           <Check
-            className={cn(
-              "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
-              "opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-0",
-              "peer-disabled:text-icon-disabled",
-              glyphSize[size]
-            )}
+            className={cx("ids-checkbox__glyph", "ids-checkbox__glyph--check", `ids-checkbox__glyph--${size}`)}
           />
           <Minus
-            className={cn(
-              "pointer-events-none absolute inset-0 m-auto text-icon-on-brand",
-              "opacity-0 peer-indeterminate:opacity-100",
-              "peer-disabled:text-icon-disabled",
-              glyphSize[size]
-            )}
+            className={cx("ids-checkbox__glyph", "ids-checkbox__glyph--minus", `ids-checkbox__glyph--${size}`)}
           />
         </span>
 
         {(label || description) && (
-          <span className="flex flex-col gap-[4px]">
+          <span className="ids-checkbox__text">
             {label && (
               <label
                 htmlFor={boxId}
-                className={cn(
-                  "cursor-pointer font-sans",
-                  labelClass[size],
-                  disabled ? "cursor-not-allowed text-text-disabled" : "text-input-label"
+                className={cx(
+                  "ids-checkbox__label",
+                  `ids-checkbox__label--${size}`,
+                  disabled ? "ids-checkbox__label--disabled" : null
                 )}
               >
                 {label}
@@ -124,10 +83,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             )}
             {description && (
               <span
-                className={cn(
-                  "font-sans",
-                  supportClass[size],
-                  disabled ? "text-text-disabled" : "text-input-helper"
+                className={cx(
+                  "ids-checkbox__support",
+                  `ids-checkbox__support--${size}`,
+                  disabled ? "ids-checkbox__support--disabled" : null
                 )}
               >
                 {description}

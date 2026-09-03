@@ -17,47 +17,49 @@ const stripComments = (t) => t.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*
 // Components that have moved off Tailwind keep their measurements in a
 // stylesheet, so their checks read declarations rather than class strings.
 const css = (name) => stripComments(fs.readFileSync(R + `${name}/${name}.css`, 'utf8')).replace(/\s+/g, ' ');
-const motionLib = stripComments(fs.readFileSync(new URL('../src/lib/motion.ts', import.meta.url).pathname, 'utf8'));
 const chk=(name,ok,detail)=>{ if(!ok) bad++; console.log(`${ok?'✅':'❌'} ${name.padEnd(46)} ${detail}`); };
 
 // ── Checkbox (Figma A08 + _Checkbox base)
 const cb=read('Checkbox/Checkbox.tsx');
-chk('checkbox box sm 20 r6', has(cb,'size-[20px] rounded-[6px]'),'20×20 r6');
-chk('checkbox box md 24 r8', has(cb,'size-[24px] rounded-[8px]'),'24×24 r8');
-chk('checkbox border 2px',   has(cb,'border-[2px]'),'2px');
-chk('checkbox glyph sm 16px → 10×8',has(cb,'sm: "size-[16px]"'),'icon/tick-02 in a 24 viewBox');
-chk('checkbox glyph md 20px → 12×10',has(cb,'md: "size-[20px]"'),'icon/tick-02 in a 24 viewBox');
+const cbc = css('Checkbox');
+chk('checkbox box sm 20 r6', has(cbc,'__input--sm { width: 20px; height: 20px; border-radius: 6px'),'20×20 r6');
+chk('checkbox box md 24 r8', has(cbc,'__input--md { width: 24px; height: 24px; border-radius: 8px'),'24×24 r8');
+chk('checkbox border 2px',   has(cbc,'border-width: 2px'),'2px');
+chk('checkbox glyph sm 16px → 10×8',has(cbc,'__glyph--sm { width: 16px; height: 16px'),'icon/tick-02 in a 24 viewBox');
+chk('checkbox glyph md 20px → 12×10',has(cbc,'__glyph--md { width: 20px; height: 20px'),'icon/tick-02 in a 24 viewBox');
 chk('checkbox uses library glyphs',has(cb,'import { Check, Minus }'),'no hand-drawn paths');
-chk('checkbox row gap 16',   has(cb,'gap-[16px]'),'control ↔ text');
-chk('checkbox text gap 4',   has(cb,'gap-[4px]'),'label ↔ support');
-chk('checkbox label sm Body/SM',has(cb,'sm: "text-body-sm"'),'14/20 regular');
-chk('checkbox label md Body/MD',has(cb,'md: "text-body-md"'),'16/24 regular');
-chk('checkbox support sm Caption/SM',has(cb,'sm: "text-caption-sm"'),'11/16 regular');
-chk('checkbox support md Caption/MD',has(cb,'md: "text-caption-md"'),'12/16 regular');
-chk('checkbox label colour input/label',has(cb,'text-input-label'),'not text-primary');
-chk('checkbox support colour input/helper',has(cb,'text-input-helper'),'not text-tertiary');
+chk('checkbox row gap 16',   has(cbc,'.ids-checkbox { display: flex; align-items: flex-start; gap: 16px'),'control ↔ text');
+chk('checkbox text gap 4',   has(cbc,'__text { display: flex; flex-direction: column; gap: 4px'),'label ↔ support');
+chk('checkbox label sm Body/SM',has(cbc,'__label--sm { font-size: var(--font-size-md); line-height: var(--line-height-md)'),'14/20 regular');
+chk('checkbox label md Body/MD',has(cbc,'__label--md { font-size: var(--font-size-lg); line-height: var(--line-height-lg)'),'16/24 regular');
+chk('checkbox support sm Caption/SM',has(cbc,'__support--sm { font-size: var(--font-size-xs)'),'11/16 regular');
+chk('checkbox support md Caption/MD',has(cbc,'__support--md { font-size: var(--font-size-sm)'),'12/16 regular');
+chk('checkbox label colour input/label',has(cbc,'__label { cursor: pointer; font-family: var(--font-family-body); color: var(--color-input-label)'),'not text-primary');
+chk('checkbox support colour input/helper',has(cbc,'__support { font-family: var(--font-family-body); color: var(--color-input-helper)'),'not text-tertiary');
 
 // ── Radio
 const rd=read('Radio/Radio.tsx');
-chk('radio 20 / 24 round',   has(rd,'sm: "size-[20px]"','md: "size-[24px]"','rounded-full'),'');
-chk('radio dot 8 / 10',      has(rd,'sm: "size-[8px]"','md: "size-[10px]"'),'');
-chk('radio border 2px',      has(rd,'border-[2px]'),'');
-chk('radio keeps white fill',has(rd,'bg-input-bg','checked:border-bg-brand') && !rd.includes('checked:bg-bg-brand'),'ring + dot, never solid');
-chk('radio row gap 16',      has(rd,'gap-[16px]'),'');
-chk('radio support sm Caption/SM',has(rd,'sm: "text-caption-sm"'),'11/16 regular');
+const rdc = css('Radio');
+chk('radio 20 / 24 round',   has(rdc,'__input--sm { width: 20px; height: 20px','__input--md { width: 24px; height: 24px','border-radius: var(--radius-full)'),'');
+chk('radio dot 8 / 10',      has(rdc,'__dot--sm { width: 8px; height: 8px','__dot--md { width: 10px; height: 10px'),'');
+chk('radio border 2px',      has(rdc,'border-width: 2px'),'');
+chk('radio keeps white fill',has(rdc,'background-color: var(--color-input-bg)','__input:checked { border-color: var(--color-bg-brand)') && !rdc.includes('__input:checked { background'),'ring + dot, never solid');
+chk('radio row gap 16',      has(rdc,'.ids-radio { display: flex; align-items: flex-start; gap: 16px'),'');
+chk('radio support sm Caption/SM',has(rdc,'__support--sm { font-size: var(--font-size-xs)'),'11/16 regular');
 
 // ── Textarea
 const ta=read('Textarea/Textarea.tsx');
-chk('textarea sm 80 r8 pad 10/12/8/12', has(ta,'min-h-[80px] rounded-[8px] pt-[8.5px] pr-[10.5px] pb-[6.5px] pl-[10.5px]'),'Figma value minus the 1.5px border');
-chk('textarea md 104 r12 pad 12/14/8/14',has(ta,'min-h-[104px] rounded-[12px] pt-[10.5px] pr-[12.5px] pb-[6.5px] pl-[12.5px]'),'Figma value minus the 1.5px border');
-chk('textarea lg 128 r16 pad 14/16/8/16',has(ta,'min-h-[128px] rounded-[16px] pt-[12.5px] pr-[14.5px] pb-[6.5px] pl-[14.5px]'),'Figma value minus the 1.5px border');
-chk('textarea lg value Body/MD', has(ta,'lg: "text-body-md"'),'sm/md Body/SM');
+const tac = css('Textarea');
+chk('textarea sm 80 r8 pad 10/12/8/12', has(tac,'--sm { min-height: 80px; border-radius: 8px; padding: 8.5px 10.5px 6.5px 10.5px'),'Figma value minus the 1.5px border');
+chk('textarea md 104 r12 pad 12/14/8/14',has(tac,'--md { min-height: 104px; border-radius: 12px; padding: 10.5px 12.5px 6.5px 12.5px'),'Figma value minus the 1.5px border');
+chk('textarea lg 128 r16 pad 14/16/8/16',has(tac,'--lg { min-height: 128px; border-radius: 16px; padding: 12.5px 14.5px 6.5px 14.5px'),'Figma value minus the 1.5px border');
+chk('textarea lg value Body/MD', has(ta,'{ sm: 36, md: 40, lg: 48 }','valueClass[size]'),'sm/md land on Body/SM, lg on Body/MD via the field ramp');
 chk('textarea label ramp 36/40/48', has(ta,'{ sm: 36, md: 40, lg: 48 }'),'→ 11/16, 12/16, 14/20');
 
 // ── Select
 const se=read('Select/Select.tsx');
 chk('select shares the field ramp', has(se,'controlClass[size]') && !se.includes('selectControlClass'),'no private geometry');
-chk('select icon ramp shared', has(se,'iconClass[size]'),'16/16/16/20/20');
+chk('select icon ramp shared', has(css('Field'),'--40 svg { width: 16px','--48 svg { width: 20px'),'16/16/16/20/20 — sized by the control');
 chk('select value ramp = input', has(se,'valueClass[size]'),'14/20 → 16/24 at 44');
 
 // ── Field shell (Text Input ramp)
@@ -87,8 +89,28 @@ chk('field colours animate with the halo',
 
 chk('select uses library chevron',has(se,'ChevronDown'),'icon/arrow-down-01-round');
 chk('textarea footer row',has(ta,'footerRight='),'helper left, count right');
-chk('textarea resizable',has(ta,'resize-y'),'matches the Figma resize handle');
+chk('textarea resizable',has(css('Textarea'),'resize: vertical'),'matches the Figma resize handle');
 chk('input select addons',has(read('Input/Input.tsx'),'prefixSelect','suffixSelect','selectAddon'),'Prefix/Suffix/Both Select');
+
+// ── Input (A04 — its own parts; the chrome is Field's)
+const inp = css('Input');
+chk('input addon pad 8.5/8.5/10.5/10.5/12.5', has(inp,
+  '--32, .ids-input__addon--36 { padding-left: 8.5px; padding-right: 8.5px',
+  '--40, .ids-input__addon--44 { padding-left: 10.5px; padding-right: 10.5px',
+  '--48 { padding-left: 12.5px; padding-right: 12.5px'),
+  'Figma value minus the 1.5px border');
+chk('input addon inner radius = field − 1.5', has(inp,
+  'border-top-left-radius: 6.5px','border-top-left-radius: 10.5px','border-top-left-radius: 14.5px',
+  'border-top-right-radius: 6.5px','border-top-right-radius: 10.5px','border-top-right-radius: 14.5px'),
+  '6.5/6.5/10.5/10.5/14.5 on the touching corners');
+chk('input addon replaces edge padding', has(inp,
+  '.ids-input--prefixed { padding-left: 1.5px','.ids-input--suffixed { padding-right: 1.5px'),
+  'only the border inset stays');
+chk('input select addon gap 4 + value colour', has(inp,
+  '__addon--select { gap: 4px; color: var(--color-input-text)'),'');
+chk('input icons icon/default', has(inp,
+  '.ids-input svg { flex-shrink: 0; color: var(--color-icon-default)'),
+  'the old [&_svg]:text-icon produced no rule — this is the fix');
 
 // ── Token discipline ────────────────────────────────────────────────
 // Type goes through a named Figma text style, never a raw px value and never
@@ -108,10 +130,10 @@ const bare = srcFiles.filter((f) =>
 chk('no bare size classes', bare.length === 0,
   bare.length ? bare.map((f) => f.split('/src/')[1]).join(', ') : 'every class is a named style');
 
-// The preset is the single place the four axes are joined. Confirm each style
-// this package uses resolves to the size, line height, tracking and weight
-// that Figma's style of the same name carries.
-const preset = fs.readFileSync(new URL('../../tokens/src/tailwind-preset.ts', import.meta.url).pathname, 'utf8');
+// `textStyle` in the tokens package is the single place the four axes are
+// joined. Confirm each style this package uses resolves to the size, line
+// height, tracking and weight that Figma's style of the same name carries.
+const foundations = fs.readFileSync(new URL('../../tokens/src/foundations.ts', import.meta.url).pathname, 'utf8');
 const FIGMA = {                       // name:            [size, line,  track,   weight]
   'label-sm':   ['xs',  'xs',  'wider',  'semibold'],   // Label/SM    11/16/0.15
   'label-md':   ['sm',  'xs',  'wide',   'semibold'],   // Label/MD    12/16/0.1
@@ -124,10 +146,12 @@ const FIGMA = {                       // name:            [size, line,  track,  
   'overline-md':['xs',  'xs',  'widest', 'semibold'],   // Overline/MD 11/16/1.2
 };
 for (const [name, row] of Object.entries(FIGMA)) {
-  const m = preset.match(new RegExp(`"${name}":\\s*\\[([^\\]]*)\\]`));
-  const got = m ? m[1].split(',').map((x) => x.trim().replace(/"/g, '')) : null;
-  chk(`preset ${name}`, got && row.every((v, i) => got[i] === v),
-    got ? got.join(' · ') : 'not found in the preset');
+  const m = foundations.match(new RegExp(`"${name}":\\s*\\{([^}]*)\\}`));
+  const got = m
+    ? ['size', 'line', 'tracking', 'weight'].map((k) => (m[1].match(new RegExp(`${k}:\\s*"([^"]+)"`)) || [])[1])
+    : null;
+  chk(`text style ${name}`, got && row.every((v, i) => got[i] === v),
+    got ? got.join(' · ') : 'not found in textStyle');
 }
 
 // ── A26 Dot · A25 KBD · A27 Code · A30 Delta Chip · A22/A23 Progress ─
@@ -176,15 +200,19 @@ chk('delta reads the chart/delta ramp', has(dc,
   'subtle/filled/text x up/down/flat');
 
 const pbar = stripComments(read('ProgressBar/ProgressBar.tsx'));
-chk('progress bar track 8 r4', has(pbar,'h-[8px] w-full overflow-hidden rounded-[4px] bg-bg-subtle'), '');
-chk('progress bar fill bg/brand r4', has(pbar,'rounded-[4px] bg-bg-brand'), '');
-chk('progress bar pill 22 r6 bordered', has(pbar,'h-[22px] items-center rounded-[6px] border border-border-subtle bg-bg-surface-raised'), '');
-chk('progress bar right label Caption/MD', has(pbar,'gap-[12px]','text-caption-md text-text-primary'), '');
+const pbc = css('ProgressBar');
+chk('progress bar track 8 r4', has(pbc,'__track { height: 8px; width: 100%; overflow: hidden; border-radius: 4px; background-color: var(--color-bg-subtle)'), '');
+chk('progress bar fill bg/brand r4', has(pbc,'__fill { height: 100%; border-radius: 4px; background-color: var(--color-bg-brand)'), '');
+chk('progress bar pill 22 r6 bordered', has(pbc,'__pill { display: inline-flex; height: 22px; align-items: center; border-radius: 6px; border: 1px solid var(--color-border-subtle); background-color: var(--color-bg-surface-raised)'), '');
+chk('progress bar right label Caption/MD', has(pbc,'__row { display: flex; align-items: center; gap: 12px','__value { flex-shrink: 0; font-size: var(--font-size-sm)'), '');
 
 const pring = stripComments(read('ProgressRing/ProgressRing.tsx'));
 chk('ring sizes 40/56/80/120/160', has(pring,'box: 40','box: 56','box: 80','box: 120','box: 160'), '');
 chk('ring strokes 4/6/8/10/14', has(pring,'stroke: 4','stroke: 6','stroke: 8','stroke: 10','stroke: 14'), '');
-chk('ring value type ramp', has(pring,'text-overline-sm','text-label-lg','text-heading-h4','text-heading-h3','text-heading-h1'), '');
+chk('ring value type ramp', has(css('ProgressRing'),
+  '__value--xs { font-size: var(--font-size-2xs)','__value--sm { font-size: var(--font-size-md)',
+  '__value--md { font-size: var(--font-size-2xl)','__value--lg { font-size: var(--font-size-3xl)',
+  '__value--xl { font-size: var(--font-size-5xl)'), '');
 chk('gauge is half the circle', has(pring,'circumference / 2'), 'Figma track spans 180°');
 chk('ring starts at 12 o\'clock, gauge at 9', has(pring,'variant === "gauge" ? 180 : -90'), '');
 
@@ -237,58 +265,86 @@ chk('cta arrow right/down', has(cta2,
   '--down:hover > svg { transform: translateY(2px)'), '');
 
 const agp = stripComments(read('AvatarGroup/AvatarGroup.tsx'));
-chk('avatar group overlap -6/-8/-10/-12',
-  has(agp,'-space-x-[6px]','-space-x-[8px]','-space-x-[10px]','-space-x-[12px]'), '');
-chk('avatar label group gaps 8/12/14/16',
-  has(agp,'gap-[8px]','gap-[12px]','gap-[14px]','gap-[16px]'), '');
-chk('avatar label type ramp',
-  has(agp,'name: "text-body-sm-medium", sub: "text-caption-md"','name: "text-body-md-medium", sub: "text-body-sm"',
-        'name: "text-label-lg", sub: "text-body-md"','name: "text-label-xl", sub: "text-body-lg"'), '');
-chk('avatar label name/subtitle 2px apart', has(agp,'gap-[2px]'), '');
+const agc = css('AvatarGroup');
+chk('avatar group overlap -6/-8/-10/-12', has(agc,
+  '--xs > :not([hidden]) ~ :not([hidden]) { margin-left: -6px','--sm > :not([hidden]) ~ :not([hidden]) { margin-left: -8px',
+  '--md > :not([hidden]) ~ :not([hidden]) { margin-left: -10px','--lg > :not([hidden]) ~ :not([hidden]) { margin-left: -12px'), '');
+chk('avatar label group gaps 8/12/14/16', has(agc,
+  '.ids-avatar-label--sm { gap: 8px','.ids-avatar-label--md { gap: 12px',
+  '.ids-avatar-label--lg { gap: 14px','.ids-avatar-label--xl { gap: 16px'), '');
+chk('avatar label type ramp', has(agc,
+  '__name--sm { font-size: var(--font-size-md)','__name--md { font-size: var(--font-size-lg)',
+  '__sub--sm { font-size: var(--font-size-sm)','__sub--xl { font-size: var(--font-size-xl)'),
+  'Body/SM Medium + Caption/MD → Label/XL + Body/LG');
+chk('avatar label name/subtitle 2px apart', has(agc,'__text { display: flex; flex-direction: column; gap: 2px'), '');
 
 // ── A07 Search · A12 Number Input · A11 Slider · A13 Color Picker ───
 // All four sit on the shared field ramp; the checks below cover what each one
 // adds on top, which is where they can drift.
 const srch = stripComments(read('Search/Search.tsx'));
-chk('search reuses the field ramp', has(srch,'controlChrome','controlClass[size]','valueClass[size]','iconClass[size]'),
-  'same height, radius, padding and gap as Text Input');
+chk('search reuses the field ramp', has(srch,'controlChrome','controlClass[size]','valueClass[size]'),
+  'same height, radius, padding and gap as Text Input; icons sized by the control');
 chk('search has a fixed leading glyph', has(srch,'<SearchIcon'), 'not a free icon slot');
 chk('search clear only when filled', has(srch,'hasValue && onClear'), '');
+const src2 = css('Search');
+chk('search icons icon/default', has(src2,'.ids-search svg { flex-shrink: 0; color: var(--color-icon-default)'),
+  'the glyph and the clear button, no control geometry leaking in');
+chk('search clear is a quiet round target', has(src2,
+  '__clear { flex-shrink: 0; border-radius: var(--radius-full)',
+  '__clear:focus-visible { box-shadow: 0 0 0 3px var(--color-focus-halo)'),'');
+
+const sel2 = css('Select');
+chk('select chevron icon/default', has(sel2,'.ids-select svg { flex-shrink: 0; color: var(--color-icon-default)'),
+  'the old [&_svg]:text-icon-default produced no rule — this is the fix');
+chk('select placeholder stays muted', has(sel2,
+  ":invalid, .ids-select__select:has(option[value='']:checked) { color: var(--color-input-placeholder)"),'');
 
 const num = stripComments(read('NumberInput/NumberInput.tsx'));
-chk('number input right padding drops to 4', has(num,'!pr-[2.5px]'), 'Figma pads 0/4/0/12 so the stepper meets the border');
-chk('number stepper buttons 32 r6 gap 2', has(num,'size-[32px]','rounded-[6px]','gap-[2px]'), '');
+const nic = css('NumberInput');
+chk('number input right padding drops to 4', has(nic,'padding-right: 2.5px'), 'Figma pads 0/4/0/12 so the stepper meets the border');
+chk('number stepper buttons 32 r6 gap 2', has(nic,
+  '__step { display: inline-flex; width: 32px; height: 32px','border-radius: 6px',
+  '__steps { display: flex; flex-shrink: 0; align-items: center; gap: 2px'), '');
 chk('number both stepper types', has(num,'stepper === "plus-minus"','<ChevronUp','<ChevronDown'), 'Plus-minus and Arrows');
-chk('number hides the native spinners', has(num,'[&::-webkit-inner-spin-button]:appearance-none'), '');
+chk('number hides the native spinners', has(nic,'::-webkit-inner-spin-button'), '');
 chk('number steps through the DOM input', has(num,'el.stepUp()','el.stepDown()'), 'keeps min/max clamping');
+chk('number stepper glyphs stay 16', has(nic,'__step svg, .ids-number-input__arrow svg { width: 16px; height: 16px'),
+  "Field's --44/--48 svg rule had grown them to 20 — this outranks it by sheet order");
 
 const sld = stripComments(read('Slider/Slider.tsx'));
-chk('slider track 4/6/8', has(sld,'track: "h-[4px]"','track: "h-[6px]"','track: "h-[8px]"'), '');
+const slc = css('Slider');
+chk('slider track 4/6/8', has(slc,'__track--sm { height: 4px','__track--md { height: 6px','__track--lg { height: 8px'), '');
 chk('slider thumb 12/16/20', has(sld,'thumb: 12','thumb: 16','thumb: 20'), '');
-chk('slider hover grows the thumb', has(sld,'hover: 18'), 'Figma MD goes 16 -> 18');
-chk('slider thumb is surface + 2px brand ring',
-  has(sld,'[&::-webkit-slider-thumb]:bg-bg-surface','[&::-webkit-slider-thumb]:border-bg-brand'), '');
-chk('slider disabled greys fill and ring', has(sld,'disabled ? "bg-border"','disabled:[&::-webkit-slider-thumb]:border-border'), '');
+chk('slider hover grows the thumb', has(sld,'hover: 18') && has(slc,':hover::-webkit-slider-thumb { width: var(--thumb-hover)'), 'Figma MD goes 16 -> 18');
+chk('slider thumb is surface + 2px brand ring', has(slc,
+  '::-webkit-slider-thumb { width: var(--thumb)','background-color: var(--color-bg-surface)','border-color: var(--color-bg-brand)'), '');
+chk('slider disabled greys fill and ring', has(slc,
+  '__fill--disabled { background-color: var(--color-border-default)',
+  ':disabled::-webkit-slider-thumb { border-color: var(--color-border-default)'), '');
 
 const cp = stripComments(read('ColorPicker/ColorPicker.tsx'));
-chk('colour swatch 28 at size 40, radius 4', has(cp,'40: "size-[28px]"','rounded-[4px]'), '');
-chk('colour hex in Code/MD', has(cp,'text-code-md'), '');
-chk('colour hash is text/tertiary', has(cp,'text-code-md text-text-tertiary'), '');
+const cpc = css('ColorPicker');
+chk('colour swatch 28 at size 40, radius 4', has(cpc,'__swatch--40 { width: 28px; height: 28px','border-radius: 4px'), '');
+chk('colour hex in Code/MD', has(cpc,'__hex { min-width: var(--spacing-0); flex: 1 1 0%; background-color: transparent; font-size: var(--font-size-md)'), '');
+chk('colour hash is text/tertiary', has(cpc,'__hash { flex-shrink: 0; font-size: var(--font-size-md)','color: var(--color-text-tertiary)'), '');
 chk('colour swatch opens the native picker', has(cp,'type="color"'), '');
 
 // ── A14 Multi-select · A19 Tooltip ──────────────────────────────────
 const mse = stripComments(read('MultiSelect/MultiSelect.tsx'));
-chk('multi-select reuses the field ramp', has(mse,'controlChrome','controlClass[size]','iconClass[size]'), '');
-chk('multi-select vertical padding drops to 4', has(mse,'!py-[2.5px]'), 'Figma pads 4/12 so the chip row centres');
+const msc = css('MultiSelect');
+chk('multi-select reuses the field ramp', has(mse,'controlChrome','controlClass[size]'), 'icons sized by the control');
+chk('multi-select vertical padding drops to 4', has(msc,'.ids-multi-select { padding-top: 2.5px; padding-bottom: 2.5px'), 'Figma pads 4/12 so the chip row centres');
 chk('multi-select chips are A18 Tag at SM', has(mse,'<Tag','size="sm"'), 'the real component, not a lookalike');
-chk('multi-select chip gap 4', has(mse,'gap-[4px]'), '');
+chk('multi-select chip gap 4', has(msc,'__tags { display: flex; min-width: var(--spacing-0); flex: 1 1 0%; flex-wrap: wrap; align-items: center; gap: 4px'), '');
 chk('multi-select is a listbox, not a native select',
   has(mse,'role="combobox"','role="listbox"','aria-multiselectable'), 'a native select cannot show chips');
 
 const tip = stripComments(read('Tooltip/Tooltip.tsx'));
+const tipc = css('Tooltip');
 chk('tooltip bubble r8 pad 8/12 on bg/inverse',
-  has(tip,'rounded-[8px] bg-bg-inverse px-[12px] py-[8px]'), '');
-chk('tooltip type Body/XS Medium on text/inverse', has(tip,'text-body-xs-medium text-text-inverse'), '');
+  has(tipc,'border-radius: 8px; background-color: var(--color-bg-inverse); padding: 8px 12px'), '');
+chk('tooltip type Body/XS Medium on text/inverse', has(tipc,
+  'font-size: var(--font-size-sm); line-height: var(--line-height-sm)','font-weight: var(--font-weight-medium); color: var(--color-text-inverse)'), '');
 chk('tooltip arrow 10x6', has(tip,'width={10} height={6}'), '');
 chk('tooltip arrow is optional', has(tip,'arrow = true','arrow &&'), 'Figma splits arrow / no arrow into variants');
 chk('tooltip does not need tailwindcss-animate', !tip.includes('animate-in'), 'not a dependency');
@@ -358,16 +414,20 @@ chk('snackbar message Body/SM Medium on text/inverse', has(snk,
 
 // ── M02 Toast · M06 Status Block ────────────────────────────────────
 const tst = stripComments(read('Toast/Toast.tsx'));
-chk('toast r12 pad 14/14/14/16 gap 12',
-  has(tst,'rounded-[12px] border border-border-subtle bg-bg-surface-raised p-[14px] pl-[16px]','gap-[12px]'), '');
-chk('toast title Body/MD Medium, supporting Body/SM',
-  has(tst,'text-body-md-medium text-text-primary','text-body-sm text-text-secondary'), 'content gap 4');
-chk('toast icon badges: brand/gray/success/warning/error',
-  has(tst,'primary: "bg-bg-brand"','gray: "bg-icon-secondary"','success: "bg-icon-success"',
-        'warning: "bg-icon-warning"','error: "bg-icon-error"'), 'five variants differ only in the badge fill');
-chk('toast image 40 r8, avatar 32 round', has(tst,'size-[40px]','rounded-[8px]'), '');
-chk('toast no-icon keeps the 1px spacer', has(tst,'w-px shrink-0'), 'text starts in the same place');
-chk('toast progress restacks vertically', has(tst,'leading === "progress"','flex-col gap-[12px]'), '');
+const tstc = css('Toast');
+chk('toast r12 pad 14/14/14/16 gap 12', has(tstc,
+  '.ids-toast { width: 100%; border-radius: 12px; border: 1px solid var(--color-border-subtle); background-color: var(--color-bg-surface-raised); padding: 14px; padding-left: 16px',
+  '--row { display: flex; align-items: center; gap: 12px'), '');
+chk('toast title Body/MD Medium, supporting Body/SM', has(tstc,
+  '__title { font-size: var(--font-size-lg)','font-weight: var(--font-weight-medium); color: var(--color-text-primary)',
+  '__description { font-size: var(--font-size-md)'), 'content gap 4');
+chk('toast icon badges: brand/gray/success/warning/error', has(tstc,
+  '--primary { background-color: var(--color-bg-brand)','--gray { background-color: var(--color-icon-secondary)',
+  '--success { background-color: var(--color-icon-success)','--warning { background-color: var(--color-icon-warning)',
+  '--error { background-color: var(--color-icon-error)'), 'five variants differ only in the badge fill');
+chk('toast image 40 r8, avatar 32 round', has(tstc,'__image { display: inline-flex; width: 40px; height: 40px','border-radius: 8px'), '');
+chk('toast no-icon keeps the 1px spacer', has(tstc,'__spacer { width: 1px; flex-shrink: 0'), 'text starts in the same place');
+chk('toast progress restacks vertically', has(tst,'leading === "progress"') && has(tstc,'--stack { display: flex; flex-direction: column; gap: 12px'), '');
 
 const stb = css('StatusBlock');
 chk('status block r6 pad 6/8 gap 6', has(stb,
@@ -390,14 +450,16 @@ chk('status label Body/SM Medium, detail Caption/MD at 2px', has(stb,
 
 // ── Molecules — States: M48-M59 · M50 · M51 ─────────────────────────
 const sv = stripComments(read('StateView/StateView.tsx'));
-chk('state view gap 10 pad 12 centred on bg/surface',
-  has(sv,'flex-col items-center gap-[10px] bg-bg-surface p-[12px] text-center'), 'identical in all ten');
-chk('state badge 80 round, glyph 40', has(sv,'size-[80px]','rounded-full','size-[40px]'), '');
-chk('state text gap 4, H3 over Body/SM',
-  has(sv,'gap-[4px]','text-heading-h3 text-text-primary','text-body-sm text-text-secondary'), '');
-chk('state actions gap 6', has(sv,'items-center gap-[6px]'), '');
+const svc = css('StateView');
+chk('state view gap 10 pad 12 centred on bg/surface', has(svc,
+  '.ids-state-view { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 10px; background-color: var(--color-bg-surface); padding: 12px; text-align: center'), 'identical in all ten');
+chk('state badge 80 round, glyph 40', has(svc,'__badge { display: inline-flex; width: 80px; height: 80px','__glyph { width: 40px; height: 40px'), '');
+chk('state text gap 4, H3 over Body/SM', has(svc,
+  '__text { display: flex; flex-direction: column; align-items: center; gap: 4px',
+  '__title { font-size: var(--font-size-3xl)','__description { font-size: var(--font-size-md)'), '');
+chk('state actions gap 6', has(svc,'__actions { display: flex; align-items: center; gap: 6px'), '');
 chk('state badge and glyph are set independently',
-  has(sv,'badgeTone[badge]','glyphTone[glyph]'), 'Figma does not derive one from the other');
+  has(sv,'`ids-state-view__badge--${badge}`','`ids-state-view__glyph--${glyph}`'), 'Figma does not derive one from the other');
 chk('state presets keep Figma pairings',
   has(sv,'"not-found": { icon: AlertCircle, badge: "brand", glyph: "secondary" }',
         'empty: { icon: Inbox, badge: "neutral", glyph: "inherit" }',
@@ -424,82 +486,96 @@ chk('loading description is Body/MD tertiary',
   'Figma shows it on Page only');
 
 const skl = stripComments(read('SkeletonLayout/SkeletonLayout.tsx'));
-chk('skeleton layout card 360 r8 pad 20 gap 16', has(skl,'w-[360px] flex-col gap-[16px] rounded-[8px] p-[20px]'), '');
-chk('skeleton layout list item 480x56 r6 pad 12/16', has(skl,'w-[480px] items-center gap-[12px] rounded-[6px] px-[16px] py-[12px]'), '');
-chk('skeleton layout article 640 r8 pad 24 gap 20', has(skl,'w-[640px] flex-col gap-[20px] rounded-[8px] p-[24px]'), '');
-chk('skeleton layout chart 336, no border', has(skl,'w-[336px] flex-col gap-[16px] rounded-[8px] p-[20px]'), '');
+const sklc = css('SkeletonLayout');
+chk('skeleton layout card 360 r8 pad 20 gap 16', has(sklc,'--card { display: flex; width: 360px; flex-direction: column; gap: 16px; border-radius: 8px; padding: 20px'), '');
+chk('skeleton layout list item 480x56 r6 pad 12/16', has(sklc,'--list-item { display: flex; width: 480px; align-items: center; gap: 12px; border-radius: 6px; padding: 12px 16px'), '');
+chk('skeleton layout article 640 r8 pad 24 gap 20', has(sklc,'--article { display: flex; width: 640px; flex-direction: column; gap: 20px; border-radius: 8px; padding: 24px'), '');
+chk('skeleton layout chart 336, no border', has(sklc,'--chart { display: flex; width: 336px; flex-direction: column; gap: 16px; border-radius: 8px; padding: 20px')
+  && has(skl,'frame(false)'), '');
 chk('skeleton layout reuses the A21 atom', has(skl,'import { Skeleton }','<Skeleton'), 'only the frame is new');
 
 // ── Molecules — Navigation: M14 · M19 · M20 ─────────────────────────
 const tbs = stripComments(read('Tabs/Tabs.tsx'));
-chk('tab fill ramp 36/38/44', has(tbs,'h-[36px] rounded-[6px] px-[12px] py-[8px]',
-  'h-[38px] rounded-[8px] px-[14px] py-[9px]','h-[44px] rounded-[8px] px-[16px] py-[10px]'), '');
-chk('tab line ramp 36/40/48', has(tbs,'h-[36px] px-[4px] py-[8px]','h-[40px] px-[4px] py-[10px]',
-  'h-[48px] px-[4px] py-[12px]'), 'its own ramp, not Fill\'s');
-chk('tab toggle ramp 32/36/44', has(tbs,'h-[32px] rounded-[6px] px-[12px] py-[6px]',
-  'h-[36px] rounded-[8px] px-[14px] py-[8px]'), '');
-chk('tab gap 6 everywhere', has(tbs,'gap-[6px]'), 'the one thing the three styles share');
-// The three active treatments now live on the sliding indicator rather than on
+const tbc = css('Tabs');
+chk('tab fill ramp 36/38/44', has(tbc,'--fill-sm { height: 36px; border-radius: 6px; padding: 8px 12px',
+  '--fill-md { height: 38px; border-radius: 8px; padding: 9px 14px','--fill-lg { height: 44px; border-radius: 8px; padding: 10px 16px'), '');
+chk('tab line ramp 36/40/48', has(tbc,'--line-sm { height: 36px; padding: 8px 4px','--line-md { height: 40px; padding: 10px 4px',
+  '--line-lg { height: 48px; padding: 12px 4px'), 'its own ramp, not Fill\'s');
+chk('tab toggle ramp 32/36/44', has(tbc,'--toggle-sm { height: 32px; border-radius: 6px; padding: 6px 12px',
+  '--toggle-md { height: 36px; border-radius: 8px; padding: 8px 14px'), '');
+chk('tab gap 6 everywhere', has(tbc,'.ids-tab {','gap: 6px'), 'the one thing the three styles share');
+// The three active treatments live on the sliding indicator rather than on
 // the selected tab, so the paint is checked where it is actually applied. The
 // label colour stays on the tab, because text cannot slide.
-chk('tab active differs in kind',
-  has(tbs,"fill: \"bg-bg-brand\"","line: \"bg-border-brand\"","toggle: \"bg-bg-surface border border-border-subtle\"")
-    && has(tbs,'active: "text-text-inverse"','active: "text-text-brand','active: "text-text-primary"'),
+chk('tab active differs in kind', has(tbc,
+  '__indicator--fill { background-color: var(--color-bg-brand)',
+  '__indicator--line { background-color: var(--color-border-brand)',
+  '__indicator--toggle { background-color: var(--color-bg-surface); border: 1px solid var(--color-border-subtle)',
+  '--fill-active { color: var(--color-text-inverse)','--line-active { color: var(--color-text-brand)',
+  '--toggle-active { color: var(--color-text-primary)'),
   'fill / underline / lift');
-chk('selecting a tab never changes its height',
-  (tbs.match(/border-b-\[2px\] border-transparent/g) || []).length === 3,
+chk('selecting a tab never changes its height', has(tbc,
+  '--line-idle, .ids-tab--line-active, .ids-tab--line-disabled { border-color: transparent; border-bottom-width: 2px'),
   'all three Line rows reserve the 2px, active included');
-chk('tab indicator slides on the spring',
-  has(tbs,'transition-[left,top,width,height] " + motionSpring'), '');
-chk('first placement does not animate', has(tbs,'placed.current &&'),
+chk('tab indicator slides on the spring', has(tbc,
+  '__indicator--travel { transition-property: left, top, width, height; transition-duration: var(--motion-duration-normal); transition-timing-function: var(--motion-easing-spring)'), '');
+chk('first placement does not animate', has(tbs,'placed.current ?'),
   'otherwise it flies in from the left edge on mount');
-chk('tab label paints above the indicator', has(tbs,'"relative inline-flex items-center'),
+chk('tab label paints above the indicator', has(tbc,'.ids-tab { position: relative'),
   'the indicator is the only positioned sibling');
-chk('tab line underline is 2px', has(tbs,'border-b-[2px]'), 'measured, not assumed');
-chk('tabs line-full rule is 1px', has(tbs,'"line-full": "h-[40px] gap-0 border-b border-border-subtle"'), '');
-chk('tabs toggle tray r12 pad 4 gap 4', has(tbs,'toggle: "h-[44px] gap-[4px] rounded-[12px] bg-bg-subtle p-[4px]"'), '');
-chk('tab counter 20 tall, radius full, bg/subtle',
-  has(tbs,'h-[20px] min-w-[19px] items-center justify-center rounded-full bg-bg-subtle'), '');
+chk('tab line underline is 2px', has(tbs,'height: 2 }'), 'measured, not assumed');
+chk('tabs line-full rule is 1px', has(tbc,'--line-full { height: 40px; gap: var(--spacing-0); border-color: var(--color-border-subtle); border-bottom-width: 1px'), '');
+chk('tabs toggle tray r12 pad 4 gap 4', has(tbc,'--toggle { height: 44px; gap: 4px; border-radius: 12px; background-color: var(--color-bg-subtle); padding: 4px'), '');
+chk('tab counter 20 tall, radius full, bg/subtle', has(tbc,
+  '__counter { display: inline-flex; height: 20px; min-width: 19px; align-items: center; justify-content: center; border-radius: var(--radius-full); background-color: var(--color-bg-subtle)'), '');
 
 const bcr = stripComments(read('Breadcrumb/Breadcrumb.tsx'));
-chk('breadcrumb gap 8', has(bcr,'items-center gap-[8px]'), '');
-chk('breadcrumb trail is quiet, last is emphasised',
-  has(bcr,'text-body-sm text-text-tertiary','text-body-sm-medium text-text-primary'), '');
+const bcc = css('Breadcrumb');
+chk('breadcrumb gap 8', has(bcc,'.ids-breadcrumb { display: flex; align-items: center; gap: 8px'), '');
+chk('breadcrumb trail is quiet, last is emphasised', has(bcc,
+  '__crumb { font-size: var(--font-size-md)','color: var(--color-text-tertiary)',
+  '__current { font-size: var(--font-size-md)'), '');
 chk('breadcrumb separator is a literal /', has(bcr,'separator = "/"'), 'not an icon');
 chk('breadcrumb marks the current page', has(bcr,'aria-current="page"'), '');
 
 const pgn = stripComments(read('Pagination/Pagination.tsx'));
-chk('pagination cells 32/40 r8', has(pgn,'sm: "size-[32px] rounded-[8px]','md: "size-[40px] rounded-[8px]'), '');
-chk('pagination gap 4 / 6', has(pgn,'sm: "gap-[4px]", md: "gap-[6px]"'), '');
-chk('pagination current on brand-subtle', has(pgn,'bg-bg-brand-subtle text-text-brand'), 'others transparent');
+const pgc = css('Pagination');
+chk('pagination cells 32/40 r8', has(pgc,'__cell--sm { width: 32px; height: 32px; border-radius: 8px','__cell--md { width: 40px; height: 40px; border-radius: 8px'), '');
+chk('pagination gap 4 / 6', has(pgc,'.ids-pagination--sm { gap: 4px','.ids-pagination--md { gap: 6px'), '');
+chk('pagination current on brand-subtle', has(pgc,'__cell--current { background-color: var(--color-bg-brand-subtle); color: var(--color-text-brand)'), 'others transparent');
 chk('pagination truncates like Figma', has(pgn,'paginationRange'), '1 2 3 … 8 9 10');
 
 // ── M18 Dropdown Menu row · M16 Sidebar Item ────────────────────────
 const nvi = stripComments(read('NavItem/NavItem.tsx'));
-chk('nav item row 40 r6 gap 10 pad 12',
-  has(nvi,'h-[40px] w-full items-center gap-[10px] rounded-[6px] px-[12px]'), 'shared by M18 and M16');
-chk('nav item slots dot/leading/content/trailing',
-  has(nvi,'size-[8px]','size-[20px]','gap-[2px]','items-center gap-[8px]'), '');
-chk('nav item states none/subtle/brand-subtle',
-  has(nvi,'bg-bg-brand-subtle','hover:bg-bg-subtle'), '');
-chk('nav item selected shifts the description too',
-  has(nvi,'const tone = disabled ? "text-text-disabled" : selected ? "text-text-brand" : undefined',
-        'tone ?? "text-text-secondary"'), 'not just the label');
-chk('nav item label Body/SM Medium, description Caption/MD',
-  has(nvi,'text-body-sm-medium','text-caption-md'), '');
+const nvc = css('NavItem');
+chk('nav item row 40 r6 gap 10 pad 12', has(nvc,
+  '.ids-nav-item { display: flex; height: 40px; width: 100%; align-items: center; gap: 10px; border-radius: 6px; padding-left: 12px; padding-right: 12px'), 'shared by M18 and M16');
+chk('nav item slots dot/leading/content/trailing', has(nvc,
+  '__dot { display: flex; width: 8px; height: 8px','__leading { display: inline-flex; width: 20px; height: 20px',
+  '__content { display: flex; min-width: var(--spacing-0); flex: 1 1 0%; flex-direction: column; gap: 2px',
+  '__trailing { display: flex; flex-shrink: 0; align-items: center; gap: 8px'), '');
+chk('nav item states none/subtle/brand-subtle', has(nvc,
+  '--rest:hover { background-color: var(--color-bg-subtle)','--selected { background-color: var(--color-bg-brand-subtle)'), '');
+chk('nav item selected shifts the description too', has(nvc,
+  '--selected .ids-nav-item__label, .ids-nav-item--selected .ids-nav-item__description { color: var(--color-text-brand)'), 'not just the label');
+chk('nav item label Body/SM Medium, description Caption/MD', has(nvc,
+  '__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-md)',
+  '__description { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-sm)'), '');
 
 const sbi = stripComments(read('SidebarItem/SidebarItem.tsx'));
 chk('sidebar item reuses the shared row', has(sbi,'import { NavItem','<NavItem'), 'M16 instances M18 in Figma');
-chk('sidebar sub-items 36 r6, stack gap 2', has(sbi,'h-[36px]','rounded-[6px]','gap-[2px]'), '');
-chk('sidebar sub-item indent 40', has(sbi,'pl-[40px] pr-[12px]'), 'lines the label up past the parent icon');
-chk('sidebar sub-item states match the parent',
-  has(sbi,'bg-bg-brand-subtle text-text-brand','hover:bg-bg-subtle','text-text-disabled'), '');
-chk('sidebar chevron rotates when open', has(sbi,'open && "rotate-180"'), '');
+const sbc = css('SidebarItem');
+chk('sidebar sub-items 36 r6, stack gap 2', has(sbc,'__sub { display: flex; height: 36px','border-radius: 6px','__list { display: flex; flex-direction: column; gap: 2px'), '');
+chk('sidebar sub-item indent 40', has(sbc,'padding-left: 40px;\n  padding-right: 12px'.replace('\n  ',' ')), 'lines the label up past the parent icon');
+chk('sidebar sub-item states match the parent', has(sbc,
+  '__sub--selected { background-color: var(--color-bg-brand-subtle); color: var(--color-text-brand)',
+  '__sub--rest:hover { background-color: var(--color-bg-subtle)','__sub--disabled { pointer-events: none; color: var(--color-text-disabled)'), '');
+chk('sidebar chevron rotates when open', has(sbc,'__chevron--open { transform: rotate(180deg)'), '');
 
 const ddm = stripComments(read('DropdownMenu/DropdownMenu.tsx'));
 chk('dropdown row is the shared NavItem', has(ddm,'<NavItem ref={ref} role="menuitem"'), 'M18 is the row, not the panel');
-chk('dropdown panel matches the overlay chrome',
-  has(ddm,'rounded-[12px] border border-border bg-bg-surface p-[4px] shadow-3'), 'same as the MultiSelect list');
+chk('dropdown panel matches the overlay chrome', has(css('DropdownMenu'),
+  'border-radius: 12px; border: 1px solid var(--color-border-default); background-color: var(--color-bg-surface); padding: 4px; box-shadow: var(--elevation-3)'), 'same as the MultiSelect list');
 
 // ── Motion ──────────────────────────────────────────────────────────
 // Figma carries 7,199 prototype reactions and 7,194 of them are the same
@@ -509,40 +585,43 @@ chk('dropdown panel matches the overlay chrome',
 const tokensCss = fs.readFileSync(new URL('../../tokens/css/tokens.css', import.meta.url).pathname, 'utf8');
 chk('motion scale carries the 120ms interaction step',
   /--motion-duration-interaction:\s*120ms/.test(tokensCss), 'the value 7,194 reactions use');
-chk('preset exposes duration-interaction',
-  /interaction:\s*"var\(--motion-duration-interaction\)"/.test(preset), '');
 
-// The motion recipes moved into lib/motion.ts, so a file that presses now says
-// `motionPress` rather than carrying the class string. These checks are about
-// what ships in the class attribute, so the recipes are expanded back in first
-// — otherwise a file would silently "pass" by not mentioning transitions at all.
-const RECIPES = Object.fromEntries(
-  [...motionLib.matchAll(/export const (motion\w+)\s*=\s*([\s\S]*?);\n/g)]
-    .map(([, name, body]) => [name, (body.match(/"([^"]*)"/g) || []).map((q) => q.slice(1, -1)).join(' ')]));
-const expand = (t) => t.replace(/\bmotion(State|Press|Lift|Spring)\b/g, (m) => RECIPES[m] ?? m);
-const uiFiles = srcFiles.map((f) => [f.split('/src/')[1], expand(stripComments(fs.readFileSync(f, 'utf8')))]);
+// The motion recipes live in the stylesheets now, as ordinary declarations —
+// these checks read the rules the way a browser would.
 // An interaction must not animate on the standard curve — Figma says ease-out.
-const wrongEasing = uiFiles.filter(([, t]) => /duration-interaction ease-standard/.test(t));
+const allSheets = readdirSync(R, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && fs.existsSync(`${R}${e.name}/${e.name}.css`))
+  .map((e) => [e.name, css(e.name)]);
+const wrongEasing = allSheets.filter(([, t]) =>
+  /transition-duration: var\(--motion-duration-interaction\); transition-timing-function: var\(--motion-easing-standard\)/.test(t));
 chk('interactions use ease-decelerate', wrongEasing.length === 0,
   wrongEasing.length ? wrongEasing.map(([n]) => n).join(', ') : 'EASE_OUT, not the standard curve');
 
-// Every transition must name a motion token; a bare or arbitrary duration is
-// how a scale stops being one.
-const rawDuration = uiFiles.filter(([, t]) => /duration-\[\d/.test(t));
+// Every transition must name a motion token; a raw millisecond duration is
+// how a scale stops being one. The slider thumb's stock 150ms is the argued
+// exception — the old build never overrode it (see Slider.css).
+const rawDuration = allSheets.filter(([n, t]) => n !== 'Slider' && /transition-duration: \d/.test(t));
 chk('no arbitrary durations', rawDuration.length === 0,
   rawDuration.length ? rawDuration.map(([n]) => n).join(', ') : 'every duration is a token');
 
-const bareTransition = uiFiles.filter(([, t]) =>
-  /transition(-\[[a-z,\-]+\]|-colors|-opacity|-transform|-shadow)?(?![a-z-])/.test(t) &&
-  !/duration-(instant|fast|interaction|normal|slow|slower)/.test(t));
+const bareTransition = allSheets.filter(([n, t]) =>
+  n !== 'Slider' && /transition-property:/.test(t) && !/transition-duration: var\(--motion-duration-/.test(t));
 chk('every transition carries a duration token', bareTransition.length === 0,
   bareTransition.length ? bareTransition.map(([n]) => n).join(', ') : '');
 
-// Anything with a hover or focus treatment should animate it.
-const unanimated = uiFiles.filter(([, t]) =>
-  /hover:|focus-visible:|aria-pressed:|checked:|data-\[state=/.test(t) && !/transition/.test(t));
+// Anything with a hover or focus treatment should animate it. The treatments
+// live in the stylesheets now, so that is what is scanned.
+const sheets = readdirSync(R, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && fs.existsSync(`${R}${e.name}/${e.name}.css`))
+  .map((e) => [e.name, css(e.name)]);
+// `:has(option:checked)` is a colour rule, not a state treatment — drop
+// :has() clauses before looking for interaction pseudos.
+const unanimated = sheets.filter(([, t]) => {
+  const bare = t.replace(/:has\([^)]*\)/g, '');
+  return /:hover|:focus-visible|\[aria-pressed|:checked|\[data-state=/.test(bare) && !/transition-property/.test(bare);
+});
 chk('interactive components all animate', unanimated.length === 0,
-  unanimated.length ? unanimated.map(([n]) => n).join(', ') : `${uiFiles.length} files checked`);
+  unanimated.length ? unanimated.map(([n]) => n).join(', ') : `${sheets.length} stylesheets checked`);
 
 const resetCss = fs.readFileSync(new URL('../../tokens/css/reset.css', import.meta.url).pathname, 'utf8');
 chk('reduced motion is honoured',
@@ -551,31 +630,24 @@ chk('reduced motion is honoured',
 
 // ── Motion recipes ──────────────────────────────────────────────────
 // A colour cross-fade alone reads as inert, so pressables also move. This
-// part is not in Figma — the file specifies the cross-fade and nothing else —
-// so it lives in one place and is checked rather than sprinkled.
-chk('motion recipes go through the tokens',
-  has(motionLib,'duration-interaction ease-decelerate','active:duration-instant','duration-normal ease-spring')
-    && !/\d+ms/.test(motionLib),
-  'no raw milliseconds');
-chk('press is instant down, eased up',
-  has(motionLib,'active:duration-instant active:scale-[0.97]'),
+// part is not in Figma — the file specifies the cross-fade and nothing else.
+// The recipes are declarations now; lib/motion.ts retired when its last
+// consumer moved, the same way motionLift and motionSwell did earlier.
+chk('press is instant down, eased up', has(css('NavItem'),
+  ':active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)'),
   'lag between finger and pixel reads as slow');
-// The lift and swell recipes moved into Button.css and IconButton.css, where
-// they are checked as rules. What matters here is that motion.ts holds only
-// what is still expressed as classes.
-chk('motion.ts holds only what is still a class',
-  !has(motionLib,'motionLift','motionSwell')
-    && has(motionLib,'motionState','motionPress','motionSpring'),
-  'lift and swell live in the two stylesheets that use them');
-chk('spring is reserved for travel', has(motionLib,'motionSpring') && has(motionLib,'ease-spring'),
+chk('spring is reserved for travel',
+  has(css('Toggle'),'transition-property: left; transition-duration: var(--motion-duration-normal); transition-timing-function: var(--motion-easing-spring)')
+    && has(css('Tabs'),'transition-property: left, top, width, height; transition-duration: var(--motion-duration-normal); transition-timing-function: var(--motion-easing-spring)')
+    && !allSheets.some(([, t]) => /transition-property: (color|[^;]*background)[^;]*;[^}]*easing-spring/.test(t)),
   'wrong for colour, which cannot overshoot');
 
 // Button and IconButton have moved to their own CSS; the rest still carry the
 // recipe as classes.
-const pressables = ['Tabs/Tabs.tsx','NavItem/NavItem.tsx','Pagination/Pagination.tsx'];
-const notPressing = pressables.filter((f) => !/motionPress|active:scale-\[0\.97\]/.test(read(f)));
+const pressSheets = ['Tabs','NavItem','Pagination'];
+const notPressing = pressSheets.filter((c) => !css(c).includes(':active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)'));
 chk('everything clickable presses', notPressing.length === 0,
-  notPressing.length ? notPressing.join(', ') : `${pressables.length} components`);
+  notPressing.length ? notPressing.join(', ') : `${pressSheets.length} components`);
 
 // One rule, applied twice: a hierarchy lifts if and only if it is raised.
 // The shadow is what makes it raised, so the shadow is what the check reads —
@@ -615,10 +687,11 @@ for (const file of []) {
         + rows.filter((r) => !r.raised).map((r) => r.name).join('/') + ' swell');
 }
 chk('swell is smaller than the press',
-  has(css('Button'),'--flat:hover { transform: scale(1.02)') && has(motionLib,'active:scale-[0.97]'),
+  has(css('Button'),'--flat:hover { transform: scale(1.02)') && has(css('Button'),':active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)'),
   'hover grows a little, press shrinks more — the press must still read as a press');
 
-chk('toggle thumb travels on the spring', has(read('Toggle/Toggle.tsx'),'"transition-[left] " + motionSpring'), '');
+chk('toggle thumb travels on the spring', has(css('Toggle'),
+  'transition-property: left; transition-duration: var(--motion-duration-normal); transition-timing-function: var(--motion-easing-spring)'), '');
 chk('a static Tag does not press',
   has(css('Tag'),'--interactive:active { transition-duration: var(--motion-duration-instant); transform: scale(0.97)')
     && !/\.ids-tag:active/.test(css('Tag')),
@@ -636,9 +709,9 @@ const formBlock = /input,\s*\n\s*button,\s*\n\s*textarea,\s*\n\s*select\s*\{([^}
 chk('reset zeroes form-control margins', Boolean(formBlock) && /margin:\s*0/.test(formBlock[1]),
   'UA margin on radio/checkbox otherwise offsets the dot');
 chk('reset sets border-box', /box-sizing:\s*border-box/.test(reset), '');
-chk('radio wrapper is control-sized', has(rd, 'relative inline-flex shrink-0", boxClass[size]'),
+chk('radio wrapper is control-sized', has(rdc, '__box { position: relative; display: inline-flex; flex-shrink: 0','__box--sm { width: 20px; height: 20px'),
   'so the dot centres on the ring, not on the input margin box');
-chk('checkbox wrapper is control-sized', has(cb, 'relative inline-flex shrink-0", boxClass[size]'), '');
+chk('checkbox wrapper is control-sized', has(cbc, '__box { position: relative; display: inline-flex; flex-shrink: 0','__box--sm { width: 20px; height: 20px'), '');
 
 // ── A17 Badge ───────────────────────────────────────────────────────
 const bg2 = stripComments(read('Badge/Badge.tsx'));
@@ -675,49 +748,31 @@ chk('badge outline borders are semantic', has(bgc,
   && !/border-color: var\(--(?!color-)/.test(bgc), 'no raw primitive borders');
 
 // ── _Radio base state colours ───────────────────────────────────────
-chk('radio dot follows the ring on hover', has(rd, 'peer-checked:peer-hover:bg-bg-brand-hover'), '');
-chk('radio dot disabled is input/bg-disabled', has(rd, 'peer-disabled:bg-input-bg-disabled'), 'not text/disabled');
-chk('checkbox indeterminate hover', has(cb, 'indeterminate:hover:bg-bg-brand-hover'), '');
-chk('checkbox glyph disabled is icon/disabled', has(cb, 'peer-disabled:text-icon-disabled'), 'Figma strokes it icon/disabled');
+chk('radio dot follows the ring on hover', has(rdc, '__input:checked:hover ~ .ids-radio__dot { background-color: var(--color-bg-brand-hover)'), '');
+chk('radio dot disabled is input/bg-disabled', has(rdc, '__input:disabled ~ .ids-radio__dot { background-color: var(--color-input-bg-disabled)'), 'not text/disabled');
+chk('checkbox indeterminate hover', has(cbc, '__input:indeterminate:hover { background-color: var(--color-bg-brand-hover)'), '');
+chk('checkbox glyph disabled is icon/disabled', has(cbc, '__input:disabled ~ .ids-checkbox__glyph { color: var(--color-icon-disabled)'), 'Figma strokes it icon/disabled');
 
 // ── A10 Toggle / _Toggle base ───────────────────────────────────────
 const tg2 = stripComments(read('Toggle/Toggle.tsx'));
-chk('toggle track sm 36x20 / md 44x24', has(tg2, 'sm: "h-[20px] w-[36px]"', 'md: "h-[24px] w-[44px]"'), '');
-chk('toggle thumb 16 / 20, inset 2', has(tg2, 'size-[16px] left-[2px]', 'size-[20px] left-[2px]', 'top-[2px]'), '');
-chk('toggle on position 18 / 22', has(tg2, 'data-[state=checked]:left-[18px]', 'data-[state=checked]:left-[22px]'), 'Figma thumb x when Pressed=On');
+const tgc2 = css('Toggle');
+chk('toggle track sm 36x20 / md 44x24', has(tgc2, '--sm { height: 20px; width: 36px', '--md { height: 24px; width: 44px'), '');
+chk('toggle thumb 16 / 20, inset 2', has(tgc2, '__thumb--sm { width: 16px; height: 16px', '__thumb--md { width: 20px; height: 20px', 'top: 2px', 'left: 2px'), '');
+chk('toggle on position 18 / 22', has(tgc2, '__thumb--sm[data-state="checked"] { left: 18px', '__thumb--md[data-state="checked"] { left: 22px'), 'Figma thumb x when Pressed=On');
 chk('toggle moves with left, not translate',
-  has(tg2, 'transition-[left]') && !/\btranslate-[xy]-/.test(tg2),
-  'translate shares --tw-translate-x and can be pinned by any other transform');
-chk('toggle off fill input/border', has(tg2, 'bg-input-border hover:bg-input-border-hover'), 'not bg/surface-raised');
-chk('toggle on fill bg/brand + hover', has(tg2, 'data-[state=checked]:bg-bg-brand', 'data-[state=checked]:hover:bg-bg-brand-hover'), '');
+  has(tgc2, 'transition-property: left') && !tgc2.includes('translate'),
+  'translate shared --tw-translate-x and could be pinned by any other transform');
+chk('toggle off fill input/border', has(tgc2, 'background-color: var(--color-input-border)', ':hover { background-color: var(--color-input-border-hover)'), 'not bg/surface-raised');
+chk('toggle on fill bg/brand + hover', has(tgc2, '[data-state="checked"] { background-color: var(--color-bg-brand)', '[data-state="checked"]:hover { background-color: var(--color-bg-brand-hover)'), '');
 chk('toggle disabled swaps fill, not opacity',
-  has(tg2, 'disabled:!bg-input-bg-disabled') && !tg2.includes('disabled:opacity'), 'Figma: input/bg-disabled');
+  has(tgc2, ':disabled { cursor: not-allowed; background-color: var(--color-input-bg-disabled) !important') && !tgc2.includes(':disabled { opacity'), 'Figma: input/bg-disabled');
 chk('toggle track has no border',
-  !/(^|\s)border(\s|"|')/.test(tg2) && !tg2.includes('border-border'),
+  !/\.ids-toggle[^_{]*\{[^}]*border:/.test(tgc2),
   'Figma track carries no stroke');
-chk('toggle thumb fill bg/surface', has(tg2, 'bg-bg-surface'), 'not raw white');
+chk('toggle thumb fill bg/surface', has(tgc2, '__thumb { pointer-events: none; position: absolute; top: 2px; display: block; border-radius: var(--radius-full); background-color: var(--color-bg-surface)'), 'not raw white');
 
-// ── cn() must tell text styles apart from text colours ──────────────
-// The styles sit in Tailwind's fontSize scale, so `text-label-lg` and
-// `text-button-primary-text` share a prefix. tailwind-merge cannot separate
-// them unaided, and when it guessed it dropped the colour — every filled
-// button rendered with inherited near-black text. cn.ts names the styles; if
-// the preset gains one and that list is not updated, the same bug returns.
-const cnSrc = fs.readFileSync(new URL('../src/lib/cn.ts', import.meta.url).pathname, 'utf8');
-const listed = new Set([...cnSrc.matchAll(/"([a-z0-9-]+)",/g)].map((m) => m[1]));
-// fontSize entries in the preset are `"label-sm": ["xs", "xs", "wider", "semibold"],`
-// inside a `fontSize: ts({ ... })` call — slice to that call's closing brace.
-const fsStart = preset.indexOf('fontSize: ts({');
-const fsBlock = preset.slice(fsStart, preset.indexOf('}),', fsStart));
-const presetSizes = new Set([...fsBlock.matchAll(/"([a-z0-9-]+)":\s*\[/g)].map((m) => m[1]));
-const missing = [...presetSizes].filter((k) => !listed.has(k));
-const extra = [...listed].filter((k) => !presetSizes.has(k));
-chk('cn() knows every text style', missing.length === 0 && extra.length === 0,
-  missing.length ? 'missing: ' + missing.join(', ')
-  : extra.length ? 'not in the preset: ' + extra.join(', ')
-  : `${presetSizes.size} styles, none treated as a colour`);
-chk('cn() uses extendTailwindMerge', cnSrc.includes('extendTailwindMerge') && cnSrc.includes('"font-size"'),
-  'plain twMerge conflates styles with colours');
+// cn() and tailwind-merge are gone with the utility layer — component
+// classes do not collide, so there is nothing to merge and nothing to guard.
 
 // ── Display atoms ───────────────────────────────────────────────────
 // Values read out of Atoms — Display with the plugin API, same as above.
@@ -725,31 +780,41 @@ chk('cn() uses extendTailwindMerge', cnSrc.includes('extendTailwindMerge') && cn
 // A16 Avatar — 6 sizes, and initials step through named styles rather than
 // raw sizes. The contrast border is 1px up to XS and 2px from SM.
 const av = read('Avatar/Avatar.tsx');
-chk('avatar size ramp 20/24/32/40/48/64',
-  has(av, 'size-[20px]', 'size-[24px]', 'size-[32px]', 'size-[40px]', 'size-[48px]', 'size-[64px]'), '2XS→XL');
-chk('avatar initials type ramp',
-  has(av, '"2xs": "size-[20px] text-overline-sm"', 'xs: "size-[24px] text-label-sm"',
-       'sm: "size-[32px] text-label-lg"', 'md: "size-[40px] text-heading-h6"',
-       'lg: "size-[48px] text-heading-h5"', 'xl: "size-[64px] text-heading-h3"'),
+const avc = css('Avatar');
+chk('avatar size ramp 20/24/32/40/48/64', has(avc,
+  '--2xs { width: 20px; height: 20px','--xs { width: 24px; height: 24px','--sm { width: 32px; height: 32px',
+  '--md { width: 40px; height: 40px','--lg { width: 48px; height: 48px','--xl { width: 64px; height: 64px'), '2XS→XL');
+chk('avatar initials type ramp', has(avc,
+  '--2xs { width: 20px; height: 20px; font-size: var(--font-size-2xs)',
+  '--sm { width: 32px; height: 32px; font-size: var(--font-size-md)',
+  '--xl { width: 64px; height: 64px; font-size: var(--font-size-3xl)'),
   'Overline/SM → Label/SM → Label/LG → H6 → H5 → H3');
-chk('avatar contrast border 1px → 2px', has(av, '"2xs": "ring-1 ring-inset ring-bg-surface"', 'sm: "ring-2 ring-inset ring-bg-surface"'), '1px at 20/24, 2px from 32');
-chk('avatar icon frame 12/14/18/22/26/36',
-  has(av, '"2xs": "size-[12px]"', 'xs: "size-[14px]"', 'sm: "size-[18px]"',
-       'md: "size-[22px]"', 'lg: "size-[26px]"', 'xl: "size-[36px]"'),
+chk('avatar contrast border 1px → 2px', has(avc,
+  '--2xs, .ids-avatar--xs { box-shadow: inset 0 0 0 1px var(--color-bg-surface)',
+  '--xl { box-shadow: inset 0 0 0 2px var(--color-bg-surface)'), '1px at 20/24, 2px from 32');
+chk('avatar icon frame 12/14/18/22/26/36', has(avc,
+  '__icon--2xs { width: 12px','__icon--xs { width: 14px','__icon--sm { width: 18px',
+  '__icon--md { width: 22px','__icon--lg { width: 26px','__icon--xl { width: 36px'),
   'measured per size — not one percentage');
-chk('avatar status dot ramp 6/7/9/11/13/16',
-  has(av, 'size-[6px]', 'size-[7px]', 'size-[9px]', 'size-[11px]', 'size-[13px]', 'size-[16px]'), '');
-chk('avatar status dot inset 0 → 1px at LG/XL',
-  has(av, 'size-[11px] right-0 bottom-0', 'size-[13px] right-[1px] bottom-[1px]'), '');
-chk('avatar status dot is ring + 2/3 core', has(av, 'rounded-full bg-bg-surface', 'h-2/3 w-2/3'), '_Status dot: 12px ring, 8px dot');
-chk('avatar status set = online/offline/verified',
-  has(av, 'online: "bg-icon-success"', 'offline: "bg-icon-disabled"', 'verified: "bg-icon-blue"')
-    && !av.includes('busy:') && !av.includes('away:'),
+chk('avatar status dot ramp 6/7/9/11/13/16', has(avc,
+  '__status--2xs { width: 6px','__status--xs { width: 7px','__status--sm { width: 9px',
+  '__status--md { width: 11px','__status--lg { width: 13px','__status--xl { width: 16px'), '');
+chk('avatar status dot inset 0 → 1px at LG/XL', has(avc,
+  '__status--md { width: 11px; height: 11px; right: var(--spacing-0); bottom: var(--spacing-0)',
+  '__status--lg { width: 13px; height: 13px; right: 1px; bottom: 1px'), '');
+chk('avatar status dot is ring + 2/3 core', has(avc,
+  '__status { position: absolute; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-full); background-color: var(--color-bg-surface)',
+  '__status-core { width: 66.666667%; height: 66.666667%'), '_Status dot: 12px ring, 8px dot');
+chk('avatar status set = online/offline/verified', has(avc,
+  '__status-core--online { background-color: var(--color-icon-success)',
+  '__status-core--offline { background-color: var(--color-icon-disabled)',
+  '__status-core--verified { background-color: var(--color-icon-blue)')
+    && !avc.includes('--busy') && !avc.includes('--away'),
   'Figma has no busy or away');
-chk('avatar initials fill', has(av, 'bg-bg-brand-subtle text-text-brand'), 'bg/brand-subtle + text/brand');
-chk('avatar icon fill', has(av, 'bg-bg-surface-raised'), 'bg/surface-raised');
-chk('avatar hover wash 8%', has(av, 'hover:after:opacity-[0.08]'), 'text/primary at 8%');
-chk('avatar disabled 50%', has(av, 'opacity-50'), '');
+chk('avatar initials fill', has(avc, '--initials { background-color: var(--color-bg-brand-subtle); color: var(--color-text-brand)'), 'bg/brand-subtle + text/brand');
+chk('avatar icon fill', has(avc, '--icon { background-color: var(--color-bg-surface-raised)'), 'bg/surface-raised');
+chk('avatar hover wash 8%', has(avc, '--interactive:hover::after { opacity: 0.08'), 'text/primary at 8%');
+chk('avatar disabled 50%', has(avc, '--disabled { pointer-events: none; opacity: 0.5'), '');
 
 // A18 Tag — border in every state; Badge is the coloured one, Tag is neutral.
 const tg = read('Tag/Tag.tsx');
@@ -796,20 +861,28 @@ chk('spinner colours read icon/*', has(spnc,
 chk('spinner dots = 12', has(spn, 'const DOTS = 12'), 'Figma bakes 12 nodes with a fade');
 
 // A21 Skeleton — geometry is the Figma default, overridable via className.
-const sk = read('Skeleton/Skeleton.tsx');
-chk('skeleton rectangle ramp', has(sk, 'w-[120px] h-[60px]', 'w-[200px] h-[100px]', 'w-[320px] h-[160px]'), 'SM/MD/LG');
-chk('skeleton line ramp', has(sk, 'w-[80px] h-[8px]', 'w-[160px] h-[12px]', 'w-[240px] h-[16px]'), '');
-chk('skeleton circle ramp 24/32/48', has(sk, 'size-[24px]', 'size-[32px]', 'size-[48px]'), '');
-chk('skeleton card image ramp', has(sk, 'w-[160px] h-[80px]', 'w-[240px] h-[140px]', 'w-[320px] h-[180px]'), '');
-chk('skeleton avatar lines exact',
-  has(sk, 'l1: "h-[8px] w-[80px]", l2: "h-[6px] w-[60px]"',
-       'l1: "h-[10px] w-[120px]", l2: "h-[8px] w-[80px]"',
-       'l1: "h-[14px] w-[160px]", l2: "h-[10px] w-[100px]"'), 'no percentage fallback');
-chk('skeleton card lines exact',
-  has(sk, 'l1: "h-[10px] w-[120px]", l2: "h-[8px] w-[80px]"',
-       'l1: "h-[12px] w-[180px]", l2: "h-[10px] w-[120px]"',
-       'l1: "h-[16px] w-[240px]", l2: "h-[12px] w-[160px]"'), '');
-chk('skeleton fill bg/subtle', has(sk, 'bg-bg-subtle'), '');
+const skc = css('Skeleton');
+chk('skeleton rectangle ramp', has(skc,
+  '--rectangle.ids-skeleton--sm { width: 120px; height: 60px','--rectangle.ids-skeleton--md { width: 200px; height: 100px',
+  '--rectangle.ids-skeleton--lg { width: 320px; height: 160px'), 'SM/MD/LG');
+chk('skeleton line ramp', has(skc,
+  '--line.ids-skeleton--sm { width: 80px; height: 8px','--line.ids-skeleton--md { width: 160px; height: 12px',
+  '--line.ids-skeleton--lg { width: 240px; height: 16px'), '');
+chk('skeleton circle ramp 24/32/48', has(skc,
+  '--circle.ids-skeleton--sm { width: 24px','--circle.ids-skeleton--md { width: 32px','--circle.ids-skeleton--lg { width: 48px'), '');
+chk('skeleton card image ramp', has(skc,
+  '--card-sm .ids-skeleton__piece--img { width: 160px; height: 80px',
+  '--card-md .ids-skeleton__piece--img { width: 240px; height: 140px',
+  '--card-lg .ids-skeleton__piece--img { width: 320px; height: 180px'), '');
+chk('skeleton avatar lines exact', has(skc,
+  '--avatar-sm .ids-skeleton__piece--l1 { height: 8px; width: 80px','--avatar-sm .ids-skeleton__piece--l2 { height: 6px; width: 60px',
+  '--avatar-md .ids-skeleton__piece--l1 { height: 10px; width: 120px',
+  '--avatar-lg .ids-skeleton__piece--l1 { height: 14px; width: 160px'), 'no percentage fallback');
+chk('skeleton card lines exact', has(skc,
+  '--card-sm .ids-skeleton__piece--l1 { height: 10px; width: 120px',
+  '--card-md .ids-skeleton__piece--l1 { height: 12px; width: 180px',
+  '--card-lg .ids-skeleton__piece--l1 { height: 16px; width: 240px'), '');
+chk('skeleton fill bg/subtle', has(skc, '.ids-skeleton { background-color: var(--color-bg-subtle)'), '');
 
 // A24 Divider — 1px border/subtle, 16px gap, Body/SM label.
 const dv = read('Divider/Divider.tsx');

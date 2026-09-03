@@ -1,0 +1,259 @@
+/*
+ * Avatar — mirrors Figma `A16 Avatar` (Atoms — Display).
+ *
+ * Every number is measured off the file, not derived from a ratio — the icon
+ * frame is 12/14/18/22/26/36, which is 60% of the box at 2XS but 54% at LG,
+ * so a single percentage does not reproduce it. The contrast ring is 1px at
+ * 20/24 and 2px from 32 up, drawn as an inset box-shadow exactly as the old
+ * ring utilities computed it.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family-body);
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* ── Size ramp — box + type + contrast ring ─────────────────────────── */
+
+.ids-avatar--2xs {
+  width: 20px;
+  height: 20px;
+  font-size: var(--font-size-2xs);
+  line-height: var(--line-height-2xs);
+  letter-spacing: var(--letter-spacing-caps);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar--xs {
+  width: 24px;
+  height: 24px;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar--sm {
+  width: 32px;
+  height: 32px;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar--md {
+  width: 40px;
+  height: 40px;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar--lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-xl);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-avatar--xl {
+  width: 64px;
+  height: 64px;
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-4xl);
+  letter-spacing: var(--letter-spacing-slight);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ids-avatar--2xs,
+.ids-avatar--xs {
+  box-shadow: inset 0 0 0 1px var(--color-bg-surface);
+}
+.ids-avatar--sm,
+.ids-avatar--md,
+.ids-avatar--lg,
+.ids-avatar--xl {
+  box-shadow: inset 0 0 0 2px var(--color-bg-surface);
+}
+
+/* ── Tones — Figma fills Initials with bg/brand-subtle, Icon with
+   bg/surface-raised ─────────────────────────────────────────────────── */
+
+.ids-avatar--initials {
+  background-color: var(--color-bg-brand-subtle);
+  color: var(--color-text-brand);
+}
+.ids-avatar--icon {
+  background-color: var(--color-bg-surface-raised);
+  color: var(--color-icon-default);
+}
+.ids-avatar--image {
+  background-color: var(--color-bg-surface-raised);
+}
+
+/* ── Interactive ─────────────────────────────────────────────────────── */
+
+.ids-avatar--interactive {
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  /* `transition-[colors,box-shadow]` written out — `colors` is no property. */
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-avatar--2xs.ids-avatar--interactive:focus-visible,
+.ids-avatar--xs.ids-avatar--interactive:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--color-bg-surface), 0 0 0 3px var(--color-focus-halo);
+}
+.ids-avatar--sm.ids-avatar--interactive:focus-visible,
+.ids-avatar--md.ids-avatar--interactive:focus-visible,
+.ids-avatar--lg.ids-avatar--interactive:focus-visible,
+.ids-avatar--xl.ids-avatar--interactive:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-bg-surface), 0 0 0 3px var(--color-focus-halo);
+}
+
+/* `Hover overlay` — text/primary at 8% over the fill. */
+.ids-avatar--interactive::after {
+  content: "";
+  position: absolute;
+  inset: var(--spacing-0);
+  background-color: var(--color-text-primary);
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-avatar--interactive:hover::after {
+  opacity: 0.08;
+}
+
+.ids-avatar--disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ── Content ─────────────────────────────────────────────────────────── */
+
+.ids-avatar__image {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+/* `Icon` frame inside the avatar, measured per size. */
+.ids-avatar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ids-avatar__icon--2xs {
+  width: 12px;
+  height: 12px;
+}
+.ids-avatar__icon--xs {
+  width: 14px;
+  height: 14px;
+}
+.ids-avatar__icon--sm {
+  width: 18px;
+  height: 18px;
+}
+.ids-avatar__icon--md {
+  width: 22px;
+  height: 22px;
+}
+.ids-avatar__icon--lg {
+  width: 26px;
+  height: 26px;
+}
+.ids-avatar__icon--xl {
+  width: 36px;
+  height: 36px;
+}
+
+.ids-avatar__glyph {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Status dot — `_Status dot`: a bg/surface ring with a coloured core at
+   two thirds. Flush at 2XS–MD, inset 1px at LG/XL. ─────────────────────── */
+
+.ids-avatar__wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.ids-avatar__status {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-surface);
+}
+.ids-avatar__status--2xs {
+  width: 6px;
+  height: 6px;
+  right: var(--spacing-0);
+  bottom: var(--spacing-0);
+}
+.ids-avatar__status--xs {
+  width: 7px;
+  height: 7px;
+  right: var(--spacing-0);
+  bottom: var(--spacing-0);
+}
+.ids-avatar__status--sm {
+  width: 9px;
+  height: 9px;
+  right: var(--spacing-0);
+  bottom: var(--spacing-0);
+}
+.ids-avatar__status--md {
+  width: 11px;
+  height: 11px;
+  right: var(--spacing-0);
+  bottom: var(--spacing-0);
+}
+.ids-avatar__status--lg {
+  width: 13px;
+  height: 13px;
+  right: 1px;
+  bottom: 1px;
+}
+.ids-avatar__status--xl {
+  width: 16px;
+  height: 16px;
+  right: 1px;
+  bottom: 1px;
+}
+
+.ids-avatar__status-core {
+  width: 66.666667%;
+  height: 66.666667%;
+  border-radius: var(--radius-full);
+}
+.ids-avatar__status-core--online {
+  background-color: var(--color-icon-success);
+}
+.ids-avatar__status-core--offline {
+  background-color: var(--color-icon-disabled);
+}
+.ids-avatar__status-core--verified {
+  background-color: var(--color-icon-blue);
+}

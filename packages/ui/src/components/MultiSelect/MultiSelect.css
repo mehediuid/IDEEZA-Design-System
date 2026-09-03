@@ -1,0 +1,86 @@
+/*
+ * MultiSelect — mirrors Figma `A14 Multi-select` (Atoms — Input).
+ *
+ * The field ramp again, with vertical padding at 2.5 (Figma's 4 minus the
+ * 1.5px border) so the tag row sits centred. Chips are A18 Tags at SM and
+ * carry their own styles; the control's svg sizing from Field applies to the
+ * chevron, and Tag's own rules outrank it for the chip close icon by sheet
+ * order.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-multi-select__root {
+  position: relative;
+}
+
+.ids-multi-select {
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
+  cursor: pointer;
+}
+
+.ids-multi-select__tags {
+  display: flex;
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.ids-multi-select__placeholder {
+  color: var(--color-input-placeholder);
+}
+
+.ids-multi-select__chevron {
+  flex-shrink: 0;
+  color: var(--color-icon-default);
+  transition-property: transform;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-multi-select__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── The menu ────────────────────────────────────────────────────────── */
+
+.ids-multi-select__menu {
+  position: absolute;
+  left: var(--spacing-0);
+  right: var(--spacing-0);
+  top: calc(100% + 4px);
+  z-index: var(--z-dropdown);
+  max-height: 240px;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-default);
+  background-color: var(--color-bg-surface);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  box-shadow: var(--elevation-3);
+}
+
+/* Order matters below: disabled outranks the base colour, active paints the
+   hover row, and selected wins last — the same resolution tailwind-merge
+   used to arrive at. */
+.ids-multi-select__option {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  color: var(--color-input-text);
+}
+.ids-multi-select__option--disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+.ids-multi-select__option--active {
+  background-color: var(--color-bg-subtle);
+}
+.ids-multi-select__option--selected {
+  color: var(--color-text-brand);
+}

@@ -4,7 +4,7 @@ import { Button, IconButton, Tag, Toggle, Tabs, Tab } from "@ideeza/ui";
 import { Plus } from "../../../packages/ui/src/lib/icons";
 
 /**
- * Motion — the four recipes in `packages/ui/src/lib/motion.ts`, side by side.
+ * Motion — the recipes the component stylesheets carry, side by side.
  *
  * Figma's prototype reactions specify one thing: a 120ms EASE_OUT cross-fade on
  * state change. `state` is exactly that. The other three are a deliberate

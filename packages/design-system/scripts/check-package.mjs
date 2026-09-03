@@ -35,8 +35,7 @@ chk('every export map path exists', missingFile.length === 0,
 // copy resolves to nothing, and the failure lands on the consumer.
 // The .d.ts files count. Types that still point at a workspace package fail
 // for every TypeScript consumer, and the runtime bundle looks fine meanwhile.
-const bundle = ['index.js', 'index.cjs', 'index.d.ts', 'index.d.cts',
-                'tailwind-preset.d.ts', 'tailwind-preset.d.cts']
+const bundle = ['index.js', 'index.cjs', 'index.d.ts', 'index.d.cts']
   .map((f) => fs.readFileSync(path.join(dist, f), 'utf8')).join('\n');
 // Doc comments carried over from the source mention these packages by name
 // and are not imports; strip them before deciding anything is leaking.
@@ -66,14 +65,15 @@ chk('the package declares no dependencies',
 const css = fs.readFileSync(path.join(dist, 'styles.css'), 'utf8');
 const squash = (s) => s.replace(/\s+/g, '');
 const flat = squash(css);
-const cls = (n) => squash('.' + n.replace(/([:[\]().%#])/g, '\\$1').replace(/,/g, '\\2c '));
-for (const [label, name] of Object.entries({
-  'press scale': 'active:scale-[0.97]',
-  'hover lift': 'hover:-translate-y-px',
-  'the 120ms step': 'duration-interaction',
-  'the spring easing': 'ease-spring',
+// Every component's motion ships as ordinary rules now — a sample from each
+// recipe family proves the sheet carries them.
+for (const [label, rule] of Object.entries({
+  'press scale': ':active{transition-duration:var(--motion-duration-instant);transform:scale(0.97)',
+  'hover lift': '.ids-button--raised:hover{transform:translateY(-1px)',
+  'the 120ms step': 'transition-duration:var(--motion-duration-interaction)',
+  'the spring easing': 'transition-timing-function:var(--motion-easing-spring)',
 })) {
-  chk(`styles.css defines ${label}`, flat.includes(cls(name)), name);
+  chk(`styles.css defines ${label}`, flat.includes(squash(rule)), rule);
 }
 
 // Components that have moved off Tailwind carry their motion as ordinary
@@ -90,12 +90,12 @@ for (const [label, rule] of Object.entries({
   console.log(`${ok ? '✅' : '❌'} ${label.padEnd(30)} ${rule}`);
 }
 
-// The reset has to come before the utilities, and the --tw-* defaults with
-// it — a transform whose vars are undefined computes to `none`.
-chk('reset precedes the utilities', css.indexOf('--tw-translate-x') < css.indexOf('.active'),
-  'otherwise every transform is discarded');
+// The reset has to come before the component rules, and the token variables
+// with it — a rule whose vars are undefined computes to nothing.
+chk('reset precedes the component rules', css.indexOf('box-sizing') < css.indexOf('.ids-'),
+  'otherwise UA metrics leak into control geometry');
 chk('token variables are in the sheet', css.includes('--motion-duration-interaction: 120ms'),
-  'the utilities read them by name');
+  'the rules read them by name');
 
 // ── A consumer should not need Tailwind ────────────────────────────────
 // Comments are prose and may name the very directives being ruled out.

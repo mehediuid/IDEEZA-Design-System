@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import {
   AlertCircle,
   CheckmarkCircle02,
@@ -43,26 +43,8 @@ export type StatePreset =
   | "coming-soon"
   | "server-error";
 
-const badgeTone = {
-  neutral: "bg-bg-subtle",
-  error: "bg-bg-error-subtle",
-  success: "bg-bg-success-subtle",
-  warning: "bg-bg-warning-subtle",
-  info: "bg-bg-info-subtle",
-  brand: "bg-bg-brand-subtle",
-} as const;
-
-const glyphTone = {
-  inherit: "text-icon",
-  error: "text-icon-error",
-  success: "text-icon-success",
-  warning: "text-icon-warning",
-  blue: "text-icon-blue",
-  secondary: "text-icon-secondary",
-} as const;
-
-export type StateBadgeTone = keyof typeof badgeTone;
-export type StateGlyphTone = keyof typeof glyphTone;
+export type StateBadgeTone = "neutral" | "error" | "success" | "warning" | "info" | "brand";
+export type StateGlyphTone = "inherit" | "error" | "success" | "warning" | "blue" | "secondary";
 
 /** Exactly the pairings in the file — badge and glyph read separately. */
 export const statePresets: Record<
@@ -104,20 +86,20 @@ export const StateView = React.forwardRef<HTMLDivElement, StateViewProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex w-full flex-col items-center gap-[10px] bg-bg-surface p-[12px] text-center", className)}
+        className={cx("ids-state-view", className)}
         {...props}
       >
-        <span className={cn("inline-flex size-[80px] items-center justify-center rounded-full", badgeTone[badge])}>
-          {icon ?? <Glyph className={cn("size-[40px]", glyphTone[glyph])} />}
+        <span className={cx("ids-state-view__badge", `ids-state-view__badge--${badge}`)}>
+          {icon ?? <Glyph className={cx("ids-state-view__glyph", `ids-state-view__glyph--${glyph}`)} />}
         </span>
 
-        <div className="flex flex-col items-center gap-[4px]">
-          {title && <span className="text-heading-h3 text-text-primary">{title}</span>}
-          {description && <span className="text-body-sm text-text-secondary">{description}</span>}
+        <div className="ids-state-view__text">
+          {title && <span className="ids-state-view__title">{title}</span>}
+          {description && <span className="ids-state-view__description">{description}</span>}
           {children}
         </div>
 
-        {actions && <div className="flex items-center gap-[6px]">{actions}</div>}
+        {actions && <div className="ids-state-view__actions">{actions}</div>}
       </div>
     );
   }

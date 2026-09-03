@@ -1,0 +1,88 @@
+/*
+ * Toggle — mirrors Figma `_Toggle base` / `A10 Toggle` (Atoms — Input).
+ *
+ *   SM  track 36×20 · thumb 16 · inset 2 · on at x=18
+ *   MD  track 44×24 · thumb 20 · inset 2 · on at x=22
+ *
+ * Track fill is a state ramp, not a single colour — off input/border, on
+ * bg/brand, hover one step deeper, disabled input/bg-disabled in both states.
+ * The track carries no border in Figma.
+ *
+ * The thumb is placed with `left`, not a translate — see the note in
+ * Toggle.tsx. It travels on the spring curve (motion/normal + easing/spring),
+ * which overshoots slightly and settles.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-toggle {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  vertical-align: middle;
+  background-color: var(--color-input-border);
+  transition-property: color, background-color;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-toggle--sm {
+  height: 20px;
+  width: 36px;
+}
+.ids-toggle--md {
+  height: 24px;
+  width: 44px;
+}
+.ids-toggle:hover {
+  background-color: var(--color-input-border-hover);
+}
+.ids-toggle[data-state="checked"] {
+  background-color: var(--color-bg-brand);
+}
+.ids-toggle[data-state="checked"]:hover {
+  background-color: var(--color-bg-brand-hover);
+}
+.ids-toggle:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+/* Disabled outranks the checked fill in Figma. `[data-state=checked]:hover`
+   is (0,3,0) against `:disabled`'s (0,2,0), and a disabled button still
+   matches :hover — so the important flag stays, exactly as the old
+   `disabled:!bg-input-bg-disabled` carried it. */
+.ids-toggle:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-input-bg-disabled) !important;
+}
+
+.ids-toggle__thumb {
+  pointer-events: none;
+  position: absolute;
+  top: 2px;
+  display: block;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-surface);
+  box-shadow: var(--elevation-1);
+  transition-property: left;
+  transition-duration: var(--motion-duration-normal);
+  transition-timing-function: var(--motion-easing-spring);
+  left: 2px;
+}
+.ids-toggle__thumb--sm {
+  width: 16px;
+  height: 16px;
+}
+.ids-toggle__thumb--md {
+  width: 20px;
+  height: 20px;
+}
+.ids-toggle__thumb--sm[data-state="checked"] {
+  left: 18px;
+}
+.ids-toggle__thumb--md[data-state="checked"] {
+  left: 22px;
+}

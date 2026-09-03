@@ -26,7 +26,6 @@ const config: StorybookConfig = {
     cfg.resolve.alias = {
       ...(cfg.resolve.alias as Record<string, string>),
       "@ideeza/ui": src("../../../packages/ui/src/index.ts"),
-      "@ideeza/tokens/tailwind-preset": src("../../../packages/tokens/src/tailwind-preset.ts"),
     };
     return cfg;
   },

@@ -1,0 +1,141 @@
+/*
+ * Input — mirrors Figma `Text Input` (A04, Atoms — Input).
+ *
+ * The control chrome, size ramp and value type live in Field.css; Input adds
+ * only its own parts — the <input> itself, the prefix/suffix addons, and the
+ * select addon.
+ *
+ * Addon geometry per size (padding-x · inner radius):
+ *   32 · 8.5 · 6.5    36 · 8.5 · 6.5    40 · 10.5 · 10.5
+ *   44 · 10.5 · 10.5  48 · 12.5 · 14.5
+ * The addon replaces the field's edge padding and sits inside the 1.5px
+ * border, so it carries the Figma padding minus the border, and the field
+ * radius minus the border — the same fix applied to the Figma component.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-input svg {
+  flex-shrink: 0;
+  /* The old build asked for this colour with `[&_svg]:text-icon`, which
+     produced no rule in any published build — a sixth dead class, and one
+     find-dead-classes cannot see: its prefix match stops at the arbitrary
+     variant. Icons silently inherited the value colour instead. This is the
+     fix — icon/default, as drawn in Figma. The Diff harness never measures a
+     child svg, so it is argued for here instead. */
+  color: var(--color-icon-default);
+}
+
+/* The addon replaces the control's edge padding, so the control keeps only
+   the border inset on that side. */
+.ids-input--prefixed {
+  padding-left: 1.5px;
+}
+.ids-input--suffixed {
+  padding-right: 1.5px;
+}
+
+/* ── Addons ──────────────────────────────────────────────────────────── */
+
+.ids-input__addon {
+  display: flex;
+  flex-shrink: 0;
+  align-self: stretch;
+  align-items: center;
+  background-color: var(--color-bg-subtle);
+  color: var(--color-input-placeholder);
+  font-family: var(--font-family-body);
+}
+
+.ids-input__addon--32,
+.ids-input__addon--36 {
+  padding-left: 8.5px;
+  padding-right: 8.5px;
+}
+.ids-input__addon--40,
+.ids-input__addon--44 {
+  padding-left: 10.5px;
+  padding-right: 10.5px;
+}
+.ids-input__addon--48 {
+  padding-left: 12.5px;
+  padding-right: 12.5px;
+}
+
+/* Inner radius for an addon sitting against the border: field radius − 1.5px,
+   on the corners it touches. */
+.ids-input__addon--l.ids-input__addon--32,
+.ids-input__addon--l.ids-input__addon--36 {
+  border-top-left-radius: 6.5px;
+  border-bottom-left-radius: 6.5px;
+}
+.ids-input__addon--l.ids-input__addon--40,
+.ids-input__addon--l.ids-input__addon--44 {
+  border-top-left-radius: 10.5px;
+  border-bottom-left-radius: 10.5px;
+}
+.ids-input__addon--l.ids-input__addon--48 {
+  border-top-left-radius: 14.5px;
+  border-bottom-left-radius: 14.5px;
+}
+.ids-input__addon--r.ids-input__addon--32,
+.ids-input__addon--r.ids-input__addon--36 {
+  border-top-right-radius: 6.5px;
+  border-bottom-right-radius: 6.5px;
+}
+.ids-input__addon--r.ids-input__addon--40,
+.ids-input__addon--r.ids-input__addon--44 {
+  border-top-right-radius: 10.5px;
+  border-bottom-right-radius: 10.5px;
+}
+.ids-input__addon--r.ids-input__addon--48 {
+  border-top-right-radius: 14.5px;
+  border-bottom-right-radius: 14.5px;
+}
+
+/* Figma `Prefix Select` / `Suffix Select` — a select plus a chevron. The
+   addon shifts from placeholder- to value-coloured, since a select always
+   shows a value. */
+.ids-input__addon--select {
+  gap: 4px;
+  color: var(--color-input-text);
+}
+
+.ids-input__select {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  font-family: var(--font-family-body);
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-input__select:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+
+/* ── The <input> itself ──────────────────────────────────────────────── */
+
+.ids-input__input {
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  background-color: transparent;
+  font-family: var(--font-family-body);
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-input__input::placeholder {
+  color: var(--color-input-placeholder);
+}
+.ids-input__input:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+.ids-input__input:disabled::placeholder {
+  color: var(--color-text-disabled);
+}

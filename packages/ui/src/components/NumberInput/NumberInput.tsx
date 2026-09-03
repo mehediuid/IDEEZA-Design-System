@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { Plus, Minus, ChevronUp, ChevronDown } from "../../lib/icons";
 import {
   FieldShell,
@@ -21,26 +21,15 @@ import {
  * right padding drops to 4 so the stepper sits flush inside the border while
  * the left keeps the usual 12. Plus-minus is two 32px buttons at radius 6 with
  * 2px between them; Arrows is a single 32px column holding both chevrons.
+ * Measurements live in `NumberInput.css`.
  *
  * `prefix` and `suffix` are the text/secondary slots either side of the value
  * — currency in front, unit behind.
+ *
+ * Error and disabled ride the field chrome's `data-invalid` / `data-disabled`
+ * treatment, the same as every other control.
  */
 export type NumberInputSize = FieldSize;
-
-/** Figma pads 0/4/0/12 so the buttons meet the border. */
-const controlPad: Record<FieldSize, string> = {
-  32: "!pl-[8.5px] !pr-[2.5px]",
-  36: "!pl-[10.5px] !pr-[2.5px]",
-  40: "!pl-[10.5px] !pr-[2.5px]",
-  44: "!pl-[12.5px] !pr-[2.5px]",
-  48: "!pl-[12.5px] !pr-[2.5px]",
-};
-
-const stepBtn =
-  "inline-flex size-[32px] shrink-0 items-center justify-center rounded-[6px] text-icon outline-none " +
-  "transition-colors duration-interaction ease-decelerate " +
-  "hover:bg-bg-subtle active:bg-bg-surface-raised disabled:pointer-events-none disabled:text-text-disabled " +
-  "focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]";
 
 export interface NumberInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type" | "prefix"> {
@@ -65,6 +54,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   ) => {
     const autoId = React.useId();
     const inputId = id ?? autoId;
+    const invalid = Boolean(error);
     const inner = React.useRef<HTMLInputElement>(null);
     React.useImperativeHandle(ref, () => inner.current as HTMLInputElement);
 
@@ -89,16 +79,11 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         className={containerClassName}
       >
         <div
-          className={cn(
-            controlChrome,
-            controlClass[size],
-            controlPad[size],
-            error && "border-input-border-error focus-within:shadow-[0_0_0_3px_var(--color-focus-halo-danger)]",
-            disabled && "pointer-events-none bg-input-bg-disabled border-input-border-disabled",
-            className
-          )}
+          data-invalid={invalid}
+          data-disabled={Boolean(disabled)}
+          className={cx(controlChrome, controlClass[size], `ids-number-input--${size}`, className)}
         >
-          {prefix && <span className={cn("shrink-0 text-text-secondary", valueClass[size])}>{prefix}</span>}
+          {prefix && <span className={cx("ids-number-input__unit", valueClass[size])}>{prefix}</span>}
           <input
             ref={inner}
             id={inputId}
@@ -111,33 +96,27 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             value={value}
             defaultValue={defaultValue}
             onChange={onChange}
-            className={cn(
-              "min-w-0 flex-1 bg-transparent outline-none",
-              "text-input-text placeholder:text-input-placeholder",
-              // The native spinners are replaced by the Figma stepper.
-              "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
-              valueClass[size]
-            )}
+            className={cx("ids-number-input__input", valueClass[size])}
             {...props}
           />
-          {suffix && <span className={cn("shrink-0 text-text-secondary", valueClass[size])}>{suffix}</span>}
+          {suffix && <span className={cx("ids-number-input__unit", valueClass[size])}>{suffix}</span>}
 
           {stepper === "plus-minus" ? (
-            <span className="flex shrink-0 items-center gap-[2px]">
-              <button type="button" className={stepBtn} onClick={() => nudge(-1)} disabled={disabled} aria-label="Decrease">
-                <Minus className="size-[16px]" aria-hidden="true" />
+            <span className="ids-number-input__steps">
+              <button type="button" className="ids-number-input__step" onClick={() => nudge(-1)} disabled={disabled} aria-label="Decrease">
+                <Minus aria-hidden="true" />
               </button>
-              <button type="button" className={stepBtn} onClick={() => nudge(1)} disabled={disabled} aria-label="Increase">
-                <Plus className="size-[16px]" aria-hidden="true" />
+              <button type="button" className="ids-number-input__step" onClick={() => nudge(1)} disabled={disabled} aria-label="Increase">
+                <Plus aria-hidden="true" />
               </button>
             </span>
           ) : (
-            <span className="flex size-[32px] shrink-0 flex-col items-center justify-center rounded-[6px]">
-              <button type="button" className="flex h-[16px] w-[32px] items-center justify-center rounded-t-[6px] text-icon outline-none transition-colors duration-interaction ease-decelerate hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] disabled:text-text-disabled" onClick={() => nudge(1)} disabled={disabled} aria-label="Increase">
-                <ChevronUp className="size-[16px]" aria-hidden="true" />
+            <span className="ids-number-input__arrows">
+              <button type="button" className="ids-number-input__arrow ids-number-input__arrow--up" onClick={() => nudge(1)} disabled={disabled} aria-label="Increase">
+                <ChevronUp aria-hidden="true" />
               </button>
-              <button type="button" className="flex h-[16px] w-[32px] items-center justify-center rounded-b-[6px] text-icon outline-none transition-colors duration-interaction ease-decelerate hover:bg-bg-subtle focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] disabled:text-text-disabled" onClick={() => nudge(-1)} disabled={disabled} aria-label="Decrease">
-                <ChevronDown className="size-[16px]" aria-hidden="true" />
+              <button type="button" className="ids-number-input__arrow ids-number-input__arrow--down" onClick={() => nudge(-1)} disabled={disabled} aria-label="Decrease">
+                <ChevronDown aria-hidden="true" />
               </button>
             </span>
           )}

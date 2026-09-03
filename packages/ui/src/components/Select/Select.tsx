@@ -1,11 +1,10 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { ChevronDown } from "../../lib/icons";
 import {
   FieldShell,
   controlChrome,
   controlClass,
-  iconClass,
   valueClass,
   type FieldSize,
 } from "../Field/Field";
@@ -76,12 +75,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         <div
           data-invalid={invalid}
           data-disabled={Boolean(disabled)}
-          className={cn(
-            controlChrome,
-            controlClass[size],
-            iconClass[size],
-            "relative [&_svg]:shrink-0 [&_svg]:text-icon-default"
-          )}
+          className={cx(controlChrome, controlClass[size], "ids-select")}
         >
           {leftIcon}
           <select
@@ -92,15 +86,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             defaultValue={defaultValue ?? (placeholder ? "" : undefined)}
             aria-invalid={invalid || undefined}
             aria-describedby={helperText || error ? `${selectId}-description` : undefined}
-            className={cn(
-              "min-w-0 flex-1 appearance-none bg-transparent font-sans outline-none",
-              "text-input-text",
-              // The placeholder option keeps the muted colour until something is chosen
-              "invalid:text-input-placeholder [&:has(option[value='']:checked)]:text-input-placeholder",
-              "disabled:cursor-not-allowed disabled:text-text-disabled",
-              valueClass[size],
-              className
-            )}
+            className={cx("ids-select__select", valueClass[size], className)}
             {...props}
           >
             {placeholder ? (

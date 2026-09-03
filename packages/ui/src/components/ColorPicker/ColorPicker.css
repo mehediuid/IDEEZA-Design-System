@@ -1,0 +1,87 @@
+/*
+ * ColorPicker — mirrors Figma `A13 Color Picker` (Atoms — Input).
+ *
+ * The field ramp again. What A13 adds: a swatch at radius 4 tracking the
+ * control height (22/26/28/32/36), a text/tertiary `#`, the hex in Code/MD,
+ * and the eyedropper glyph — sized by the control (Field.css), coloured
+ * icon/default here.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-color-picker svg {
+  flex-shrink: 0;
+  color: var(--color-icon-default);
+}
+
+.ids-color-picker__swatch {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid var(--color-border-default);
+}
+.ids-color-picker__swatch--32 {
+  width: 22px;
+  height: 22px;
+}
+.ids-color-picker__swatch--36 {
+  width: 26px;
+  height: 26px;
+}
+.ids-color-picker__swatch--40 {
+  width: 28px;
+  height: 28px;
+}
+.ids-color-picker__swatch--44 {
+  width: 32px;
+  height: 32px;
+}
+.ids-color-picker__swatch--48 {
+  width: 36px;
+  height: 36px;
+}
+
+.ids-color-picker__swatch-fill {
+  position: absolute;
+  inset: var(--spacing-0);
+}
+
+/* The swatch doubles as the native colour input, so the OS picker opens on
+   click without a second control. */
+.ids-color-picker__native {
+  position: absolute;
+  inset: var(--spacing-0);
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  opacity: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.ids-color-picker__hash {
+  flex-shrink: 0;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-tertiary);
+}
+
+.ids-color-picker__hex {
+  min-width: var(--spacing-0);
+  flex: 1 1 0%;
+  background-color: transparent;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-input-text);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-color-picker__hex::placeholder {
+  color: var(--color-input-placeholder);
+}

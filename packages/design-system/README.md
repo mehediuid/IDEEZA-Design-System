@@ -28,9 +28,8 @@ That is the whole setup. **You do not need Tailwind.** The stylesheet ships
 prebuilt with every rule the components use.
 
 Requires React 18 or newer, and nothing else — the package has no runtime
-dependencies. Radix's switch, tooltip and slot primitives, clsx, cva and
-tailwind-merge are all bundled in, so installing this adds one entry to your
-lockfile rather than a dozen.
+dependencies. Radix's switch, tooltip and slot primitives are bundled in, so
+installing this adds one entry to your lockfile rather than a dozen.
 
 One consequence worth knowing: the bundled Radix carries its own React
 context, so our `Tooltip` reads the `TooltipProvider` this package exports,
@@ -77,36 +76,18 @@ spring.
 All of it goes through the motion tokens, so `prefers-reduced-motion: reduce`
 flattens the lot without disabling the state changes themselves.
 
-## Using it with Tailwind
+## Styling around it
 
-Optional, and only if you want to write utility classes in the same scale as
-the components. The components themselves need none of this.
-
-```js
-// tailwind.config.js
-import preset from "ideeza-ds/tailwind-preset";
-
-export default {
-  presets: [preset],
-  content: ["./src/**/*.{ts,tsx}"],
-};
-```
-
-If you go this route, note that this package's `styles.css` already includes a
-reset and the token variables — so import `ideeza-ds/tokens.css`
-alone if you would rather bring your own reset:
+The system is self-contained: `styles.css` carries the reset, the token
+variables and every component rule, and needs no framework or build step.
+Custom styling in a consuming app is written against the same CSS variables
+the components read. If you would rather bring your own reset, import the
+pieces separately:
 
 ```css
 @import "ideeza-ds/reset.css";   /* optional */
 @import "ideeza-ds/tokens.css";  /* the variables */
 ```
-
-One caveat worth stating plainly, because it costs hours when it bites:
-Tailwind builds `transform`, `box-shadow` and `filter` out of `--tw-*` custom
-properties and relies on Preflight to define their defaults. If you disable
-Preflight, define them yourself — a `var()` with no value makes the whole
-declaration invalid, so every transform silently computes to `none` while the
-class sits right there in the markup. Our `reset.css` defines them.
 
 ## Server components
 

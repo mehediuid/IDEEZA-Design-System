@@ -2,7 +2,7 @@ import * as React from "react";
 import type { Decorator, Preview } from "@storybook/react";
 import "@ideeza/tokens/css";
 import "@ideeza/tokens/reset";
-import "./tailwind.css";
+import "./preview.css";
 
 const withTheme: Decorator = (Story, ctx) => {
   const theme = (ctx.globals.theme as string) ?? "light";

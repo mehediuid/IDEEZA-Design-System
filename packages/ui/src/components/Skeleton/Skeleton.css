@@ -1,0 +1,213 @@
+/*
+ * Skeleton — mirrors Figma `A21 Skeleton` (Atoms — Display).
+ *
+ * Every placeholder fills with bg/subtle. Figma has no motion, so the pulse
+ * is an addition: a static grey block reads as a broken layout, a pulsing one
+ * reads as loading.
+ *
+ * Avatar and Card are compositions in Figma and carry their own geometry —
+ * both line widths are explicit px: the sub-line is 75% of the name line at
+ * Avatar SM but 62.5% at Avatar LG, so no single ratio reproduces the file.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-skeleton {
+  background-color: var(--color-bg-subtle);
+}
+.ids-skeleton--animate {
+  animation: ids-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes ids-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.ids-skeleton--rectangle {
+  border-radius: var(--radius-lg);
+}
+.ids-skeleton--line {
+  border-radius: var(--radius-sm);
+}
+.ids-skeleton--circle {
+  border-radius: var(--radius-full);
+}
+
+.ids-skeleton--rectangle.ids-skeleton--sm {
+  width: 120px;
+  height: 60px;
+}
+.ids-skeleton--rectangle.ids-skeleton--md {
+  width: 200px;
+  height: 100px;
+}
+.ids-skeleton--rectangle.ids-skeleton--lg {
+  width: 320px;
+  height: 160px;
+}
+.ids-skeleton--line.ids-skeleton--sm {
+  width: 80px;
+  height: 8px;
+}
+.ids-skeleton--line.ids-skeleton--md {
+  width: 160px;
+  height: 12px;
+}
+.ids-skeleton--line.ids-skeleton--lg {
+  width: 240px;
+  height: 16px;
+}
+.ids-skeleton--circle.ids-skeleton--sm {
+  width: 24px;
+  height: 24px;
+}
+.ids-skeleton--circle.ids-skeleton--md {
+  width: 32px;
+  height: 32px;
+}
+.ids-skeleton--circle.ids-skeleton--lg {
+  width: 48px;
+  height: 48px;
+}
+
+/* ── Avatar composition ──────────────────────────────────────────────── */
+
+.ids-skeleton__group {
+  display: inline-flex;
+  align-items: center;
+}
+.ids-skeleton__group--card {
+  flex-direction: column;
+  align-items: stretch;
+}
+.ids-skeleton__lines {
+  display: flex;
+  flex-direction: column;
+}
+.ids-skeleton__piece {
+  background-color: var(--color-bg-subtle);
+}
+.ids-skeleton__piece--circle {
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+}
+.ids-skeleton__piece--line {
+  border-radius: var(--radius-sm);
+}
+.ids-skeleton__piece--img {
+  border-radius: var(--radius-lg);
+}
+
+.ids-skeleton--avatar-sm {
+  gap: 8px;
+}
+.ids-skeleton--avatar-sm .ids-skeleton__piece--circle {
+  width: 24px;
+  height: 24px;
+}
+.ids-skeleton--avatar-sm .ids-skeleton__lines {
+  gap: 6px;
+}
+.ids-skeleton--avatar-sm .ids-skeleton__piece--l1 {
+  height: 8px;
+  width: 80px;
+}
+.ids-skeleton--avatar-sm .ids-skeleton__piece--l2 {
+  height: 6px;
+  width: 60px;
+}
+.ids-skeleton--avatar-md {
+  gap: 10px;
+}
+.ids-skeleton--avatar-md .ids-skeleton__piece--circle {
+  width: 32px;
+  height: 32px;
+}
+.ids-skeleton--avatar-md .ids-skeleton__lines {
+  gap: 8px;
+}
+.ids-skeleton--avatar-md .ids-skeleton__piece--l1 {
+  height: 10px;
+  width: 120px;
+}
+.ids-skeleton--avatar-md .ids-skeleton__piece--l2 {
+  height: 8px;
+  width: 80px;
+}
+.ids-skeleton--avatar-lg {
+  gap: 12px;
+}
+.ids-skeleton--avatar-lg .ids-skeleton__piece--circle {
+  width: 48px;
+  height: 48px;
+}
+.ids-skeleton--avatar-lg .ids-skeleton__lines {
+  gap: 10px;
+}
+.ids-skeleton--avatar-lg .ids-skeleton__piece--l1 {
+  height: 14px;
+  width: 160px;
+}
+.ids-skeleton--avatar-lg .ids-skeleton__piece--l2 {
+  height: 10px;
+  width: 100px;
+}
+
+/* ── Card composition ────────────────────────────────────────────────── */
+
+.ids-skeleton--card-sm {
+  gap: 12px;
+}
+.ids-skeleton--card-sm .ids-skeleton__piece--img {
+  width: 160px;
+  height: 80px;
+}
+.ids-skeleton--card-sm .ids-skeleton__lines {
+  gap: 8px;
+}
+.ids-skeleton--card-sm .ids-skeleton__piece--l1 {
+  height: 10px;
+  width: 120px;
+}
+.ids-skeleton--card-sm .ids-skeleton__piece--l2 {
+  height: 8px;
+  width: 80px;
+}
+.ids-skeleton--card-md {
+  gap: 14px;
+}
+.ids-skeleton--card-md .ids-skeleton__piece--img {
+  width: 240px;
+  height: 140px;
+}
+.ids-skeleton--card-md .ids-skeleton__lines {
+  gap: 10px;
+}
+.ids-skeleton--card-md .ids-skeleton__piece--l1 {
+  height: 12px;
+  width: 180px;
+}
+.ids-skeleton--card-md .ids-skeleton__piece--l2 {
+  height: 10px;
+  width: 120px;
+}
+.ids-skeleton--card-lg {
+  gap: 16px;
+}
+.ids-skeleton--card-lg .ids-skeleton__piece--img {
+  width: 320px;
+  height: 180px;
+}
+.ids-skeleton--card-lg .ids-skeleton__lines {
+  gap: 12px;
+}
+.ids-skeleton--card-lg .ids-skeleton__piece--l1 {
+  height: 16px;
+  width: 240px;
+}
+.ids-skeleton--card-lg .ids-skeleton__piece--l2 {
+  height: 12px;
+  width: 160px;
+}

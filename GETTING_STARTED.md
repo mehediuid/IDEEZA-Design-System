@@ -103,7 +103,7 @@ Done — color update propagated. Onno product gulo o ekhon update korte parbe j
 
 **"Cannot find module '@ideeza/tokens'"** — `pnpm install` at the repo root, not inside a package.
 
-**Tailwind classes na working** — confirm `content` array tomar `tailwind.config.ts` te tomar app er src files cover korche, ar `@ideeza/tokens/css` import hocche tomar entry te.
+**Component styles na aschhe** — confirm `ideeza-ds/styles.css` (ba `@ideeza/design-system` er styles) tomar app entry te import hocche. Components ekhon nijer CSS ship kore — Tailwind config lagbe na.
 
 **Dark mode na switching** — `<html data-theme="dark">` ache kina dekho. Ba useEffect e theme provider lekho jeta `data-theme` set kore.
 
