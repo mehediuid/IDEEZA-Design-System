@@ -101,19 +101,12 @@ pnpm typecheck
 pnpm test
 ```
 
-## Moving off Tailwind
+## Styling
 
-Half-done, and deliberately paused in the middle rather than rushed: 20 of 46
-components carry their own CSS, the rest still use Tailwind classes, and both
-run side by side. `MIGRATION.md` has the state, the procedure and every trap
-found so far — most of which produced output that looked entirely reasonable.
-
-## The Figma side
-
-The file is the source and this repo is the copy, so some of what turns up here
-is a defect over there. `FIGMA.md` is that list: what was proved from the repo,
-what still needs opening the file, and the handful of things the code added
-because Figma is silent on them.
+All 46 components carry their own plain CSS — `ids-*` classes over the token
+variables, no framework, no build step for consumers. Every measurement was
+lifted from the Figma file and is held in place by the parity checks
+(`pnpm test`), so a drifted value fails with the property named.
 
 ## Installing it
 
@@ -146,8 +139,6 @@ pnpm release     # build, test, and pack the tarball
 
 Then `npm publish` the tarball yourself — publishing needs your npm
 credentials, which do not belong in this repo or in any tool that reads it.
-`PUBLISH.md` walks through it step by step, including what to check before
-pressing publish and what the common errors mean.
 
 ### When a style change does not show up
 
@@ -230,7 +221,7 @@ Reference: see `packages/ui/src/components/Button/Button.tsx` for the full patte
 
 **Why CSS variables?** Light/dark switching is a single attribute toggle on `<html>`, and responsive token values use one media query. No JS theme provider, no FOUC, works with any framework, and Tailwind utilities map directly via the preset.
 
-**Why plain component CSS?** Every component ships its own stylesheet of `ids-*` classes, generated from the same Figma-measured values the old Tailwind classes carried (MIGRATION.md tells that story). Variant props still give the ergonomic typed APIs (`<Button variant="primary" size="md" />`) — they now resolve to class names instead of utility strings, and component classes do not collide, so nothing needs merging.
+**Why plain component CSS?** Every component ships its own stylesheet of `ids-*` classes, generated from the same Figma-measured values the old Tailwind classes carried. Variant props still give the ergonomic typed APIs (`<Button variant="primary" size="md" />`) — they now resolve to class names instead of utility strings, and component classes do not collide, so nothing needs merging.
 
 **Why Radix?** ~80% of the molecules in Figma (Dialog, Dropdown, Tooltip, Toast, Popover, Toggle, Tabs, Accordion) need accessibility primitives. Radix gives us those for free; we own the styling.
 

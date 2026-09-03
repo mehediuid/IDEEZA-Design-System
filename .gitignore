@@ -60,3 +60,8 @@ _to_delete/
 # Local-only helper scripts — git-e jay na (owner-er siddhanto)
 RUN-KORO.command
 PUSH-KORO.command
+
+# Personal reference docs — git-e jay na (owner-er siddhanto)
+FIGMA.md
+MIGRATION.md
+PUBLISH.md
