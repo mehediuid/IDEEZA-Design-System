@@ -61,14 +61,29 @@ chk('select icon ramp shared', has(se,'iconClass[size]'),'16/16/16/20/20');
 chk('select value ramp = input', has(se,'valueClass[size]'),'14/20 → 16/24 at 44');
 
 // ── Field shell (Text Input ramp)
-const fd=read('Field/Field.tsx');
-chk('field height ramp',  has(fd,'h-[32px]','h-[36px]','h-[40px]','h-[44px]','h-[48px]'),'');
-chk('field radius ramp',  has(fd,'32: "h-[32px] rounded-[8px]','40: "h-[40px] rounded-[12px]','48: "h-[48px] rounded-[16px]'),'8/8/12/12/16');
-chk('field padX ramp 10/10/12/12/14', has(fd,'px-[8.5px]','px-[10.5px]','px-[12.5px]'),'Figma value minus the 1.5px border');
-chk('field label ramp Label SM/SM/MD/MD/LG',has(fd,'32: "text-label-sm"','40: "text-label-md"','48: "text-label-lg"'),'11/11/12/12/14 semibold');
-chk('field row gap 4/4/4/6/6', has(fd,'32: "gap-[4px]"','44: "gap-[6px]"'),'');
-chk('field border 1.5 solid', has(fd,'border-solid border-[1.5px]'),'');
-chk('field error halo danger', has(fd,'focus-halo-danger'),'');
+const fd = css('Field');
+chk('field height ramp',
+  has(fd,'--32 { height: 32px','--36 { height: 36px','--40 { height: 40px',
+        '--44 { height: 44px','--48 { height: 48px'),'');
+chk('field radius ramp', has(fd,
+  '--32 { height: 32px; border-radius: 8px','--40 { height: 40px; border-radius: 12px',
+  '--48 { height: 48px; border-radius: 16px'),'8/8/12/12/16');
+chk('field padX ramp 10/10/12/12/14',
+  has(fd,'padding-inline: 8.5px','padding-inline: 10.5px','padding-inline: 12.5px'),
+  'Figma value minus the 1.5px border');
+chk('field label ramp Label SM/SM/MD/MD/LG', has(fd,
+  '__label { font-family: var(--font-family-body); color: var(--color-input-label); font-size: var(--font-size-xs)',
+  '--40 .ids-field__label, .ids-field--44 .ids-field__label { font-size: var(--font-size-sm)',
+  '--48 .ids-field__label { font-size: var(--font-size-md)'),'11/11/12/12/14 semibold');
+chk('field row gap 4/4/4/6/6',
+  has(fd,'.ids-field { display: flex; width: 100%; flex-direction: column; gap: 4px',
+         '--44, .ids-field--48 { gap: 6px'),'');
+chk('field border 1.5 solid', has(fd,'border: 1.5px solid var(--color-input-border)'),'');
+chk('field error halo danger',
+  has(fd,'[data-invalid="true"]:focus-within { box-shadow: 0 0 0 3px var(--color-focus-halo-danger)'),'');
+chk('field colours animate with the halo',
+  has(fd,'transition-property: color, background-color, border-color, box-shadow'),
+  'the old class said `colors`, which is not a property — the border snapped');
 
 chk('select uses library chevron',has(se,'ChevronDown'),'icon/arrow-down-01-round');
 chk('textarea footer row',has(ta,'footerRight='),'helper left, count right');

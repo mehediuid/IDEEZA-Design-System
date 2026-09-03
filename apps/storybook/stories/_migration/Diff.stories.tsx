@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
 import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner, Banner, Snackbar, Tag, ButtonGroupSegment, Alert } from "@ideeza/ui";
+import { controlChrome, controlClass, type FieldSize } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -317,6 +318,28 @@ const alertSeverity: Record<string, string> = {
   error: "bg-bg-error-subtle border-border-error",
 };
 
+const fieldChrome =
+  "flex w-full items-center bg-input-bg text-input-text" +
+  " border-solid border-[1.5px] border-input-border" +
+  " transition-[colors,box-shadow] duration-interaction ease-decelerate" +
+  " hover:border-input-border-hover outline-none" +
+  " focus-within:border-input-border-focus" +
+  " focus-within:shadow-[0_0_0_3px_var(--color-focus-halo)]" +
+  " data-[invalid=true]:border-input-border-error" +
+  " data-[invalid=true]:hover:border-input-border-error" +
+  " data-[invalid=true]:focus-within:shadow-[0_0_0_3px_var(--color-focus-halo-danger)]" +
+  " data-[disabled=true]:pointer-events-none" +
+  " data-[disabled=true]:bg-input-bg-disabled" +
+  " data-[disabled=true]:border-input-border-disabled" +
+  " data-[disabled=true]:text-text-disabled";
+const fieldControl: Record<string, string> = {
+  "32": "h-[32px] rounded-[8px] px-[8.5px] gap-[8px]",
+  "36": "h-[36px] rounded-[8px] px-[8.5px] gap-[8px]",
+  "40": "h-[40px] rounded-[12px] px-[10.5px] gap-[8px]",
+  "44": "h-[44px] rounded-[12px] px-[10.5px] gap-[8px]",
+  "48": "h-[48px] rounded-[16px] px-[12.5px] gap-[8px]",
+};
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -624,6 +647,16 @@ const CASES: Case[] = [
       key.endsWith("/info") && prop.startsWith("background")
         ? "bg-bg-info-subtle was dead in 0.2.0 — new side is the fix"
         : false,
+  },
+  {
+    name: "FieldControl",
+    tag: "div",
+    old: Object.fromEntries(
+      Object.entries(fieldControl).map(([sz, c]) => [sz, `${fieldChrome} ${c}`])
+    ),
+    render: (key) => (
+      <div className={`${controlChrome} ${controlClass[Number(key) as FieldSize]}`} />
+    ),
   },
   {
     name: "Dot",

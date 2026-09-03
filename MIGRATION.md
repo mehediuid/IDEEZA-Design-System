@@ -7,23 +7,25 @@ found so far.
 
 ## Where it stands
 
-19 of 46 components carry their own stylesheet. The other 27 still use
+20 of 46 components carry their own stylesheet. The other 26 still use
 Tailwind classes, and both run side by side: `packages/ui/src/styles/index.css`
 collects the component sheets and is loaded ahead of the utility layer in the
 published `styles.css`. Nothing is broken in between.
 
 **Moved** — Alert, Badge, Banner, Button, ButtonGroup, Code, DeltaChip,
 Divider, Dot, IconButton, InlineCta, InlineMessage, Kbd, Link, LoadingState,
-Snackbar, Spinner, StatusBlock, Tag
+Field, Snackbar, Spinner, StatusBlock, Tag
 
 **Not yet** — Avatar, AvatarGroup, Breadcrumb, Checkbox, ColorPicker,
-DropdownMenu, Field, Input, MultiSelect, NavItem, NumberInput, Pagination,
+DropdownMenu, Input, MultiSelect, NavItem, NumberInput, Pagination,
 ProgressBar, ProgressRing, Radio, Search, Select, SidebarItem, Skeleton,
 SkeletonLayout, Slider, StateView, Tabs, Textarea, Toast, Toggle, Tooltip
 
-The form family is best done together: Field is the shell every input shares,
-so Input, Select, Textarea, MultiSelect, NumberInput and Search all depend on
-whatever shape Field takes.
+Field has moved, and it is the shell the rest of the form family sits on. Its
+exports — `controlChrome`, `controlClass`, `valueClass` — are class names now
+rather than Tailwind strings, so the components that consume them already
+render against the new CSS for their chrome. Each still has its own parts to
+move.
 
 Tailwind goes when the last one moves. Until then `tailwindcss` stays a
 dev-dependency of tokens, design-system and storybook. It has never been a
@@ -100,6 +102,9 @@ Each one produced output that looked entirely reasonable.
 - **A keyframe in the wrong file.** `@keyframes ids-spin` lived in Button.css
   and Spinner.css used it, so Spinner stopped turning on any page without a
   Button. It is defined once, in index.css.
+- **`transition-[colors,box-shadow]` on the field control.** `colors` is not a
+  CSS property, so the border and background snapped while only the focus halo
+  animated. Every input in the system, since the shell was written.
 - **Checks going stale in the other direction.** `hover:scale-[1.02]` stopped
   appearing anywhere once its last user migrated, and a check that only knew
   the class name called that a pass.

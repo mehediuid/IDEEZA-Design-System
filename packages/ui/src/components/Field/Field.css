@@ -1,0 +1,210 @@
+/*
+ * Field — the shell every input shares: label, control, helper row.
+ *
+ * Figma `A11 Text Input` and its siblings all sit on the same five-step ramp,
+ * so the geometry lives here once and Input, Select, Textarea, MultiSelect,
+ * NumberInput and Search name the same classes rather than repeating it.
+ *
+ *   32  radius 8  · px 10 · label Label/SM · value Body/SM · icon 16
+ *   36  radius 8  · px 10 · label Label/SM · value Body/SM · icon 16
+ *   40  radius 12 · px 12 · label Label/MD · value Body/SM · icon 16
+ *   44  radius 12 · px 12 · label Label/MD · value Body/MD · icon 20
+ *   48  radius 16 · px 14 · label Label/LG · value Body/MD · icon 20
+ *
+ * The padding numbers below are the Figma value minus the 1.5px border, for
+ * the same reason Button subtracts it: Figma measures from the frame edge
+ * with the stroke inside, CSS border-box adds the border on top.
+ *
+ * Values lifted from the previous Tailwind build with
+ * `tools/resolve-classes.mjs`, not retyped.
+ */
+
+.ids-field {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 4px;
+}
+.ids-field--44,
+.ids-field--48 {
+  gap: 6px;
+}
+
+/* ── Label ───────────────────────────────────────────────────────────── */
+
+.ids-field__label {
+  font-family: var(--font-family-body);
+  color: var(--color-input-label);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-field--40 .ids-field__label,
+.ids-field--44 .ids-field__label {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-wide);
+}
+.ids-field--48 .ids-field__label {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-wide);
+}
+.ids-field--disabled .ids-field__label {
+  color: var(--color-text-disabled);
+}
+
+.ids-field__required {
+  margin-left: 2px;
+  color: var(--color-input-error-text);
+}
+
+/* ── Control ─────────────────────────────────────────────────────────── */
+
+.ids-field__control {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  background-color: var(--color-input-bg);
+  color: var(--color-input-text);
+  border: 1.5px solid var(--color-input-border);
+  gap: 8px;
+
+  /* The old class was `transition-[colors,box-shadow]`, and `colors` is not a
+     CSS property — so the border and background snapped while only the focus
+     halo animated. Written out, they all move together at Figma's 120ms. */
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.ids-field__control:hover {
+  border-color: var(--color-input-border-hover);
+}
+.ids-field__control:focus-within {
+  border-color: var(--color-input-border-focus);
+  box-shadow: 0 0 0 3px var(--color-focus-halo);
+}
+
+/* Invalid outranks hover: a field in error stays red while the pointer is
+   over it, which is the one place the two states overlap. */
+.ids-field__control[data-invalid="true"],
+.ids-field__control[data-invalid="true"]:hover {
+  border-color: var(--color-input-border-error);
+}
+.ids-field__control[data-invalid="true"]:focus-within {
+  box-shadow: 0 0 0 3px var(--color-focus-halo-danger);
+}
+
+.ids-field__control[data-disabled="true"] {
+  pointer-events: none;
+  background-color: var(--color-input-bg-disabled);
+  border-color: var(--color-input-border-disabled);
+  color: var(--color-text-disabled);
+}
+
+/* ── The size ramp ───────────────────────────────────────────────────── */
+
+.ids-field__control--32 {
+  height: 32px;
+  border-radius: 8px;
+  padding-inline: 8.5px;
+}
+.ids-field__control--36 {
+  height: 36px;
+  border-radius: 8px;
+  padding-inline: 8.5px;
+}
+.ids-field__control--40 {
+  height: 40px;
+  border-radius: 12px;
+  padding-inline: 10.5px;
+}
+.ids-field__control--44 {
+  height: 44px;
+  border-radius: 12px;
+  padding-inline: 10.5px;
+}
+.ids-field__control--48 {
+  height: 48px;
+  border-radius: 16px;
+  padding-inline: 12.5px;
+}
+
+/* Icons ride the control, so a component that puts one in a slot gets the
+   right size without passing anything. */
+.ids-field__control--32 svg,
+.ids-field__control--36 svg,
+.ids-field__control--40 svg {
+  width: 16px;
+  height: 16px;
+}
+.ids-field__control--44 svg,
+.ids-field__control--48 svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* The value ramp is separate from the control: Textarea and MultiSelect set
+   their own geometry but take the same type. */
+.ids-field__value--32,
+.ids-field__value--36,
+.ids-field__value--40 {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+.ids-field__value--44,
+.ids-field__value--48 {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+
+/* ── Helper row ──────────────────────────────────────────────────────── */
+
+.ids-field__footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ids-field__message {
+  font-family: var(--font-family-body);
+  color: var(--color-input-helper);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+}
+/* An error message steps up to Label/MD — semibold, and it reads as the
+   field's own voice rather than as a footnote. */
+.ids-field__message--error {
+  color: var(--color-input-error-text);
+  letter-spacing: var(--letter-spacing-wide);
+  font-weight: var(--font-weight-semibold);
+}
+.ids-field--disabled .ids-field__message {
+  color: var(--color-text-disabled);
+}
+
+.ids-field__count {
+  flex-shrink: 0;
+  font-family: var(--font-family-body);
+  color: var(--color-input-helper);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  /* Tabular figures, so a counter does not jitter as it counts. */
+  font-variant-numeric: tabular-nums;
+}
+.ids-field--disabled .ids-field__count {
+  color: var(--color-text-disabled);
+}

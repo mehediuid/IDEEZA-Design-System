@@ -12,12 +12,17 @@
  * one the cascade already has an answer. So there is nothing to merge, and
  * this is nine lines instead of a dependency.
  */
-export type ClassArg = string | false | null | undefined;
+/**
+ * `cond && "class"` is the call site, and `cond` is often a count or a
+ * ReactNode rather than a boolean — so the falsy value that arrives can be
+ * `0` as easily as `false`.
+ */
+export type ClassArg = string | number | false | null | undefined;
 
 export function cx(...args: ClassArg[]) {
   let out = "";
   for (const a of args) {
-    if (!a) continue;
+    if (!a || typeof a !== "string") continue;
     out = out ? out + " " + a : a;
   }
   return out;
