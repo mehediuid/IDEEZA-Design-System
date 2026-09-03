@@ -7,6 +7,7 @@
  * follows this file in the build — the two coexist until the last one moves.
  */
 
+@import "../components/Alert/Alert.css";
 @import "../components/Badge/Badge.css";
 @import "../components/Banner/Banner.css";
 @import "../components/Button/Button.css";

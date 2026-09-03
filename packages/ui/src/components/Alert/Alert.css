@@ -1,0 +1,148 @@
+/*
+ * Alert — generated from the Tailwind classes by tools/generate-css.mjs,
+ * then reviewed by hand. Values resolved from the built stylesheet, not
+ * retyped.
+ */
+
+.ids-alert {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  border-width: 1px;
+}
+
+.ids-alert--sm {
+  gap: 10px;
+  border-radius: 8px;
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.ids-alert--md {
+  gap: 12px;
+  border-radius: 12px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.ids-alert--info {
+  background-color: var(--color-bg-info-subtle);
+  border-color: var(--color-border-blue);
+}
+
+.ids-alert--success {
+  background-color: var(--color-bg-success-subtle);
+  border-color: var(--color-border-success);
+}
+
+.ids-alert--warning {
+  background-color: var(--color-bg-warning-subtle);
+  border-color: var(--color-border-warning);
+}
+
+.ids-alert--error {
+  background-color: var(--color-bg-error-subtle);
+  border-color: var(--color-border-error);
+}
+
+/* The severity disc, filled, with the glyph on top in icon/on-brand. Both
+   the disc and the glyph step up at MD. */
+.ids-alert__badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  width: 20px;
+  height: 20px;
+}
+.ids-alert__badge > svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-icon-on-brand);
+}
+.ids-alert--sm .ids-alert__badge { width: 18px; height: 18px; }
+.ids-alert--sm .ids-alert__badge > svg { width: 12px; height: 12px; }
+
+.ids-alert--info .ids-alert__badge { background-color: var(--color-icon-blue); }
+.ids-alert--success .ids-alert__badge { background-color: var(--color-icon-success); }
+.ids-alert--warning .ids-alert__badge { background-color: var(--color-icon-warning); }
+.ids-alert--error .ids-alert__badge { background-color: var(--color-icon-error); }
+
+.ids-alert__body {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0%;
+  flex-direction: column;
+  gap: 4px;
+}
+.ids-alert--sm .ids-alert__body { gap: 2px; }
+
+/* Title and action share a ramp: Body/MD Medium at MD, Body/SM Medium at SM. */
+.ids-alert__title,
+.ids-alert__action {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-medium);
+}
+.ids-alert--sm .ids-alert__title,
+.ids-alert--sm .ids-alert__action {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+}
+.ids-alert__title { color: var(--color-text-primary); }
+
+.ids-alert__description {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-normal);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+}
+.ids-alert--sm .ids-alert__description {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+}
+
+/* The action takes the severity colour, so it reads as part of the message. */
+.ids-alert__action {
+  width: fit-content;
+  text-align: left;
+  border-radius: 2px;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-alert__action:hover { text-decoration-line: underline; }
+.ids-alert__action:focus-visible { box-shadow: 0 0 0 3px var(--color-focus-halo); }
+.ids-alert--info .ids-alert__action { color: var(--color-icon-blue); }
+.ids-alert--success .ids-alert__action { color: var(--color-icon-success); }
+.ids-alert--warning .ids-alert__action { color: var(--color-icon-warning); }
+.ids-alert--error .ids-alert__action { color: var(--color-icon-error); }
+
+.ids-alert__dismiss {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: var(--color-icon-default);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: 20px;
+  height: 20px;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: var(--motion-duration-interaction);
+  transition-timing-function: var(--motion-easing-decelerate);
+}
+.ids-alert--sm .ids-alert__dismiss { width: 18px; height: 18px; }
+.ids-alert__dismiss:hover { color: var(--color-text-primary); }
+.ids-alert__dismiss:focus-visible { box-shadow: 0 0 0 3px var(--color-focus-halo); }
+.ids-alert__dismiss > svg { width: 14px; height: 14px; }

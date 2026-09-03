@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner, Banner, Snackbar, Tag, ButtonGroupSegment } from "@ideeza/ui";
+import { Button, Kbd, Code, Dot, DeltaChip, InlineMessage, Link, InlineCta, Badge, IconButton, Spinner, Banner, Snackbar, Tag, ButtonGroupSegment, Alert } from "@ideeza/ui";
 // The stylesheet from the published 0.2.0 build — the last Tailwind one.
 import oldCss from "./old/styles.css?raw";
 
@@ -305,6 +305,18 @@ const segmentSize: Record<string, string> = {
   xl: "h-[44px] px-[16px] text-body-md-medium [&>svg]:size-[16px]",
 };
 
+const alertBase = "flex w-full items-center border";
+const alertSize: Record<string, string> = {
+  sm: "gap-[10px] rounded-[8px] px-[14px] py-[12px]",
+  md: "gap-[12px] rounded-[12px] px-[18px] py-[16px]",
+};
+const alertSeverity: Record<string, string> = {
+  info: "bg-bg-info-subtle border-border-blue",
+  success: "bg-bg-success-subtle border-border-success",
+  warning: "bg-bg-warning-subtle border-border-warning",
+  error: "bg-bg-error-subtle border-border-error",
+};
+
 const cross = <A extends string, B extends string>(
   a: Record<A, string>, b: Record<B, string>
 ): Record<string, string> =>
@@ -577,6 +589,41 @@ const CASES: Case[] = [
     ),
     children: "Day",
     render: (key) => <ButtonGroupSegment size={key as never}>Day</ButtonGroupSegment>,
+  },
+  {
+    name: "Alert",
+    tag: "div",
+    old: Object.fromEntries(
+      Object.entries(alertSize).flatMap(([sz, szc]) =>
+        Object.entries(alertSeverity).map(([sev, sc]) => [`${sz}/${sev}`, `${alertBase} ${szc} ${sc}`])
+      )
+    ),
+    // Alert always draws its badge, so the old side has to as well — an empty
+    // container is 18px shorter and reads as a real height difference.
+    children: (key) => {
+      const [size, severity] = key.split("/");
+      const badge = size === "sm" ? "size-[18px]" : "size-[20px]";
+      const glyph = size === "sm" ? "size-[12px]" : "size-[14px]";
+      const fill = { info: "bg-icon-blue", success: "bg-icon-success", warning: "bg-icon-warning", error: "bg-icon-error" }[severity as string];
+      return (
+        <>
+          <span className={`inline-flex shrink-0 items-center justify-center rounded-full ${fill} ${badge}`}>
+            <svg className={`${glyph} text-icon-on-brand`} viewBox="0 0 24 24" aria-hidden="true" />
+          </span>
+          <div className={`flex min-w-0 flex-1 flex-col ${size === "sm" ? "gap-[2px]" : "gap-[4px]"}`} />
+        </>
+      );
+    },
+    render: (key) => {
+      const [size, severity] = key.split("/");
+      return <Alert size={size as never} severity={severity as never} />;
+    },
+    // `bg-bg-info-subtle` was dead in 0.2.0, so the info alert had no
+    // background. Same fix as Banner.
+    expected: (key, prop) =>
+      key.endsWith("/info") && prop.startsWith("background")
+        ? "bg-bg-info-subtle was dead in 0.2.0 — new side is the fix"
+        : false,
   },
   {
     name: "Dot",

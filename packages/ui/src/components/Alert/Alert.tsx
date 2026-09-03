@@ -1,7 +1,5 @@
 import * as React from "react";
-import { cva } from "../../lib/cva";
-import type { VariantProps } from "../../lib/types";
-import { cn } from "../../lib/cn";
+import { cx } from "../../lib/cx";
 import { AlertCircle, CheckCircle, Close, InformationCircle } from "../../lib/icons";
 
 /**
@@ -20,35 +18,19 @@ import { AlertCircle, CheckCircle, Close, InformationCircle } from "../../lib/ic
  * Title and description stay text/primary and text/secondary in every
  * severity; only the surface, border, badge and action carry the colour.
  */
-export const alertVariants = cva("flex w-full items-center border", {
-  variants: {
-    size: {
-      sm: "gap-[10px] rounded-[8px] px-[14px] py-[12px]",
-      md: "gap-[12px] rounded-[12px] px-[18px] py-[16px]",
-    },
-    severity: {
-      info: "bg-bg-info-subtle border-border-blue",
-      success: "bg-bg-success-subtle border-border-success",
-      warning: "bg-bg-warning-subtle border-border-warning",
-      error: "bg-bg-error-subtle border-border-error",
-    },
-  },
-  defaultVariants: { size: "md", severity: "info" },
-});
+export type AlertSize = "sm" | "md";
+export type AlertSeverity = "info" | "success" | "warning" | "error";
 
-const badge = {
-  info: "bg-icon-blue",
-  success: "bg-icon-success",
-  warning: "bg-icon-warning",
-  error: "bg-icon-error",
-} as const;
-
-const accent = {
-  info: "text-icon-blue",
-  success: "text-icon-success",
-  warning: "text-icon-warning",
-  error: "text-icon-error",
-} as const;
+export function alertVariants(
+  props: { size?: AlertSize | null; severity?: AlertSeverity | null; className?: string } = {}
+) {
+  return cx(
+    "ids-alert",
+    `ids-alert--${props.size ?? "md"}`,
+    `ids-alert--${props.severity ?? "info"}`,
+    props.className
+  );
+}
 
 const glyph = {
   info: InformationCircle,
@@ -57,18 +39,11 @@ const glyph = {
   error: AlertCircle,
 } as const;
 
-const ramp = {
-  sm: { badge: "size-[18px]", glyph: "size-[12px]", gap: "gap-[2px]", title: "text-body-sm-medium", body: "text-caption-md", dismiss: "size-[18px]" },
-  md: { badge: "size-[20px]", glyph: "size-[14px]", gap: "gap-[4px]", title: "text-body-md-medium", body: "text-body-sm", dismiss: "size-[20px]" },
-} as const;
-
-export interface AlertProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
-    VariantProps<typeof alertVariants> {
-  severity?: keyof typeof badge;
+export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
+  size?: AlertSize | null;
+  severity?: AlertSeverity;
   title?: React.ReactNode;
   description?: React.ReactNode;
-  /** The trailing text link. Takes the severity colour, as in Figma. */
   action?: React.ReactNode;
   onActionClick?: () => void;
   onDismiss?: () => void;
@@ -76,46 +51,25 @@ export interface AlertProps
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, size = "md", severity = "info", title, description, action, onActionClick, onDismiss, children, ...props }, ref) => {
-    const s = ramp[size ?? "md"];
     const Glyph = glyph[severity];
-
     return (
-      <div ref={ref} role="alert" className={cn(alertVariants({ size, severity }), className)} {...props}>
-        <span className={cn("inline-flex shrink-0 items-center justify-center rounded-full", badge[severity], s.badge)}>
-          <Glyph className={cn(s.glyph, "text-icon-on-brand")} aria-hidden="true" />
+      <div ref={ref} role="alert" className={alertVariants({ size, severity, className })} {...props}>
+        <span className="ids-alert__badge">
+          <Glyph aria-hidden="true" />
         </span>
-
-        <div className={cn("flex min-w-0 flex-1 flex-col", s.gap)}>
-          {title && <span className={cn(s.title, "text-text-primary")}>{title}</span>}
-          {description && <span className={cn(s.body, "text-text-secondary")}>{description}</span>}
+        <div className="ids-alert__body">
+          {title && <span className="ids-alert__title">{title}</span>}
+          {description && <span className="ids-alert__description">{description}</span>}
           {children}
           {action && (
-            <button
-              type="button"
-              onClick={onActionClick}
-              className={cn(
-                "w-fit text-left outline-none transition-colors duration-interaction ease-decelerate hover:underline focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)] rounded-[2px]",
-                s.title,
-                accent[severity]
-              )}
-            >
+            <button type="button" onClick={onActionClick} className="ids-alert__action">
               {action}
             </button>
           )}
         </div>
-
         {onDismiss && (
-          <button
-            type="button"
-            onClick={onDismiss}
-            aria-label="Dismiss"
-            className={cn(
-              "inline-flex shrink-0 items-center justify-center rounded-[4px] text-icon outline-none",
-              "transition-colors duration-interaction ease-decelerate hover:text-text-primary focus-visible:shadow-[0_0_0_3px_var(--color-focus-halo)]",
-              s.dismiss
-            )}
-          >
-            <Close className="size-[14px]" aria-hidden="true" />
+          <button type="button" onClick={onDismiss} aria-label="Dismiss" className="ids-alert__dismiss">
+            <Close aria-hidden="true" />
           </button>
         )}
       </div>

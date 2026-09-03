@@ -279,18 +279,31 @@ chk('tooltip arrow is optional', has(tip,'arrow = true','arrow &&'), 'Figma spli
 chk('tooltip does not need tailwindcss-animate', !tip.includes('animate-in'), 'not a dependency');
 
 // ── Molecules — Feedback: M01 · M05 · M03 · M04 ─────────────────────
-const al = stripComments(read('Alert/Alert.tsx'));
-chk('alert sm r8 pad 12/14 gap 10', has(al,'gap-[10px] rounded-[8px] px-[14px] py-[12px]'), '');
-chk('alert md r12 pad 16/18 gap 12', has(al,'gap-[12px] rounded-[12px] px-[18px] py-[16px]'), '');
-chk('alert badge 18/20, glyph 12/14',
-  has(al,'badge: "size-[18px]", glyph: "size-[12px]"','badge: "size-[20px]", glyph: "size-[14px]"'), '');
-chk('alert badge is a filled circle, glyph white',
-  has(al,'rounded-full', 'text-icon-on-brand', 'info: "bg-icon-blue"'), 'not a tinted glyph on the surface');
-chk('alert surfaces are the subtle ramp',
-  has(al,'bg-bg-info-subtle border-border-blue','bg-bg-error-subtle border-border-error'), '');
+const al = css('Alert');
+chk('alert sm r8 pad 12/14 gap 10', has(al,
+  '--sm { gap: 10px; border-radius: 8px; padding-left: 14px; padding-right: 14px; padding-top: 12px'), '');
+chk('alert md r12 pad 16/18 gap 12', has(al,
+  '--md { gap: 12px; border-radius: 12px; padding-left: 18px; padding-right: 18px; padding-top: 16px'), '');
+chk('alert badge 18/20, glyph 12/14', has(al,
+  '__badge { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; border-radius: var(--radius-full); width: 20px',
+  '__badge > svg { width: 14px; height: 14px',
+  '--sm .ids-alert__badge { width: 18px; height: 18px',
+  '--sm .ids-alert__badge > svg { width: 12px; height: 12px'), '');
+chk('alert badge is a filled circle, glyph white', has(al,
+  '__badge > svg { width: 14px; height: 14px; color: var(--color-icon-on-brand)',
+  '--info .ids-alert__badge { background-color: var(--color-icon-blue)'),
+  'not a tinted glyph on the surface');
+chk('alert surfaces are the subtle ramp', has(al,
+  '--info { background-color: var(--color-bg-info-subtle); border-color: var(--color-border-blue)',
+  '--error { background-color: var(--color-bg-error-subtle); border-color: var(--color-border-error)'), '');
 chk('alert title/description stay neutral',
-  has(al,'text-text-primary','text-text-secondary'), 'only surface, border, badge and action take the colour');
-chk('alert type ramp', has(al,'title: "text-body-sm-medium", body: "text-caption-md"','title: "text-body-md-medium", body: "text-body-sm"'), '');
+  has(al,'__title { color: var(--color-text-primary)','__description','color: var(--color-text-secondary)')
+    && !/--(info|success|warning|error) \.ids-alert__(title|description)/.test(al),
+  'only surface, border, badge and action take the colour');
+chk('alert type ramp', has(al,
+  '__title, .ids-alert__action { font-size: var(--font-size-lg)',
+  '--sm .ids-alert__title, .ids-alert--sm .ids-alert__action { font-size: var(--font-size-md)'),
+  'title and action share the ramp');
 
 const inm = css('InlineMessage');
 chk('inline message gap 4, Caption/MD',
